@@ -1,0 +1,34 @@
+{
+  "name": "hanzoai-angular",
+  "version": "0.1.0",
+  "description": "The Hanzo API client for Angular — injectable services, HttpClient, RxJS Observables.",
+  "author": "Hanzo <dev@hanzo.ai>",
+  "license": "Apache-2.0",
+  "repository": "github:hanzo-js/sdk-angular",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "generate": "./scripts/generate.sh"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=19.0.0",
+    "@angular/core": ">=19.0.0",
+    "rxjs": "^7.4.0"
+  },
+  "devDependencies": {
+    "@angular/common": "^22.1.2",
+    "@angular/compiler": "^22.1.2",
+    "@angular/compiler-cli": "^22.1.2",
+    "@angular/core": "^22.1.2",
+    "ng-packagr": "^22.1.1",
+    "rxjs": "^7.8.2",
+    "typescript": "~6.0.3"
+  }
+}

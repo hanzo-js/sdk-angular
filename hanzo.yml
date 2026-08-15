@@ -1,0 +1,42 @@
+# Hanzo CI — the ONE way this repo is gated, read by hanzoai/ci.
+#
+# No `images:` and no `deploy:`: this is a client library. A consumer installs
+# it from npm at a tag, so what CI owes is a gate, not an artifact.
+
+test:
+  - name: build
+    # `npm ci`, not `npm install`: the lockfile is committed and a gate that
+    # silently resolves a different Angular than the release does is not a gate.
+    #
+    # ng-packagr is the build AND the gate. It runs the Angular compiler over
+    # all 192 services and 2460 models in partial compilation mode and then
+    # bundles them, so a type error, a name collision in a barrel or a decorator
+    # the compiler cannot lower is a failure here with a file and a line. `tsc`
+    # alone would miss the Angular half; an application build would need an
+    # application.
+    #
+    # The publishable package is dist/, which ng-packagr writes — a manifest
+    # with its scripts and devDependencies stripped, FESM2022 and types.
+    run: |
+      set -e
+      npm ci --no-audit --no-fund
+      npm run build
+      test -f dist/fesm2022/hanzoai-angular.mjs
+      test -f dist/types/hanzoai-angular.d.ts
+
+# THE CLIENT LANE — this repo is a PROJECTION of one API document at one
+# version.
+#
+# hanzoai/cloud's release sends the document's ref and sha256; hanzoai/ci
+# fetches openapi.yaml AT THAT SHA, REFUSES if the bytes hash to anything else,
+# runs `generate:`, writes `.spec-lock` beside the code, and — only after the
+# `test:` block above has passed over exactly those bytes — commits and cuts a
+# patch.
+#
+# The input is hanzoai/cloud `openapi.yaml`, emitted from the code by each app's
+# own router and gated on every cloud release. `.spec-lock` records which one
+# this tree projects, so `hanzoai`, `hanzoai-fetch` and `hanzoai-angular` are
+# always three projections of ONE release.
+client:
+  generate: ./scripts/generate.sh
+  version: 'package.json:jq -r .version package.json'

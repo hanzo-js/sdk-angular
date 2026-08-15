@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "useDefineForClassFields": false,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "strict": false
+  },
+  "angularCompilerOptions": {
+    // The library is published in partial-Ivy form, which is what an
+    // application's own build finishes compiling. Full compilation here would
+    // pin the output to this exact Angular, and ngcc — which used to bridge
+    // that — was removed in Angular 16.
+    "compilationMode": "partial"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules"]
+}
