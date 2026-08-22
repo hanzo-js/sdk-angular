@@ -14,11 +14,29 @@ import { PagesKVBinding } from './pagesKVBinding';
 
 
 export interface PagesDeploymentConfig { 
+    /**
+     * CompatibilityDate pins which Workers runtime behaviour the functions run under, as a date (\"2024-01-01\"). It is a pin, not a version: the runtime keeps that date\'s semantics for code deployed against it.
+     */
     compatibility_date?: string;
+    /**
+     * CompatibilityFlags turn individual runtime behaviours on or off ahead of, or behind, the date above (\"nodejs_compat\").
+     */
     compatibility_flags?: Array<string>;
+    /**
+     * D1Databases binds D1 databases in, keyed by binding name.
+     */
     d1_databases?: { [key: string]: PagesD1Binding; };
+    /**
+     * EnvVars are the environment variables the functions see, KEYED BY VARIABLE NAME. The key is the name; the value carries the value and whether it is a secret.
+     */
     env_vars?: { [key: string]: PagesEnvVar; };
+    /**
+     * KVNamespaces binds KV namespaces into the functions, KEYED BY THE BINDING NAME the code reads (`env.SESSIONS`). Same shape for the two below.
+     */
     kv_namespaces?: { [key: string]: PagesKVBinding; };
+    /**
+     * R2Buckets binds R2 buckets in, keyed by binding name.
+     */
     r2_buckets?: { [key: string]: PagesR2Binding; };
 }
 

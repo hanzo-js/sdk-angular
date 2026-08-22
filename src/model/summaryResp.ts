@@ -13,13 +13,16 @@ import { TotalView } from './totalView';
 
 export interface SummaryResp { 
     /**
-     * Account and Hanzo report each ledger\'s own availability, so a partial warehouse never fabricates the other half.
+     * Account reports the linked-accounts ledger\'s own availability, so a partial answer never fabricates this half. It is scoped to the CALLER: the accounts they linked, metered from each provider\'s own login.
      */
     account?: SourceState;
     /**
-     * From and To are the one [from, to) window BOTH halves resolved, RFC 3339 UTC.
+     * From is when the window opens, RFC 3339 UTC. ONE resolver fixes it for both ledgers, so the account rows and the Hanzo rows always cover the same period — two resolvers could drift and turn the union into a lie.
      */
     from?: string;
+    /**
+     * Hanzo reports the same for the Hanzo-routed ledger, which is scoped to the ORG rather than the caller — a different question over the same window. The two are independent: either can be unavailable while the other answers, and Rows then carries only the half that did.
+     */
     hanzo?: SourceState;
     /**
      * Range is the resolved period label.
@@ -29,6 +32,9 @@ export interface SummaryResp {
      * Rows is the union of both ledgers, each row labelled by source and scope — concatenated, NEVER summed: a plan\'s percentage is not money.
      */
     rows?: Array<TotalView>;
+    /**
+     * To is where the window closes, EXCLUSIVE, RFC 3339 UTC — the instant the read was served. Shared by both ledgers, for the reason From gives.
+     */
     to?: string;
 }
 

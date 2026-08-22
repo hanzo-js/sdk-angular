@@ -10,10 +10,16 @@
 
 
 export interface RiskDatasetDisposal { 
+    /**
+     * Dataset is the dataset that was disposed of. The NAME survives: declaring it again continues the version count rather than starting over at 1.
+     */
     dataset?: string;
+    /**
+     * Rows is how many rows they held between them, as the REGISTER recorded them when each was materialised — not a count of what the drop deleted, which is gone by the time this answers.
+     */
     rows?: number;
     /**
-     * Versions is how many versions went, and Rows how many rows they held between them, as the register recorded them.
+     * Versions is how many versions went.
      */
     versions?: number;
 }

@@ -19,7 +19,7 @@ export interface CreateEndpointIn {
      */
     events?: Array<string>;
     /**
-     * Status is \"active\" or \"disabled\". Empty defaults to active. A disabled endpoint receives no bus deliveries, but can still be exercised with POST /v1/webhooks/{id}/test.
+     * Status is \"active\" or \"disabled\". Empty defaults to active. A disabled endpoint receives no bus deliveries, but can still be exercised with POST /v1/webhook/{id}/test.
      */
     status?: string;
     /**

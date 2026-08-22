@@ -11,23 +11,23 @@
 
 export interface LeaseIn { 
     /**
-     * Class is what KIND of computer to lease, and the set is closed:   exec     a throwaway one that keeps nothing. Seconds to minutes.  dev      a coding one, with the project\'s own disk attached. Hours.  desktop  a dev one that also has a screen.  android  a desktop with a phone running on that screen.  Empty leases an `exec`, which is the right answer for running a program and the wrong one for working on a repository, because it keeps nothing.  An `android` needs a node that can virtualise a CPU, so it is the one class a deployment may not be able to place. Where the fleet has none, the lease succeeds and the pod stays Pending naming the device it is waiting for — which is the honest answer, because the alternative is an emulator running on an interpreted CPU and never finishing its boot.
+     * Class is what the sandbox is FOR: \"exec\" for a code-interpreter call, \"dev\" for a workspace bound to a project, \"desktop\" for one with a screen. It decides the image, the working directory and the isolation.
      */
     'class'?: string;
     /**
-     * ID names a sandbox to RESUME, and is the id an earlier lease answered with. Empty asks for a new one. A caller that holds an id and omits it does not get a second view of the same computer, it gets a second computer.
+     * Image overrides the image the class would pick. Honoured only for a caller the policy admits, and the sandbox that comes back names the image it GOT.
      */
-    id?: string;
+    image?: string;
     /**
-     * Project names the disk to attach, and is REQUIRED for every class but `exec`.  One live sandbox per project: the disk attaches to one computer at a time, so a second lease over a project that already has one is refused by name rather than handed a silently empty disk.
+     * Project binds the sandbox to one of the org\'s projects. Required for a dev or desktop class, which are single-attach per project; an exec sandbox carries none.
      */
     project?: string;
     /**
-     * Runtime is the isolation boundary asked for: `gvisor` shares a filesystem and holds a project volume, `kata-fc` is a microVM that boots slower and reads files faster but has no shared filesystem at all. Empty asks for the fleet\'s default, which is the right answer unless you are measuring.  It is a REQUEST. The owner decides, and refuses a combination it cannot honour — a volume under a runtime with no shared filesystem would write into a tmpfs and lose the bytes at exit. Read Leased.Runtime for what the sandbox actually got.
+     * Runtime asks for an isolation: runc, gvisor, kata-clh or kata-fc. It is a REQUEST, not a guarantee — the sandbox that comes back carries the runtime it was actually given, which is the field to read.
      */
     runtime?: string;
     /**
-     * TTLSec bounds the lease in seconds. Unset takes the class default. Nothing runs forever, because a sandbox is somebody else\'s code on our nodes.
+     * TTLSec is how long the lease runs before the reaper may take it, in seconds. Zero takes the class\'s own default.
      */
     ttlSec?: number;
 }

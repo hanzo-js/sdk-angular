@@ -18,11 +18,17 @@ export interface ActivityView {
      * RFC3339 UTC
      */
     at?: string;
+    /**
+     * ID identifies the event, and its shape says which kind it is: a run event carries the run\'s own id, while an agent event is the agent id suffixed \":created\" or \":updated\". Unique within a feed, and not an address — there is nothing to fetch it by.
+     */
     id?: string;
     /**
      * invoked|failed|created|updated (from real events)
      */
     kind?: string;
+    /**
+     * Message is the line to render, already bounded: \"Invoked <model>\" for a run that worked, the run\'s own error truncated to 200 characters for one that did not (or \"Run failed\" when it said nothing), and a fixed phrase for the two agent events. Nothing here is invented — every event is a row that exists.
+     */
     message?: string;
 }
 

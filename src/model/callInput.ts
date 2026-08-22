@@ -10,13 +10,25 @@
 
 
 export interface CallInput { 
+    /**
+     * Agent hands the answered call to a Hanzo assistant by name instead of connecting it to a person. Empty places an ordinary call.
+     */
     agent?: string;
+    /**
+     * From is the number to call FROM, in E.164. It must be one this org holds.
+     */
     from?: string;
     /**
      * Record is a per-call flag rather than a product. Where a recording lands and how long it is kept is the org\'s retention policy, not this call\'s.
      */
     record?: boolean;
+    /**
+     * To is the number to call, in E.164.
+     */
     to?: string;
+    /**
+     * Webhook is a URL the carrier posts this call\'s events to as it progresses. Empty means the call\'s outcome is only visible by reading it back.
+     */
     webhook?: string;
 }
 

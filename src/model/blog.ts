@@ -10,10 +10,25 @@
 
 
 export interface Blog { 
+    /**
+     * CaseStudy is one worked instance — somebody who ran it, and what happened.
+     */
     caseStudy?: string;
+    /**
+     * How is the run book: the steps to execute the tactic.
+     */
     how?: string;
+    /**
+     * Slug is the post\'s address — the last path segment it is published at.
+     */
     slug?: string;
+    /**
+     * Title is the post\'s headline.
+     */
     title?: string;
+    /**
+     * Why is the mechanism: the reason the tactic works, stated as a principle rather than as instructions.
+     */
     why?: string;
 }
 

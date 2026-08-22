@@ -10,11 +10,29 @@
 
 
 export interface BoardItem { 
+    /**
+     * DocType is which content type the row came from: Campaign, SocialPost or Asset. The board spans all three at once, so this is what tells them apart.
+     */
     doctype?: string;
+    /**
+     * Name is the document within that type. (doctype, name) is the pair every /v1/content write addresses an item by.
+     */
     name?: string;
+    /**
+     * Project is the brand/site sub-scope within the org. Absent for an item held at org level rather than under one brand.
+     */
     project?: string;
+    /**
+     * Status is the lifecycle state: draft, in_review, approved, queued, published or archived. It decides what a reader may see — the public site pulls exactly \"published\" and nothing else — so it is a visibility fact, not a workflow label.
+     */
     status?: string;
+    /**
+     * Title is the item\'s headline, read from its type\'s own title field. Empty for a document that has none.
+     */
     title?: string;
+    /**
+     * UpdatedAt is unix seconds of the document\'s last write, and the key the board sorts on, newest first.
+     */
     updatedAt?: number;
 }
 

@@ -27,7 +27,7 @@ export interface NodeView {
      */
     displayName?: string;
     /**
-     * ID is the node\'s own identifier within the org — the value POST /v1/bot/nodes/{id}/invoke addresses it by.
+     * ID is the node\'s own identifier within the org — the value POST /v1/node/{id}/invoke addresses it by.
      */
     id?: string;
     /**

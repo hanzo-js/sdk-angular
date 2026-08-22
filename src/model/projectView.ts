@@ -10,11 +10,29 @@
 
 
 export interface ProjectView { 
+    /**
+     * Applications is how many platform apps this org has under the project, counted per request. It is the one fact IAM cannot answer about a project.
+     */
     applications?: number;
+    /**
+     * CreatedAt is IAM\'s creation time as unix seconds. 0 when IAM\'s timestamp is absent or unparseable — never a fabricated time.
+     */
     createdAt?: number;
+    /**
+     * Description is IAM\'s free text about the project. Nothing derives from it.
+     */
     description?: string;
+    /**
+     * Name is IAM\'s display name, falling back to the slug when the project has none, so this is never empty.
+     */
     name?: string;
+    /**
+     * Org is the project\'s IAM owner, and the tenant every app under it deploys into. It comes from the validated identity, never from the request.
+     */
     org?: string;
+    /**
+     * Slug is the project\'s IAM name — half of the (org,name) identity, the `:project` path segment, and the scope key an app is filed under. It is the project\'s address; Name is not.
+     */
     slug?: string;
 }
 

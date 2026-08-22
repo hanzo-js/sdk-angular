@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * Summary totals the window in one object, so a tile does not have to sum the series to render. errorRate is a RATIO of the window\'s requests, not a percentage, and p95Ms is over the window rather than the worst bucket.
+ */
 export interface O11yMetricsResponseSummary { 
     errorRate?: number;
     errors?: number;

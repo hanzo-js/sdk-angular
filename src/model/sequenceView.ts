@@ -12,6 +12,9 @@ import { Step } from './step';
 
 
 export interface SequenceView { 
+    /**
+     * Sequence is the definition itself — the same record create and the list return. Its status is the one that decides whether enroll is accepted.
+     */
     sequence?: Sequence;
     /**
      * Steps are in send order (idx ascending); empty for a sequence with no messages yet, which enrolls fine and completes immediately.

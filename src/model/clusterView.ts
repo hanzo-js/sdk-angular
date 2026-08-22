@@ -11,20 +11,53 @@ import { NodePoolView } from './nodePoolView';
 
 
 export interface ClusterView { 
+    /**
+     * AmdGPU is the same count for `amd.com/gpu`: AMD accelerators across the BYO cluster\'s nodes, as of the attach.
+     */
     amdGpu?: number;
+    /**
+     * CreatedAt is when the cluster started existing: the earliest creation time among its pools for a managed cluster, and for a BYO one the RFC 3339 moment it was attached. Empty when the source states none.
+     */
     createdAt?: string;
+    /**
+     * DoClusterID carries the SAME id as DoksClusterID. Both names exist because the console\'s Cluster type reads either one; neither is a second identifier.
+     */
     doClusterId?: string;
+    /**
+     * DoksClusterID is the provider\'s own id for the cluster, and the value the /v1/visor/k8s/clusters/:id routes take. Empty for a BYO cluster: an attached kubeconfig was never provisioned, so there is no provider id to state.
+     */
     doksClusterId?: string;
     /**
-     * Fleet fields (additive): \"managed\" (Visor-provisioned) vs \"byo\" (attached kubeconfig), and the live GPU inventory a BYO cluster reports.
+     * Kind says which of the two kinds of cluster this row is, and there are only two: \"managed\" — Visor provisioned it and Hanzo\'s account pays the provider — or \"byo\", an existing cluster the org attached by kubeconfig.
      */
     kind?: string;
+    /**
+     * Name is the cluster\'s name: the provider\'s for a managed cluster, and for a BYO one the lower-cased fleet name it was attached under — which is also how the detach route addresses it.
+     */
     name?: string;
+    /**
+     * NodeCount is how many worker nodes the cluster has — the sum over its pools for a managed cluster, and for a BYO one the node count read off the cluster when it was attached.
+     */
     nodeCount?: number;
+    /**
+     * NodePools is the authoritative node inventory — every pool, each with its own size and count. It is empty in two cases that are not \"no pools\": a row from the /v1/visor/k8s/clusters LIST, which is deliberately lightweight and whose :id detail carries them, and a BYO cluster, whose pools were never read.
+     */
     nodePools?: Array<NodePoolView>;
+    /**
+     * NodeSize is a display convenience: the size slug of the FIRST pool. A cluster mixing sizes has more than one, and NodePools is where they all are.
+     */
     nodeSize?: string;
+    /**
+     * NvidiaGPU is how many NVIDIA accelerators the cluster\'s nodes advertise, the sum of `nvidia.com/gpu` allocatable across them. BYO only, and counted ONCE when the cluster was attached — it is an inventory, not live capacity.
+     */
     nvidiaGpu?: number;
+    /**
+     * Region is the provider region slug for a managed cluster. A BYO cluster has no region we can read, so it carries the free-form `provider` label the attach named it with (\"gke\", \"on-prem\") instead.
+     */
     region?: string;
+    /**
+     * Status is the cluster\'s state: the provider\'s own word for a managed cluster (\"running\", \"provisioning\"), \"unknown\" when the provider stated none, and always \"attached\" for a BYO cluster — that one says the kubeconfig is on file, not that the cluster is reachable this second.
+     */
     status?: string;
 }
 

@@ -11,13 +11,33 @@
 
 export interface LeaderRow { 
     /**
+     * CIHigh is the upper bound of that interval. Wilson rather than the normal approximation because the normal one produces bounds past 100 exactly where benchmark scores live — at 194/198 that is the top of the board, not a corner case.
+     */
+    ciHigh?: number;
+    /**
+     * CILow and CIHigh are the 95% Wilson interval on Measured, in percent. They are what makes the score comparable: at n=198 a 98% carries roughly ±2 points, so most differences at the top of a board are not distinguishable and a bare number implies a precision it does not have. Absent when there is no measurement.
+     */
+    ciLow?: number;
+    /**
+     * Claims is how many independent claims exist for this model on this benchmark. More than one means several sources reported it.
+     */
+    claims?: number;
+    /**
      * published − measured (the arena signal)
      */
     gap?: number;
     /**
+     * Mean is the unweighted average of every claim, which answers a different question from Published: what the field says on average, rather than what the vendor says about itself. With one claim the two are equal.
+     */
+    mean?: number;
+    /**
      * hanzo-measured accuracy % (nil if unrun)
      */
     measured?: number;
+    /**
+     * MeasuredAt is when the run behind Measured was recorded.
+     */
+    measuredAt?: string;
     /**
      * the model this row scores
      */
@@ -34,5 +54,13 @@ export interface LeaderRow {
      * provider-claimed % (nil if none)
      */
     published?: number;
+    /**
+     * Run names the measurement Measured came from, and MeasuredAt is when it ran. A score with no date is not a fact about a model, it is a fact about a model on a day — and models change, so the date is what makes the number checkable rather than merely quoted.
+     */
+    run?: string;
+    /**
+     * Spread is the distance between the highest and lowest of them, nil when there is only one. It is the disagreement AMONG sources, which a single Published number cannot show — signal in the same way the published-minus-measured gap is.
+     */
+    spread?: number;
 }
 

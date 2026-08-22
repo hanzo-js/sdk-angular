@@ -10,6 +10,9 @@
 
 
 export interface Stopped { 
+    /**
+     * Stopped counts the commands that were still running and were interrupted. Zero says the sandbox was idle, not that the stop failed — see above.
+     */
     stopped?: number;
 }
 

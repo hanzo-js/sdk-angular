@@ -10,8 +10,17 @@
 
 
 export interface PagesBuildConfig { 
+    /**
+     * BuildCommand is what Cloudflare runs to build the site (\"npm run build\"). Omitted means no build step: the repository is published as it stands.
+     */
     build_command?: string;
+    /**
+     * DestinationDir is the directory the build leaves the site in (\"dist\"), relative to RootDir. It is what gets served.
+     */
     destination_dir?: string;
+    /**
+     * RootDir is where in the repository the build runs, for a project that is not at the repository root. Omitted means the root.
+     */
     root_dir?: string;
 }
 

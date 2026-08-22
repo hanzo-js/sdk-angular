@@ -11,6 +11,9 @@ import { CalendarPost } from './calendarPost';
 
 
 export interface PostList { 
+    /**
+     * Data is the page, ordered by scheduledAt descending — the furthest-out post first and unscheduled drafts (scheduledAt 0) last. An empty array when the org\'s calendar holds no matching post.
+     */
     data?: Array<CalendarPost>;
 }
 

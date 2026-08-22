@@ -10,9 +10,21 @@
 
 
 export interface UsagePoint { 
-    date?: string;
+    /**
+     * Requests is how many LLM calls fell in this bucket.
+     */
     requests?: number;
+    /**
+     * SpendCents is what they cost, in cents.
+     */
     spendCents?: number;
+    /**
+     * T is the bucket\'s start, RFC3339 UTC, aligned to the interval.
+     */
+    t?: string;
+    /**
+     * Tokens is prompt plus completion tokens over those calls.
+     */
     tokens?: number;
 }
 

@@ -23,6 +23,22 @@ import { ConnectIn } from '../model/connectIn';
 // @ts-ignore
 import { ConnectOut } from '../model/connectOut';
 // @ts-ignore
+import { ConnectorProvidersOut } from '../model/connectorProvidersOut';
+// @ts-ignore
+import { ConnectorTokenOut } from '../model/connectorTokenOut';
+// @ts-ignore
+import { ConnectorsOut } from '../model/connectorsOut';
+// @ts-ignore
+import { CredentialIn } from '../model/credentialIn';
+// @ts-ignore
+import { CredentialOut } from '../model/credentialOut';
+// @ts-ignore
+import { DevicePollOut } from '../model/devicePollOut';
+// @ts-ignore
+import { DeviceStartIn } from '../model/deviceStartIn';
+// @ts-ignore
+import { DeviceStartOut } from '../model/deviceStartOut';
+// @ts-ignore
 import { DisconnectOut } from '../model/disconnectOut';
 // @ts-ignore
 import { GithubBackfillIn } from '../model/githubBackfillIn';
@@ -61,9 +77,13 @@ import { GithubSearchOut } from '../model/githubSearchOut';
 // @ts-ignore
 import { GithubSearchReq } from '../model/githubSearchReq';
 // @ts-ignore
+import { GitlabProjectsOut } from '../model/gitlabProjectsOut';
+// @ts-ignore
 import { ListOut } from '../model/listOut';
 // @ts-ignore
 import { ProviderView } from '../model/providerView';
+// @ts-ignore
+import { RefreshOut } from '../model/refreshOut';
 // @ts-ignore
 import { VerifyOut } from '../model/verifyOut';
 
@@ -73,18 +93,28 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
+export interface IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams {
+    /** ID is the connector id, provider + \&quot;:\&quot; + label (\&quot;openai:default\&quot;) — the auth-profile-id shape. Another user\&#39;s id is simply no row, so 404. */
+    id: string;
+}
+
 export interface IntegrationsApiDeleteIntegrationsGithubReposByRepoPagesRequestParams {
     /** Repo is the repository\&#39;s short name within the org\&#39;s installation, with no owner prefix (the owner is server-derived from the grant). A trailing \&quot;.git\&quot; is stripped. */
     repo: string;
 }
 
 export interface IntegrationsApiGetIntegrationsByProviderRequestParams {
-    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/connectors) providers, which this surface never resolves. */
+    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integrations/connectors) providers, which this surface never resolves. */
     provider: string;
 }
 
 export interface IntegrationsApiGetIntegrationsByProviderCallbackRequestParams {
     provider: string;
+}
+
+export interface IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams {
+    /** ID is the connector id, provider + \&quot;:\&quot; + label (\&quot;openai:default\&quot;) — the auth-profile-id shape. Another user\&#39;s id is simply no row, so 404. */
+    id: string;
 }
 
 export interface IntegrationsApiGetIntegrationsGithubReposByRepoPagesRequestParams {
@@ -99,13 +129,37 @@ export interface IntegrationsApiPostIntegrationsByProviderConnectRequestParams {
 }
 
 export interface IntegrationsApiPostIntegrationsByProviderDisconnectRequestParams {
-    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/connectors) providers, which this surface never resolves. */
+    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integrations/connectors) providers, which this surface never resolves. */
     provider: string;
 }
 
 export interface IntegrationsApiPostIntegrationsByProviderVerifyRequestParams {
-    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/connectors) providers, which this surface never resolves. */
+    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integrations/connectors) providers, which this surface never resolves. */
     provider: string;
+}
+
+export interface IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams {
+    /** ID is the connector id, provider + \&quot;:\&quot; + label (\&quot;openai:default\&quot;) — the auth-profile-id shape. Another user\&#39;s id is simply no row, so 404. */
+    id: string;
+}
+
+export interface IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams {
+    /** Provider is the user-scoped provider\&#39;s registry id, from the path. */
+    provider: string;
+    credentialIn: CredentialIn;
+}
+
+export interface IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams {
+    /** Provider is the user-scoped provider\&#39;s registry id, from the path. */
+    provider: string;
+    deviceStartIn: DeviceStartIn;
+}
+
+export interface IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams {
+    /** Provider is the user-scoped provider\&#39;s registry id, from the path. */
+    provider: string;
+    /** Flow is the id deviceStartOut returned. Expired or another user\&#39;s flow is indistinguishable from an unknown one: 404. */
+    flow: string;
 }
 
 export interface IntegrationsApiPostIntegrationsGithubClaimRequestParams {
@@ -157,6 +211,65 @@ export class IntegrationsApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Forgets a connector: every custodied secret, then the row.
+     * Forgets a connector: every custodied secret, then the row. Idempotent — dropping a never-connected id still answers {disconnected:true} (disconnect() parity). No provider Revoke: none of the user-plane providers exposes a revoke endpoint.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DisconnectOut>;
+    public deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DisconnectOut>>;
+    public deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DisconnectOut>>;
+    public deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteIntegrationsConnectorsById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<DisconnectOut>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -220,7 +333,7 @@ export class IntegrationsApi extends BaseService {
 
     /**
      * Returns every registered integration provider together with THIS org\&#39;s connection status for it — the catalog the console\&#39;s Integrations page renders.
-     * Returns every registered integration provider together with THIS org\&#39;s connection status for it — the catalog the console\&#39;s Integrations page renders. Org-authed: a caller with no validated principal is 403, because the status is per-org and there is no org-less answer. User-plane providers (the /v1/connectors surface) are omitted; the two planes are disjoint.
+     * Returns every registered integration provider together with THIS org\&#39;s connection status for it — the catalog the console\&#39;s Integrations page renders. Org-authed: a caller with no validated principal is 403, because the status is per-org and there is no org-less answer. User-plane providers (the /v1/integrations/connectors surface) are omitted; the two planes are disjoint.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -377,6 +490,173 @@ export class IntegrationsApi extends BaseService {
         let localVarPath = `/v1/integrations/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/callback`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lists the caller\&#39;s OWN connectors across every provider — the set &#x60;hanzo connector ls&#x60; prints.
+     * Lists the caller\&#39;s OWN connectors across every provider — the set &#x60;hanzo connector ls&#x60; prints. Rows are keyed (org,user), so this can never surface another user\&#39;s connector, and no secret is in the view.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getIntegrationsConnectors(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorsOut>;
+    public getIntegrationsConnectors(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorsOut>>;
+    public getIntegrationsConnectors(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorsOut>>;
+    public getIntegrationsConnectors(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/connectors`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ConnectorsOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Hands the custodied access token to its owner — the ONE place custody exits.
+     * Hands the custodied access token to its owner — the ONE place custody exits. The (org,user)-keyed row IS the same-user gate: another user\&#39;s id is simply \&quot;no row\&quot; → 404. fresh() auto-rotates within the refreshSkew window; static providers degenerate to a plain kmsGet of Secrets[0]. Refresh tokens are NEVER returned — custody keeps the sink. The token is never logged.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorTokenOut>;
+    public getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorTokenOut>>;
+    public getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorTokenOut>>;
+    public getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getIntegrationsConnectorsByIdToken.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/token`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ConnectorTokenOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lists the user-scoped provider cards — the catalog of what a user can connect, and how.
+     * Lists the user-scoped provider cards — the catalog of what a user can connect, and how. Methods derive from capabilities (Device/Adopt/Verify — Mount asserts at least one), never from a parallel kind enum.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getIntegrationsConnectorsProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorProvidersOut>;
+    public getIntegrationsConnectorsProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorProvidersOut>>;
+    public getIntegrationsConnectorsProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorProvidersOut>>;
+    public getIntegrationsConnectorsProviders(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/connectors/providers`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ConnectorProvidersOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -703,6 +983,60 @@ export class IntegrationsApi extends BaseService {
         let localVarPath = `/v1/integrations/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubPagesView>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lists the projects the org\&#39;s GitLab connection can reach — membership projects, most recently active first.
+     * Lists the projects the org\&#39;s GitLab connection can reach — membership projects, most recently active first.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getIntegrationsGitlabProjects(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GitlabProjectsOut>;
+    public getIntegrationsGitlabProjects(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GitlabProjectsOut>>;
+    public getIntegrationsGitlabProjects(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GitlabProjectsOut>>;
+    public getIntegrationsGitlabProjects(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/gitlab/projects`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<GitlabProjectsOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1424,6 +1758,274 @@ export class IntegrationsApi extends BaseService {
         let localVarPath = `/v1/integrations/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/verify`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<VerifyOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Forces a token rotation for a connected connector, ahead of the automatic rotation a token read would do inside the expiry window.
+     * Forces a token rotation for a connected connector, ahead of the automatic rotation a token read would do inside the expiry window. Only providers that declare a Refresh support it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RefreshOut>;
+    public postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RefreshOut>>;
+    public postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RefreshOut>>;
+    public postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postIntegrationsConnectorsByIdRefresh.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/refresh`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RefreshOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Is the direct intake path: a customer-held token/setup-token (Verify) or an externally obtained OAuth bundle from the CLI\&#39;s local PKCE (Adopt).
+     * Is the direct intake path: a customer-held token/setup-token (Verify) or an externally obtained OAuth bundle from the CLI\&#39;s local PKCE (Adopt). ALWAYS verify-before-store: a bad credential is refused and NOTHING is persisted (connectByCredential\&#39;s fail-closed order).
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CredentialOut>;
+    public postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CredentialOut>>;
+    public postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CredentialOut>>;
+    public postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const provider = requestParameters?.provider;
+        if (provider === null || provider === undefined) {
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsConnectorsByProviderCredential.');
+        }
+        const credentialIn = requestParameters?.credentialIn;
+        if (credentialIn === null || credentialIn === undefined) {
+            throw new Error('Required parameter credentialIn was null or undefined when calling postIntegrationsConnectorsByProviderCredential.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/credential`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CredentialOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: credentialIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Begins a device sign-in and returns the code to show the user plus how to poll for completion.
+     * Begins a device sign-in and returns the code to show the user plus how to poll for completion. KMS readiness is checked NOW rather than dead-ending the user at poll-done (connect() parity), and the per-provider connector cap is checked before the provider is called. The provider\&#39;s device code is persisted only in the encrypted grants table and is NEVER returned.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DeviceStartOut>;
+    public postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DeviceStartOut>>;
+    public postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DeviceStartOut>>;
+    public postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const provider = requestParameters?.provider;
+        if (provider === null || provider === undefined) {
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsConnectorsByProviderDevice.');
+        }
+        const deviceStartIn = requestParameters?.deviceStartIn;
+        if (deviceStartIn === null || deviceStartIn === undefined) {
+            throw new Error('Required parameter deviceStartIn was null or undefined when calling postIntegrationsConnectorsByProviderDevice.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/device`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<DeviceStartOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: deviceStartIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Advances a device sign-in.
+     * Advances a device sign-in. Terminal outcomes are DATA, not errors (verifyConn {active:false} discipline) — the status set is closed: pending|connected|denied|expired. pollSlow collapses to \&quot;pending\&quot; on the wire; the raised cadence rides interval.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DevicePollOut>;
+    public postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DevicePollOut>>;
+    public postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DevicePollOut>>;
+    public postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const provider = requestParameters?.provider;
+        if (provider === null || provider === undefined) {
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsConnectorsByProviderDeviceByFlowPoll.');
+        }
+        const flow = requestParameters?.flow;
+        if (flow === null || flow === undefined) {
+            throw new Error('Required parameter flow was null or undefined when calling postIntegrationsConnectorsByProviderDeviceByFlowPoll.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/device/${this.configuration.encodeParam({name: "flow", value: flow, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/poll`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<DevicePollOut>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

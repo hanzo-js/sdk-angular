@@ -10,29 +10,89 @@
 
 
 export interface Wire { 
+    /**
+     * Action is the verb that was performed. It is the event\'s name, not the HTTP method — a request-sourced record carries both, and the pair is what makes a row readable (\"grant.create\" at POST /v1/admin/grants).
+     */
     action?: string;
+    /**
+     * Auth is the credential the actor presented: \"jwt\", \"api-key\", or \"none\".
+     */
     authMethod?: string;
+    /**
+     * Email is the actor\'s validated address, absent when the credential carried none. It comes from the verified token, never from a client header.
+     */
     email?: string;
+    /**
+     * Hash is this record\'s SHA-256 over its own canonical JSON with both hash fields cleared, folded with prevHash. Recomputing it from the row\'s other fields is what proves the row has not been edited.
+     */
     hash?: string;
     /**
      * Home is present ONLY on a cross-org action: the org the actor came FROM, while Org is the org they acted IN. A console row carrying `home` is a platform-admin impersonation and should be rendered as one.
      */
     home?: string;
+    /**
+     * IsAdmin is the VALIDATED platform-SuperAdmin bit at decision time (membership of the reserved admin org), never the client\'s own claim to be one.
+     */
     isAdmin?: boolean;
+    /**
+     * Method is the HTTP verb, on a record a request produced. Absent on an event emitted from inside the binary with no request behind it.
+     */
     method?: string;
+    /**
+     * Org is the tenant the action was taken IN — the effective org, which for everyone but an impersonating SuperAdmin is also the actor\'s own. Empty on an unauthenticated request.
+     */
     org?: string;
+    /**
+     * Path is the request\'s route. Any segment shaped like a credential is replaced before the record is written, so a key that rides in a path is not preserved here by the very control meant to watch it.
+     */
     path?: string;
+    /**
+     * PrevHash is the hash of record seq-1, which is what links the rows into a chain: a deleted or reordered record breaks the recomputation at that point. The first record of a chain carries 64 zeros rather than an empty string, so \"start of chain\" and \"field missing\" cannot look alike.
+     */
     prevHash?: string;
+    /**
+     * Reason is a short explanation for a deny or an error (\"SuperAdmin required\", \"insufficient_balance\"). It is never a secret and never a raw upstream error body; absent on a success.
+     */
     reason?: string;
+    /**
+     * RequestID ties this row to the request-line log and any downstream trace — the X-Request-Id the pipeline minted for that request.
+     */
     requestId?: string;
+    /**
+     * Resource is the KIND of thing acted upon (\"org\", \"role\", \"secret\", \"provider-config\", \"credit\"). Where a mutation has no finer semantics than its route, this is the route family and resourceId is empty — the action and the path already pin the object.
+     */
     resource?: string;
+    /**
+     * ResourceID is the specific instance, absent when the kind alone identifies it.
+     */
     resourceId?: string;
+    /**
+     * Result is how the action ended: \"success\", \"deny\" or \"error\". A deny is a decision this binary made and is as much evidence as a success.
+     */
     result?: string;
+    /**
+     * Seq is the record\'s position in the chain, 0-based and gapless. The Recorder assigns it under its own lock, so it is a true total order: seq n+1 was written after seq n, and a missing number is a missing record.
+     */
     seq?: number;
+    /**
+     * SourceIP is the client address the edge resolved for the request, after the proxy chain — the address a responder would act on, not the socket peer.
+     */
     sourceIp?: string;
+    /**
+     * Status is the HTTP status the caller received. It is the outcome as the client saw it, so a 200 carrying a domain refusal still reads 200 here.
+     */
     status?: number;
+    /**
+     * Sub is the acting user (the IAM subject). Empty for a machine principal or an anonymous request, which is how a service action is told from a person\'s.
+     */
     sub?: string;
+    /**
+     * Time is when the action happened, RFC3339Nano in UTC. The stored column has the same precision and sorts the same way, so a client can range and order on this string verbatim.
+     */
     time?: string;
+    /**
+     * UserAgent is the client the request announced itself as. Client-supplied, so it is evidence about what claimed to act, not proof of it.
+     */
     userAgent?: string;
 }
 

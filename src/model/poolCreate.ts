@@ -22,9 +22,12 @@ export interface PoolCreate {
      * Count is how many nodes the pool starts with.
      */
     count?: number;
+    /**
+     * MaxNodes is the ceiling the autoscaler may not grow the pool past, and so the bound on what this pool can spend. Ignored unless AutoScale is set.
+     */
     maxNodes?: number;
     /**
-     * MinNodes and MaxNodes bound the autoscaler; they are ignored unless AutoScale is set.
+     * MinNodes is the floor the autoscaler may not shrink the pool below. Ignored unless AutoScale is set.
      */
     minNodes?: number;
     /**

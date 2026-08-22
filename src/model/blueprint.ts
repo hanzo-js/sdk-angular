@@ -15,17 +15,41 @@ import { Section } from './section';
 
 
 export interface Blueprint { 
+    /**
+     * Brand is the white-label key this playbook serves. Empty is the shared default every unbranded deployment falls back to.
+     */
     brand?: string;
+    /**
+     * Enabled is the whole-playbook lever. Absent reads as ON; an explicit false makes resolution skip this playbook entirely and fall through to the next tier, rather than serving an empty journey.
+     */
     enabled?: boolean;
     /**
-     * the 64-principle spine (Zen of Hanzo archetypes)
+     * Principles are the fixed 64-archetype spine a tactic files under. It is authored data an operator organises the corpus by; nothing in the checklist engine reads it.
      */
     principles?: Array<Principle>;
+    /**
+     * Sections are the journey\'s ordered phases.
+     */
     sections?: Array<Section>;
+    /**
+     * Steps are every checklist item, disabled ones included — this is the authored document, not the projection an org runs.
+     */
     steps?: Array<JourneyStep>;
+    /**
+     * Strategies are the tactics corpus the recommendation reads narrow.
+     */
     strategies?: Array<Strategy>;
+    /**
+     * Templates are the reusable prompts and snippets steps reference by id.
+     */
     templates?: Array<Page>;
+    /**
+     * Title is the playbook\'s name as a person reads it.
+     */
     title?: string;
+    /**
+     * Version is the playbook\'s own name for this edition of its content, chosen by whoever authored it. It travels onto every journey projected from it. The store\'s numeric revision is a separate value and lives beside it.
+     */
     version?: string;
 }
 

@@ -10,6 +10,9 @@
 
 
 export interface PagesD1Binding { 
+    /**
+     * ID is the D1 database this binding points at, by Cloudflare\'s uuid. The binding name the Worker code reads it as is the map key, not a field here.
+     */
     id?: string;
 }
 

@@ -253,8 +253,8 @@ export class ComplianceApi extends BaseService {
     }
 
     /**
-     * AuditRead is the compliance-scoped read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when).
-     * AuditRead is the compliance-scoped read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when). The org is PINNED to the caller\&#39;s validated org and the rows are narrowed to compliance.* actions. Fail-closed: no principal is a 403, no configured audit store a 501.
+     * AuditRead is the compliance read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when).
+     * AuditRead is the compliance read of the SHARED tamper-evident audit plane — the SOC 2 posture surface (privileged actions: who started/decided what, when). The org is PINNED to the caller\&#39;s validated org and the rows are narrowed to compliance.* actions. Fail-closed: no principal is a 403, no configured audit store a 501.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

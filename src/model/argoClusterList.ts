@@ -12,7 +12,13 @@ import { ArgoListMeta } from './argoListMeta';
 
 
 export interface ArgoClusterList { 
+    /**
+     * Items is one entry per distinct destination server, in first-seen order with the in-cluster destination first. Never empty: an empty fleet still has the one cluster it would deploy into.
+     */
     items?: Array<ArgoCluster>;
+    /**
+     * Metadata is the list envelope the SPA expects; it carries no resume point.
+     */
     metadata?: ArgoListMeta;
 }
 

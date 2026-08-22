@@ -10,9 +10,21 @@
 
 
 export interface ResourceUsage { 
+    /**
+     * CostCents would be the window\'s spend in cents. Always null here — the money a run costs is the metering ledger\'s, joined by the run id, and repeating it from this side would be a second number that could disagree with the bill.
+     */
     costCents?: number;
+    /**
+     * CPUVcpuHours would be vCPU-hours over the window. Always null: this store holds agent definitions and run I/O, and nothing here meters a CPU. Null is the honest answer and 0 would be a claim.
+     */
     cpuVcpuHours?: number;
+    /**
+     * MemGbHours would be gigabyte-hours of memory. Always null, same reason.
+     */
     memGbHours?: number;
+    /**
+     * StorageIoBytes would be bytes moved to and from storage. Always null, same reason.
+     */
     storageIoBytes?: number;
 }
 

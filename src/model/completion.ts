@@ -10,8 +10,17 @@
 
 
 export interface Completion { 
+    /**
+     * Detail is the server\'s short elaboration, typically the type or signature.
+     */
     detail?: string;
+    /**
+     * Kind is the LSP CompletionItemKind number (2 method, 3 function, 5 field, 6 variable, …), passed through as the protocol spells it.
+     */
     kind?: number;
+    /**
+     * Label is the text a client would insert, and what an editor lists.
+     */
     label?: string;
 }
 

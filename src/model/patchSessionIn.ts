@@ -22,7 +22,13 @@ export interface PatchSessionIn {
      * Project tags the product this session built; Published is the author\'s decision to let anyone read the story (provenance.go). Both are pointers so \"absent\" and \"cleared\" are different requests.
      */
     project?: string;
+    /**
+     * Published opens the session\'s story to the public build route; false withdraws it, and withdrawing is always allowed. PUBLISHING is refused unless the session names a Project — the one set in this same request, or the one already stored — because that route is keyed on (org, project). It widens READ access to what is already there and grants nothing else.
+     */
     published?: boolean;
+    /**
+     * Status moves the session to running, paused, done or error. A session that has already finished refuses any change with 409 — done and error are monotonic — and moving INTO one stamps the end time. This is the surface REPORTING what happened; a control command never writes it.
+     */
     status?: string;
     /**
      * Target re-dispatches a session to a run-target (the #48 association). \"\" detaches.
@@ -32,6 +38,9 @@ export interface PatchSessionIn {
      * Terminal publishes (or, with \"\", withdraws) the URL this session\'s live terminal can be watched at. A pointer so \"absent\" and \"withdrawn\" are different requests: a session that stops sharing must be able to say so.
      */
     terminal?: string;
+    /**
+     * Title rewrites the human line, up to 512 characters — usually because the work turned out to be something other than what it was opened as.
+     */
     title?: string;
 }
 

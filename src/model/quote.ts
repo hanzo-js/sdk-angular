@@ -10,26 +10,41 @@
 
 
 export interface Quote { 
+    /**
+     * ChargeCents is what month one costs after the discount, in USD cents, totalled over the seats quoted. On team that is a multiple of the seat count, so it is not ListCents minus DiscountCents.
+     */
     chargeCents?: number;
     /**
-     * Code, Plan and Seats echo what was quoted.
+     * Code is the promo that was priced, as stored.
      */
     code?: string;
+    /**
+     * DiscountCents is what the promo takes off month one, in USD cents. The promo rate reaches at most TeamSeatCap seats; seats past the cap bill at full list and add nothing here. It is arithmetic only — quoting credits nothing, counts nothing and reserves nothing.
+     */
     discountCents?: number;
     /**
      * Eligible says whether a redeem would be accepted right now; Reason says why not when it would not.
      */
     eligible?: boolean;
     /**
-     * ListCents is the undiscounted month price, ChargeCents what would be charged, DiscountCents the difference — all in USD cents.
+     * ListCents is the undiscounted month price in USD cents: PER SEAT on team, the whole month on pro and max, 0 for a plan with no list price.
      */
     listCents?: number;
+    /**
+     * Plan is the tier priced, lower-cased and trimmed: pro, max or team. Unlike a redemption\'s plan this one comes from the REQUEST — quoting has no side effects, so it will happily price a plan the caller does not hold.
+     */
     plan?: string;
+    /**
+     * Reason is why Eligible is false, drawn from: \"promo redemption is closed\" (the subsystem is off, which is how it ships), \"promo redemption cap reached\", \"promo is not active\", \"plan is free or unknown; nothing to discount\", \"promo does not cover plan <plan>\". Absent when Eligible is true.
+     */
     reason?: string;
     /**
      * Remaining is how many redemptions are left under the fleet-wide cap.
      */
     remaining?: number;
+    /**
+     * Seats is the seat count priced; a request of 0 or less was read as 1. It only bites on team, the one per-seat plan — pro and max are single-seat and ignore it.
+     */
     seats?: number;
 }
 

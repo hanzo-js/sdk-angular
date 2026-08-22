@@ -14,9 +14,21 @@ export interface ReportRunIn {
      * Branch, CommitSha and Diffstat describe what the run produced; Error is the failure when OK is false. Each is clamped, never rejected.
      */
     branch?: string;
+    /**
+     * Changed says whether the run produced any commit. It is INDEPENDENT of OK: a run can succeed and change nothing (there was nothing to do), and a run can fail after committing some of its work. Two questions, two booleans.
+     */
     changed?: boolean;
+    /**
+     * CommitSha is the tip the run pushed, clamped to 128 characters. Empty when it pushed nothing, which is the same case Changed reports false for.
+     */
     commitSha?: string;
+    /**
+     * Diffstat is the run\'s own summary of what it changed, as text, clamped to 64 KiB. Free-form: it is shown, never parsed.
+     */
     diffstat?: string;
+    /**
+     * Error is why the run failed, clamped to 64 KiB. It is CLAMPED rather than refused — a truncated reason is worth more than a rejected report, because a rejected report leaves the durable workflow waiting forever.
+     */
     error?: string;
     /**
      * ID is the machine reporting, from the path.

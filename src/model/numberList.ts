@@ -11,6 +11,9 @@ import { Number } from './number';
 
 
 export interface NumberList { 
+    /**
+     * Data is the numbers, and which numbers depends on the route: a search answers what the carrier has available, a list answers what this org already holds.
+     */
     data?: Array<Number>;
 }
 

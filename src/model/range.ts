@@ -11,7 +11,13 @@ import { Position } from './position';
 
 
 export interface Range { 
+    /**
+     * End is the position just past the span, excluded — the range is half-open, so an empty range has Start equal to End.
+     */
     end?: Position;
+    /**
+     * Start is the first position in the span, included.
+     */
     start?: Position;
 }
 

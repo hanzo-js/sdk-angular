@@ -201,6 +201,59 @@ export class WebsearchApi extends BaseService {
     }
 
     /**
+     * Fetch one page and get its extracted markdown, in the firecrawl envelope.
+     * Takes {url} and answers {success, data:{markdown, metadata}} — the exact contract a firecrawl client decodes. The fetch, extraction and optional browser render run in-process; there is no crawler pod to be down.  The shared service key is required as an Authorization Bearer, compared in constant time: unset on the deployment is 503, missing or wrong is 401. Unlike search, a validated principal does NOT substitute for it — this is the service-to-service door.  A page is archived under the caller\&#39;s own org and project, taken from the verified principal when there is one, so a scrape lands in the same corpus /v1/crawl fills and a URL already read under that scope is answered from the archive without touching the network. A service caller carrying no principal shares the unscoped prefix.  The URL is caller-supplied and fetched from INSIDE the cluster, which makes this a request-forgery primitive by construction: in-namespace service DNS and a cloud metadata endpoint that hands credentials to anyone who asks are both a resolution away. Only http and https are accepted, and every address actually dialled must be public unicast — loopback, link-local, private and multicast are refused. The check lives in the DIALER rather than on the hostname, because resolving a name to validate it and then letting the transport resolve it again is a gap DNS rebinding walks straight through; redirects re-enter the same dialer, so a public URL that bounces to the metadata address is refused at the hop that matters.  The one thing to get right: FAILURE IS 200. A missing or unparseable url, a body over the 1 MiB read cap, and a fetch that could not be completed all answer HTTP 200 with success:false and a reason — a firecrawl client reads data.success, not the status line. Only the two auth refusals use a status code, so a caller that branches on HTTP status alone will read every failed scrape as a success.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postWebsearchScrape(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postWebsearchScrape(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postWebsearchScrape(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postWebsearchScrape(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/websearch/scrape`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Keyless web meta-search, in the SearXNG JSON envelope.
      * Answers {query, number_of_results, results:[{url, title, content, engine}]} — the exact /search?format&#x3D;json contract a SearXNG client decodes, so an agent tool configured against SearXNG reaches this with no change. &#x60;q&#x60; is the query and &#x60;language&#x60; narrows it; both are read from the QUERY STRING.  Served in-process by a Go meta-search over keyless public engines, never a third-party search API and never a search key. The enabled engines run concurrently and their hits are merged, deduplicated by normalised URL (host and path, trailing slash and fragment dropped, query kept — distinct queries are distinct results) and capped at 30. Ranking is deterministic rather than scored: the first configured engine\&#39;s hits lead.  TWO WAYS IN, one-way equivalent, and no third: a validated principal — the same gate the whole data plane uses — passes straight through, and a caller without one must present the shared service key as X-API-Key, compared in constant time. A deployment with no key configured answers 503 rather than opening the surface to everyone, and a missing or wrong key is 401. It is never an open proxy. There is no tenant scoping beyond that gate, and there is nothing to scope: the results are public web pages, identical for every caller.  It fails SOFT on the engines and closed only on the gate. An engine that errors or is served a bot-challenge page contributes zero results and never fails the request, so an empty &#x60;results&#x60; is a real answer — nothing was found — and not an outage. The array is always present, never null.  The one thing to get right: every method answers identically. This is one handler registered for all of them, and it reads only the query string, so a body sent on the write verbs is ignored rather than refused.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

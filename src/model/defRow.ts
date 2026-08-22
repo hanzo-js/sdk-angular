@@ -11,9 +11,21 @@
 
 export interface DefRow { 
     definition?: any | null;
+    /**
+     * Key is the flag\'s primary key in the caller\'s (org, project) store, and the name evaluation looks it up by. On a write it is taken from the URL, never from the body: the stored document\'s own \"key\" is forced to match.
+     */
     key?: string;
+    /**
+     * UpdatedAt is when the definition was last written, RFC 3339 UTC.
+     */
     updated_at?: string;
+    /**
+     * UpdatedBy is the email of the principal who last wrote it. Empty when the write came from an in-process composer (an experiment registering its own assignment flag) rather than from a signed-in person.
+     */
     updated_by?: string;
+    /**
+     * Version is 1 when the key was created and rises by one on every overwrite. It counts writes, not content changes: re-storing an identical document bumps it.
+     */
     version?: number;
 }
 

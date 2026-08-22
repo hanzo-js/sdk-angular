@@ -15,6 +15,9 @@ export interface SeriesLine {
      * agent name
      */
     key?: string;
+    /**
+     * Points is one bucket per interval across the whole window, in time order and never sparse: a bucket with no runs is present with v 0, so two lines drawn from two agents share an x-axis without the client aligning anything. The window decides the count — 24 hourly for 24H, 7 daily, 30 daily.
+     */
     points?: Array<SeriesPoint>;
 }
 

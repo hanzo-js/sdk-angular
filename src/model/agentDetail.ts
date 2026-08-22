@@ -16,9 +16,15 @@ export interface AgentDetail {
     description?: string;
     executionMode?: string;
     id?: string;
+    /**
+     * Instructions is the agent\'s system prompt, verbatim, up to 32 KiB. It is the one field the list read withholds, because it is the agent\'s whole behaviour and a page of them would be a page of prompts.
+     */
     instructions?: string;
     model?: string;
     name?: string;
+    /**
+     * RecentRuns is the agent\'s 20 most recent executions, newest first. It is a window on the history, not the history: the count beside it is `runs`.
+     */
     recentRuns?: Array<AgentRunView>;
     runs?: number;
     schedule?: string;

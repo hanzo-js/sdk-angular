@@ -11,17 +11,20 @@
 
 export interface EngineAdvertisement { 
     /**
-     * [\"openai\",\"anthropic\"]
+     * APIs are the wire formats the engine serves on that one port: \"openai\", \"anthropic\", or both.
      */
     apis?: Array<string>;
     /**
-     * ids from the node\'s GET /v1/models
+     * Models are the model ids the node\'s own GET /v1/models answered with — what this GPU can actually be asked for.
      */
     models?: Array<string>;
     /**
-     * \"ready\" | \"unreachable\"
+     * Status is \"ready\" when the node\'s engine answered, \"unreachable\" when it did not. Advertised is not the same as serving, and this is the difference.
      */
     status?: string;
+    /**
+     * URL is the base address the node advertised its engine on — where a model call to this GPU is sent. The node chose it, so reaching it is a question about the node\'s network, not about this surface.
+     */
     url?: string;
 }
 

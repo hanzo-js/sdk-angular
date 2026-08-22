@@ -11,11 +11,29 @@ import { O11yDeployment } from './o11yDeployment';
 
 
 export interface O11yStatusResult { 
+    /**
+     * CheckedAt is when this answer was measured, RFC3339 UTC.
+     */
     checkedAt?: string;
+    /**
+     * Deployments is the per-replica inventory behind the verdict. Empty means the telemetry store reported none, not that the service runs on none.
+     */
     deployments?: Array<O11yDeployment>;
+    /**
+     * LatencyMs is the health probe\'s round trip in MILLISECONDS, time-boxed at two seconds. It is 0 when no probe answered, which is not a fast service.
+     */
     latencyMs?: number;
+    /**
+     * Product is the service this answer is about, echoed back.
+     */
     product?: string;
+    /**
+     * Source is where the verdict came from: \"probe\" (we asked and it answered), \"datastore\" (the probe did not answer and the replica inventory decided it), \"unreachable\" (neither), or \"unknown-service\" for a well-formed product name nothing backs — which is answered without probing, since dialling an arbitrary host on a caller\'s say-so is the request forgery this refuses.
+     */
     source?: string;
+    /**
+     * Up is true when the health probe succeeded OR any replica reports up, so a service reachable by either route reads up. Read Source to know which.
+     */
     up?: boolean;
 }
 

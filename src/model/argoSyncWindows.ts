@@ -10,8 +10,17 @@
 
 
 export interface ArgoSyncWindows { 
+    /**
+     * ActiveWindows are the sync windows in force right now. Always null: this platform declares none, so nothing is ever in force.
+     */
     activeWindows?: Array<object>;
+    /**
+     * AssignedWindows are the windows configured for this application at all, whether or not currently in force. Always null, for the same reason.
+     */
     assignedWindows?: Array<object>;
+    /**
+     * CanSync is whether a sync would be permitted at this moment. Always true — with no windows there is nothing to deny it. A caller must not read this as \"a sync will succeed\"; it only means no window is blocking one.
+     */
     canSync?: boolean;
 }
 

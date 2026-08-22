@@ -10,19 +10,37 @@
 
 
 export interface Entry { 
+    /**
+     * Archetype is WHAT KIND OF THING this is, from a closed and ordered list — model | contract | chain | sdk | template | infra | site | app — derived from the repository\'s own topics, name and description, first match winning, and always `site` for a deployed site. It is DERIVED, never guessed by a model, because a wrong archetype hides a row from the browse rail more thoroughly than a missing one does. Empty when no topic matched: unclassified, not uncategorisable.
+     */
     archetype?: string;
+    /**
+     * Description is the repository\'s own one-line GitHub description, carried verbatim. It comes from the SOURCE half of a row, so a site that was never matched to a repository has none, and nothing here is written by us.
+     */
     description?: string;
     /**
      * Forkable is NOT omitempty: false is an answer here, not a missing field. Omitted, a client could not tell \"you cannot fork this\" from \"nobody said\".
      */
     forkable?: boolean;
+    /**
+     * ID is \"<org>/<name>\" and is the corpus\'s primary key: a re-published entry updates in place under it rather than accumulating duplicates, so it is the one handle stable enough to link to or to name in a `template` filter. Two orgs can spell the same id, and `canonical` picks which one keeps it.
+     */
     id?: string;
     /**
      * repo | site
      */
     kind?: string;
+    /**
+     * Language is the repository\'s primary implementation language as GitHub computes it (\"Go\", \"TypeScript\"), and the case is GitHub\'s. Empty for a site with no source half and for a repository GitHub could not classify.
+     */
     language?: string;
+    /**
+     * License is the terms that upstream work carries, in whichever form the half that credited it had: an SPDX id (\"MIT\", \"Apache-2.0\") on a GitHub fork, free text on a site whose publisher declared it. GitHub\'s NOASSERTION — \"we could not identify it\" — reads as none rather than as a licence by that name. So empty means UNDECLARED and never unencumbered, and Upstream is what says whether the question applies at all.
+     */
     license?: string;
+    /**
+     * Name is the short identifier inside the org — the repository\'s name, or the site\'s slug — and is the half of ID after the slash. Not a display name; Title is.
+     */
     name?: string;
     /**
      * Note is why a row is NOT in the published catalog, set by the admission gate (gate.go) on the sites it holds back. It is the difference between a demo that silently vanished from the public lens and one whose owner can read the reason and fix it. A published row never carries one.
@@ -44,12 +62,21 @@ export interface Entry {
      * Scope is provenance, not storage: \"public\" for a row from the published corpus, \"org\" for one only this caller can see. A UI that cannot tell them apart cannot warn before sharing a link.
      */
     scope?: string;
+    /**
+     * Stars is GitHub\'s stargazer count for the source repository, read at the last sync and never accumulated here. It is not a ranking — the page sorts on Updated — but it is the tiebreak when two orgs claim one ID. Absent for a site with no repository behind it, and for a repository nobody has starred.
+     */
     stars?: number;
     /**
      * lineage, if forked from one
      */
     template?: string;
+    /**
+     * Title is what to SHOW. A site\'s human name wins where it has one; a repo row falls back to the repository name, so on a repo this usually just repeats Name. Absent only for a site whose project was never named — render Name.
+     */
     title?: string;
+    /**
+     * Updated is when the thing last MOVED, as RFC 3339 in UTC: a repository\'s last push, or a site\'s last deploy. The page is ordered on it, most recent first, by comparing these strings — so the format is load-bearing and not cosmetic. Absent means the source reported no timestamp, and such a row sorts last.
+     */
     updated?: string;
     /**
      * Upstream/License credit the third-party work an entry was published from: the difference between \"this org built it\" and \"somebody else built it and we are showing it to you\".  WHO built it is Org, above — the account that paid for the project. There was once a separate admin-gated `official` boolean here claiming the same thing, and because it was gated it disagreed: apps Hanzo wrote and hosts were published by a script holding an ordinary org token, so it stayed false on all of them and this directory filed our own work as somebody else\'s. A field that restates an unforgeable fact can only ever be the wrong copy of it.

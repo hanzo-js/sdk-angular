@@ -14,13 +14,37 @@ import { PnL } from './pnL';
 
 
 export interface FinancialPackage { 
+    /**
+     * BalanceSheet is struck as of the period END, not the start.
+     */
     balanceSheet?: BalanceSheet;
+    /**
+     * From opens the reporting period. Absent means from the beginning of the ledger.
+     */
     from?: string;
+    /**
+     * GeneratedAt is when the bundle was assembled — the moment the statements were struck, which is what makes two exports of the same period comparable.
+     */
     generatedAt?: string;
+    /**
+     * GL is the newest slice of ledger detail, as the audit trail behind the statements. It is CAPPED, so on a busy ledger it is a sample rather than the full support for the figures above.
+     */
     gl?: Array<GLRow>;
+    /**
+     * Org is the organisation whose books these are — the validated caller\'s own, stamped so a downloaded bundle still says whose it is.
+     */
     org?: string;
+    /**
+     * PnL is the income statement for the period, on an accrual basis.
+     */
     pnl?: PnL;
+    /**
+     * To closes it. Absent means up to now.
+     */
     to?: string;
+    /**
+     * TrialBalance is the proof the ledger balances over the period.
+     */
     trialBalance?: TrialBalance;
 }
 

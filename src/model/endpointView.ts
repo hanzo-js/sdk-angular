@@ -10,8 +10,17 @@
 
 
 export interface EndpointView { 
+    /**
+     * Connector names a connected account from the org\'s connector registry, when the endpoint reaches its provider through one. Absent means the locator stands on its own; the pair below is always sufficient either way.
+     */
     connector?: string;
+    /**
+     * Locator addresses the thing INSIDE that provider, in the provider\'s own terms — an https clone URL for a hosted forge, a bare repository name for hanzo-git. It never carries a credential.
+     */
     locator?: string;
+    /**
+     * Provider is the concrete integration: \"github\", \"gitlab\" or \"hanzo-git\".
+     */
     provider?: string;
 }
 

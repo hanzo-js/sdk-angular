@@ -47,38 +47,38 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface MqApiDeleteMqStreamsByNameRequestParams {
+export interface MqApiDeleteMqStreamByNameRequestParams {
     /** Name is the stream name, from the path. */
     name: string;
 }
 
-export interface MqApiDeleteMqStreamsByNameMessagesBySeqRequestParams {
+export interface MqApiDeleteMqStreamByNameMessageBySeqRequestParams {
     /** Name is the stream name, from the path. */
     name: string;
     /** Seq is the message\&#39;s stream sequence, from the path. */
     seq: number;
 }
 
-export interface MqApiDeleteMqStreamsByStreamConsumersByNameRequestParams {
+export interface MqApiDeleteMqStreamByStreamConsumerByNameRequestParams {
     /** Stream is the stream name, from the path. */
     stream: string;
     /** Name is the consumer name, from the path. */
     name: string;
 }
 
-export interface MqApiGetMqStreamsRequestParams {
+export interface MqApiGetMqStreamRequestParams {
     /** Limit caps the streams returned (1–1000, default 100). */
     limit?: number;
     /** Offset skips that many streams, name-ordered. */
     offset?: number;
 }
 
-export interface MqApiGetMqStreamsByNameRequestParams {
+export interface MqApiGetMqStreamByNameRequestParams {
     /** Name is the stream name, from the path. */
     name: string;
 }
 
-export interface MqApiGetMqStreamsByNameMessagesRequestParams {
+export interface MqApiGetMqStreamByNameMessageRequestParams {
     /** Name is the stream name, from the path. */
     name: string;
     /** Seq reads the message at this sequence (with next_by_subject: the walk\&#39;s start). */
@@ -91,7 +91,7 @@ export interface MqApiGetMqStreamsByNameMessagesRequestParams {
     limit?: number;
 }
 
-export interface MqApiGetMqStreamsByStreamConsumersRequestParams {
+export interface MqApiGetMqStreamByStreamConsumerRequestParams {
     /** Stream is the stream name, from the path. */
     stream: string;
     /** Limit caps the consumers returned (1–1000, default 100). */
@@ -100,30 +100,30 @@ export interface MqApiGetMqStreamsByStreamConsumersRequestParams {
     offset?: number;
 }
 
-export interface MqApiGetMqStreamsByStreamConsumersByNameRequestParams {
+export interface MqApiGetMqStreamByStreamConsumerByNameRequestParams {
     /** Stream is the stream name, from the path. */
     stream: string;
     /** Name is the consumer name, from the path. */
     name: string;
 }
 
-export interface MqApiPostMqStreamsRequestParams {
+export interface MqApiPostMqStreamRequestParams {
     config: Config;
 }
 
-export interface MqApiPostMqStreamsByNamePurgeRequestParams {
+export interface MqApiPostMqStreamByNamePurgeRequestParams {
     /** Name is the stream name, from the path. */
     name: string;
     purge: Purge;
 }
 
-export interface MqApiPostMqStreamsByStreamConsumersRequestParams {
+export interface MqApiPostMqStreamByStreamConsumerRequestParams {
     /** Stream is the stream name, from the path. */
     stream: string;
     makeIn: MakeIn;
 }
 
-export interface MqApiPostMqStreamsByStreamConsumersByNameNextRequestParams {
+export interface MqApiPostMqStreamByStreamConsumerByNameNextRequestParams {
     /** Stream is the stream name, from the path. */
     stream: string;
     /** Name is the consumer name, from the path. */
@@ -131,7 +131,7 @@ export interface MqApiPostMqStreamsByStreamConsumersByNameNextRequestParams {
     nextIn: NextIn;
 }
 
-export interface MqApiPutMqStreamsByNameRequestParams {
+export interface MqApiPutMqStreamByNameRequestParams {
     /** Name is the stream name, unique within the org (alphanumeric, hyphens, underscores). */
     name: string;
     config: Config;
@@ -154,13 +154,13 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteMqStreamsByName(requestParameters: MqApiDeleteMqStreamsByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteMqStreamsByName(requestParameters: MqApiDeleteMqStreamsByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteMqStreamsByName(requestParameters: MqApiDeleteMqStreamsByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteMqStreamsByName(requestParameters: MqApiDeleteMqStreamsByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteMqStreamByName(requestParameters: MqApiDeleteMqStreamByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteMqStreamByName(requestParameters: MqApiDeleteMqStreamByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteMqStreamByName(requestParameters: MqApiDeleteMqStreamByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteMqStreamByName(requestParameters: MqApiDeleteMqStreamByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling deleteMqStreamsByName.');
+            throw new Error('Required parameter name was null or undefined when calling deleteMqStreamByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -190,7 +190,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -212,17 +212,17 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteMqStreamsByNameMessagesBySeq(requestParameters: MqApiDeleteMqStreamsByNameMessagesBySeqRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteMqStreamsByNameMessagesBySeq(requestParameters: MqApiDeleteMqStreamsByNameMessagesBySeqRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteMqStreamsByNameMessagesBySeq(requestParameters: MqApiDeleteMqStreamsByNameMessagesBySeqRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteMqStreamsByNameMessagesBySeq(requestParameters: MqApiDeleteMqStreamsByNameMessagesBySeqRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteMqStreamByNameMessageBySeq(requestParameters: MqApiDeleteMqStreamByNameMessageBySeqRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteMqStreamByNameMessageBySeq(requestParameters: MqApiDeleteMqStreamByNameMessageBySeqRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteMqStreamByNameMessageBySeq(requestParameters: MqApiDeleteMqStreamByNameMessageBySeqRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteMqStreamByNameMessageBySeq(requestParameters: MqApiDeleteMqStreamByNameMessageBySeqRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling deleteMqStreamsByNameMessagesBySeq.');
+            throw new Error('Required parameter name was null or undefined when calling deleteMqStreamByNameMessageBySeq.');
         }
         const seq = requestParameters?.seq;
         if (seq === null || seq === undefined) {
-            throw new Error('Required parameter seq was null or undefined when calling deleteMqStreamsByNameMessagesBySeq.');
+            throw new Error('Required parameter seq was null or undefined when calling deleteMqStreamByNameMessageBySeq.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -252,7 +252,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/messages/${this.configuration.encodeParam({name: "seq", value: seq, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/message/${this.configuration.encodeParam({name: "seq", value: seq, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -274,17 +274,17 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteMqStreamsByStreamConsumersByName(requestParameters: MqApiDeleteMqStreamsByStreamConsumersByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteMqStreamsByStreamConsumersByName(requestParameters: MqApiDeleteMqStreamsByStreamConsumersByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteMqStreamsByStreamConsumersByName(requestParameters: MqApiDeleteMqStreamsByStreamConsumersByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteMqStreamsByStreamConsumersByName(requestParameters: MqApiDeleteMqStreamsByStreamConsumersByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteMqStreamByStreamConsumerByName(requestParameters: MqApiDeleteMqStreamByStreamConsumerByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteMqStreamByStreamConsumerByName(requestParameters: MqApiDeleteMqStreamByStreamConsumerByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteMqStreamByStreamConsumerByName(requestParameters: MqApiDeleteMqStreamByStreamConsumerByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteMqStreamByStreamConsumerByName(requestParameters: MqApiDeleteMqStreamByStreamConsumerByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const stream = requestParameters?.stream;
         if (stream === null || stream === undefined) {
-            throw new Error('Required parameter stream was null or undefined when calling deleteMqStreamsByStreamConsumersByName.');
+            throw new Error('Required parameter stream was null or undefined when calling deleteMqStreamByStreamConsumerByName.');
         }
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling deleteMqStreamsByStreamConsumersByName.');
+            throw new Error('Required parameter name was null or undefined when calling deleteMqStreamByStreamConsumerByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -314,7 +314,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumers/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumer/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -444,10 +444,10 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMqStreams(requestParameters?: MqApiGetMqStreamsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Streams>;
-    public getMqStreams(requestParameters?: MqApiGetMqStreamsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Streams>>;
-    public getMqStreams(requestParameters?: MqApiGetMqStreamsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Streams>>;
-    public getMqStreams(requestParameters?: MqApiGetMqStreamsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getMqStream(requestParameters?: MqApiGetMqStreamRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Streams>;
+    public getMqStream(requestParameters?: MqApiGetMqStreamRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Streams>>;
+    public getMqStream(requestParameters?: MqApiGetMqStreamRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Streams>>;
+    public getMqStream(requestParameters?: MqApiGetMqStreamRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const limit = requestParameters?.limit;
         const offset = requestParameters?.offset;
 
@@ -485,7 +485,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams`;
+        let localVarPath = `/v1/mq/stream`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Streams>('get', `${basePath}${localVarPath}`,
             {
@@ -508,13 +508,13 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMqStreamsByName(requestParameters: MqApiGetMqStreamsByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Stream>;
-    public getMqStreamsByName(requestParameters: MqApiGetMqStreamsByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Stream>>;
-    public getMqStreamsByName(requestParameters: MqApiGetMqStreamsByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Stream>>;
-    public getMqStreamsByName(requestParameters: MqApiGetMqStreamsByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getMqStreamByName(requestParameters: MqApiGetMqStreamByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Stream>;
+    public getMqStreamByName(requestParameters: MqApiGetMqStreamByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Stream>>;
+    public getMqStreamByName(requestParameters: MqApiGetMqStreamByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Stream>>;
+    public getMqStreamByName(requestParameters: MqApiGetMqStreamByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getMqStreamsByName.');
+            throw new Error('Required parameter name was null or undefined when calling getMqStreamByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -545,7 +545,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Stream>('get', `${basePath}${localVarPath}`,
             {
@@ -567,13 +567,13 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMqStreamsByNameMessages(requestParameters: MqApiGetMqStreamsByNameMessagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReadOut>;
-    public getMqStreamsByNameMessages(requestParameters: MqApiGetMqStreamsByNameMessagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReadOut>>;
-    public getMqStreamsByNameMessages(requestParameters: MqApiGetMqStreamsByNameMessagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReadOut>>;
-    public getMqStreamsByNameMessages(requestParameters: MqApiGetMqStreamsByNameMessagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getMqStreamByNameMessage(requestParameters: MqApiGetMqStreamByNameMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReadOut>;
+    public getMqStreamByNameMessage(requestParameters: MqApiGetMqStreamByNameMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReadOut>>;
+    public getMqStreamByNameMessage(requestParameters: MqApiGetMqStreamByNameMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReadOut>>;
+    public getMqStreamByNameMessage(requestParameters: MqApiGetMqStreamByNameMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getMqStreamsByNameMessages.');
+            throw new Error('Required parameter name was null or undefined when calling getMqStreamByNameMessage.');
         }
         const seq = requestParameters?.seq;
         const lastBySubject = requestParameters?.lastBySubject;
@@ -618,7 +618,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/messages`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/message`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ReadOut>('get', `${basePath}${localVarPath}`,
             {
@@ -641,13 +641,13 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMqStreamsByStreamConsumers(requestParameters: MqApiGetMqStreamsByStreamConsumersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PickOut>;
-    public getMqStreamsByStreamConsumers(requestParameters: MqApiGetMqStreamsByStreamConsumersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PickOut>>;
-    public getMqStreamsByStreamConsumers(requestParameters: MqApiGetMqStreamsByStreamConsumersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PickOut>>;
-    public getMqStreamsByStreamConsumers(requestParameters: MqApiGetMqStreamsByStreamConsumersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getMqStreamByStreamConsumer(requestParameters: MqApiGetMqStreamByStreamConsumerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PickOut>;
+    public getMqStreamByStreamConsumer(requestParameters: MqApiGetMqStreamByStreamConsumerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PickOut>>;
+    public getMqStreamByStreamConsumer(requestParameters: MqApiGetMqStreamByStreamConsumerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PickOut>>;
+    public getMqStreamByStreamConsumer(requestParameters: MqApiGetMqStreamByStreamConsumerRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const stream = requestParameters?.stream;
         if (stream === null || stream === undefined) {
-            throw new Error('Required parameter stream was null or undefined when calling getMqStreamsByStreamConsumers.');
+            throw new Error('Required parameter stream was null or undefined when calling getMqStreamByStreamConsumer.');
         }
         const limit = requestParameters?.limit;
         const offset = requestParameters?.offset;
@@ -686,7 +686,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumers`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumer`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PickOut>('get', `${basePath}${localVarPath}`,
             {
@@ -709,17 +709,17 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMqStreamsByStreamConsumersByName(requestParameters: MqApiGetMqStreamsByStreamConsumersByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Consumer>;
-    public getMqStreamsByStreamConsumersByName(requestParameters: MqApiGetMqStreamsByStreamConsumersByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Consumer>>;
-    public getMqStreamsByStreamConsumersByName(requestParameters: MqApiGetMqStreamsByStreamConsumersByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Consumer>>;
-    public getMqStreamsByStreamConsumersByName(requestParameters: MqApiGetMqStreamsByStreamConsumersByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getMqStreamByStreamConsumerByName(requestParameters: MqApiGetMqStreamByStreamConsumerByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Consumer>;
+    public getMqStreamByStreamConsumerByName(requestParameters: MqApiGetMqStreamByStreamConsumerByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Consumer>>;
+    public getMqStreamByStreamConsumerByName(requestParameters: MqApiGetMqStreamByStreamConsumerByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Consumer>>;
+    public getMqStreamByStreamConsumerByName(requestParameters: MqApiGetMqStreamByStreamConsumerByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const stream = requestParameters?.stream;
         if (stream === null || stream === undefined) {
-            throw new Error('Required parameter stream was null or undefined when calling getMqStreamsByStreamConsumersByName.');
+            throw new Error('Required parameter stream was null or undefined when calling getMqStreamByStreamConsumerByName.');
         }
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getMqStreamsByStreamConsumersByName.');
+            throw new Error('Required parameter name was null or undefined when calling getMqStreamByStreamConsumerByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -750,7 +750,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumers/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumer/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Consumer>('get', `${basePath}${localVarPath}`,
             {
@@ -772,13 +772,13 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postMqStreams(requestParameters: MqApiPostMqStreamsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Stream>;
-    public postMqStreams(requestParameters: MqApiPostMqStreamsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Stream>>;
-    public postMqStreams(requestParameters: MqApiPostMqStreamsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Stream>>;
-    public postMqStreams(requestParameters: MqApiPostMqStreamsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postMqStream(requestParameters: MqApiPostMqStreamRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Stream>;
+    public postMqStream(requestParameters: MqApiPostMqStreamRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Stream>>;
+    public postMqStream(requestParameters: MqApiPostMqStreamRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Stream>>;
+    public postMqStream(requestParameters: MqApiPostMqStreamRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const config = requestParameters?.config;
         if (config === null || config === undefined) {
-            throw new Error('Required parameter config was null or undefined when calling postMqStreams.');
+            throw new Error('Required parameter config was null or undefined when calling postMqStream.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -818,7 +818,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams`;
+        let localVarPath = `/v1/mq/stream`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Stream>('post', `${basePath}${localVarPath}`,
             {
@@ -841,17 +841,17 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postMqStreamsByNamePurge(requestParameters: MqApiPostMqStreamsByNamePurgeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurgeOut>;
-    public postMqStreamsByNamePurge(requestParameters: MqApiPostMqStreamsByNamePurgeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurgeOut>>;
-    public postMqStreamsByNamePurge(requestParameters: MqApiPostMqStreamsByNamePurgeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurgeOut>>;
-    public postMqStreamsByNamePurge(requestParameters: MqApiPostMqStreamsByNamePurgeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postMqStreamByNamePurge(requestParameters: MqApiPostMqStreamByNamePurgeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurgeOut>;
+    public postMqStreamByNamePurge(requestParameters: MqApiPostMqStreamByNamePurgeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurgeOut>>;
+    public postMqStreamByNamePurge(requestParameters: MqApiPostMqStreamByNamePurgeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurgeOut>>;
+    public postMqStreamByNamePurge(requestParameters: MqApiPostMqStreamByNamePurgeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling postMqStreamsByNamePurge.');
+            throw new Error('Required parameter name was null or undefined when calling postMqStreamByNamePurge.');
         }
         const purge = requestParameters?.purge;
         if (purge === null || purge === undefined) {
-            throw new Error('Required parameter purge was null or undefined when calling postMqStreamsByNamePurge.');
+            throw new Error('Required parameter purge was null or undefined when calling postMqStreamByNamePurge.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -891,7 +891,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/purge`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/purge`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PurgeOut>('post', `${basePath}${localVarPath}`,
             {
@@ -914,17 +914,17 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postMqStreamsByStreamConsumers(requestParameters: MqApiPostMqStreamsByStreamConsumersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Consumer>;
-    public postMqStreamsByStreamConsumers(requestParameters: MqApiPostMqStreamsByStreamConsumersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Consumer>>;
-    public postMqStreamsByStreamConsumers(requestParameters: MqApiPostMqStreamsByStreamConsumersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Consumer>>;
-    public postMqStreamsByStreamConsumers(requestParameters: MqApiPostMqStreamsByStreamConsumersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postMqStreamByStreamConsumer(requestParameters: MqApiPostMqStreamByStreamConsumerRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Consumer>;
+    public postMqStreamByStreamConsumer(requestParameters: MqApiPostMqStreamByStreamConsumerRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Consumer>>;
+    public postMqStreamByStreamConsumer(requestParameters: MqApiPostMqStreamByStreamConsumerRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Consumer>>;
+    public postMqStreamByStreamConsumer(requestParameters: MqApiPostMqStreamByStreamConsumerRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const stream = requestParameters?.stream;
         if (stream === null || stream === undefined) {
-            throw new Error('Required parameter stream was null or undefined when calling postMqStreamsByStreamConsumers.');
+            throw new Error('Required parameter stream was null or undefined when calling postMqStreamByStreamConsumer.');
         }
         const makeIn = requestParameters?.makeIn;
         if (makeIn === null || makeIn === undefined) {
-            throw new Error('Required parameter makeIn was null or undefined when calling postMqStreamsByStreamConsumers.');
+            throw new Error('Required parameter makeIn was null or undefined when calling postMqStreamByStreamConsumer.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -964,7 +964,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumers`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumer`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Consumer>('post', `${basePath}${localVarPath}`,
             {
@@ -987,21 +987,21 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postMqStreamsByStreamConsumersByNameNext(requestParameters: MqApiPostMqStreamsByStreamConsumersByNameNextRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReadOut>;
-    public postMqStreamsByStreamConsumersByNameNext(requestParameters: MqApiPostMqStreamsByStreamConsumersByNameNextRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReadOut>>;
-    public postMqStreamsByStreamConsumersByNameNext(requestParameters: MqApiPostMqStreamsByStreamConsumersByNameNextRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReadOut>>;
-    public postMqStreamsByStreamConsumersByNameNext(requestParameters: MqApiPostMqStreamsByStreamConsumersByNameNextRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postMqStreamByStreamConsumerByNameNext(requestParameters: MqApiPostMqStreamByStreamConsumerByNameNextRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReadOut>;
+    public postMqStreamByStreamConsumerByNameNext(requestParameters: MqApiPostMqStreamByStreamConsumerByNameNextRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReadOut>>;
+    public postMqStreamByStreamConsumerByNameNext(requestParameters: MqApiPostMqStreamByStreamConsumerByNameNextRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReadOut>>;
+    public postMqStreamByStreamConsumerByNameNext(requestParameters: MqApiPostMqStreamByStreamConsumerByNameNextRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const stream = requestParameters?.stream;
         if (stream === null || stream === undefined) {
-            throw new Error('Required parameter stream was null or undefined when calling postMqStreamsByStreamConsumersByNameNext.');
+            throw new Error('Required parameter stream was null or undefined when calling postMqStreamByStreamConsumerByNameNext.');
         }
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling postMqStreamsByStreamConsumersByNameNext.');
+            throw new Error('Required parameter name was null or undefined when calling postMqStreamByStreamConsumerByNameNext.');
         }
         const nextIn = requestParameters?.nextIn;
         if (nextIn === null || nextIn === undefined) {
-            throw new Error('Required parameter nextIn was null or undefined when calling postMqStreamsByStreamConsumersByNameNext.');
+            throw new Error('Required parameter nextIn was null or undefined when calling postMqStreamByStreamConsumerByNameNext.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1041,7 +1041,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumers/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/next`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "stream", value: stream, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/consumer/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/next`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ReadOut>('post', `${basePath}${localVarPath}`,
             {
@@ -1064,17 +1064,17 @@ export class MqApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putMqStreamsByName(requestParameters: MqApiPutMqStreamsByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Stream>;
-    public putMqStreamsByName(requestParameters: MqApiPutMqStreamsByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Stream>>;
-    public putMqStreamsByName(requestParameters: MqApiPutMqStreamsByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Stream>>;
-    public putMqStreamsByName(requestParameters: MqApiPutMqStreamsByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putMqStreamByName(requestParameters: MqApiPutMqStreamByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Stream>;
+    public putMqStreamByName(requestParameters: MqApiPutMqStreamByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Stream>>;
+    public putMqStreamByName(requestParameters: MqApiPutMqStreamByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Stream>>;
+    public putMqStreamByName(requestParameters: MqApiPutMqStreamByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling putMqStreamsByName.');
+            throw new Error('Required parameter name was null or undefined when calling putMqStreamByName.');
         }
         const config = requestParameters?.config;
         if (config === null || config === undefined) {
-            throw new Error('Required parameter config was null or undefined when calling putMqStreamsByName.');
+            throw new Error('Required parameter config was null or undefined when calling putMqStreamByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1114,7 +1114,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/streams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Stream>('put', `${basePath}${localVarPath}`,
             {

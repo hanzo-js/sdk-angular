@@ -10,7 +10,13 @@
 
 
 export interface Wrote { 
+    /**
+     * Bytes is how many bytes the file now holds. A write REPLACES the file, so this is its whole length and not an amount appended, and 0 is a legitimate answer: a WriteIn with no Data truncates the file to nothing.
+     */
     bytes?: number;
+    /**
+     * Path is where the bytes actually landed: the caller\'s path resolved against the sandbox\'s working directory (Leased.Workdir), which is what a later read or a shell line inside the sandbox has to name.
+     */
     path?: string;
 }
 

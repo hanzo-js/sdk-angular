@@ -10,9 +10,21 @@
 
 
 export interface Page { 
+    /**
+     * Body is the reusable prompt or snippet itself. It may carry {placeholder} tokens for the client-specific bits — {client_name}, {domain}, {product} — which are substituted where the template is used, not here.
+     */
     body?: string;
+    /**
+     * Enabled is the admin lever. Absent reads as ON; an explicit false withdraws the template from org-facing reads.
+     */
     enabled?: boolean;
+    /**
+     * ID is the slug a step references to pull this template in.
+     */
     id?: string;
+    /**
+     * Title names the template in the authoring plane and in a picker.
+     */
     title?: string;
 }
 

@@ -10,10 +10,25 @@
 
 
 export interface GitOpsDeploy { 
+    /**
+     * Automated is whether CD started this deploy itself, from its own polling of the tracked git ref (initiatedBy.automated), rather than someone asking for it.
+     */
     automated?: boolean;
+    /**
+     * DeployedAt is when the apply finished, RFC 3339. Absent when CD recorded none.
+     */
     deployedAt?: string;
+    /**
+     * ID is CD\'s own sequence number for this deploy (status.history[].id). It increases with every applied revision, so the largest id in `history` is the most recent deploy — which is the first entry, since the list is reversed.
+     */
     id?: number;
+    /**
+     * Revision is the git commit this deploy applied, as CD recorded it.
+     */
     revision?: string;
+    /**
+     * StartedAt is when CD began applying the revision (deployStartedAt), RFC 3339. Absent when CD recorded none.
+     */
     startedAt?: string;
 }
 

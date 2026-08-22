@@ -19,9 +19,12 @@ export interface AudiencePreview {
      */
     count?: number;
     /**
-     * Deliverable is how many de-duplicated addresses a send would reach, and Unmatched how many cohort identifiers named no customer. Unmatched is reported rather than hidden: it is the honest explanation for a cohort of 500 that mails 3.
+     * Deliverable is how many de-duplicated mailboxes a send would reach. Two customers sharing an address count once, so it is <= Count.
      */
     deliverable?: number;
+    /**
+     * Reason is the error text of the read that failed: the org\'s roster could not be loaded (\"identity store unavailable…\"), or the cohort query had no warehouse to run against (\"analytics warehouse not configured\"). Absent when the evaluation succeeded, so its presence and Available=false are one fact seen twice.
+     */
     reason?: string;
     /**
      * Sample is up to 1000 cohort IDENTIFIERS — never addresses, which product analytics does not hold. Empty for an event-less (whole-org) audience.
@@ -31,6 +34,9 @@ export interface AudiencePreview {
      * Source names where the cohort was read: the events table for an event audience, \"iam:<org>\" for the whole-org one.
      */
     source?: string;
+    /**
+     * Unmatched is how many cohort identifiers named nobody on the org\'s roster and so have no address to mail. It is reported rather than hidden: it is the honest explanation for a cohort of 500 that mails 3. Always 0 for an event-less (whole-org) audience, which starts from the roster and has nothing to match.
+     */
     unmatched?: number;
 }
 

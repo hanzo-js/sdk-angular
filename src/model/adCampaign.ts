@@ -11,21 +11,48 @@
 
 export interface AdCampaign { 
     /**
-     * provider ad-account ref (Meta act_<id>)
+     * Account is the provider ad-account the campaign runs under, in Meta\'s act_<id> form. Empty until the org supplies one or a launch resolves it.
      */
     account?: string;
+    /**
+     * Budget is the campaign\'s authorized spend in MINOR units (cents). Negative clamps to 0. It is the org\'s stored plan: a Meta launch creates the campaign object only, and the delivering budget lives on the ad set.
+     */
     budget?: number;
+    /**
+     * CreatedAt is when the campaign was first stored, in unix seconds. It never changes, including across a full-replace update.
+     */
     createdAt?: number;
     /**
-     * provider campaign id after a launch
+     * ExternalID is the ad network\'s own campaign id, written by a successful launch and by nothing else — an update never touches it. Empty means this campaign has never reached its network.
      */
     externalId?: string;
+    /**
+     * ID is the campaign\'s server-minted handle, \"camp_\" + 32 hex. A create body cannot choose it, and it is the id every other route addresses.
+     */
     id?: string;
+    /**
+     * Name is the campaign\'s display label, and the name Meta creates the campaign object under at launch. Required; trimmed and bounded to 1024 bytes.
+     */
     name?: string;
+    /**
+     * Objective is the campaign goal spelled as the provider names it (\"conversions\", \"OUTCOME_TRAFFIC\"), passed through to the network verbatim at launch — Meta defaults an empty one to OUTCOME_TRAFFIC. Free text, bounded to 1024 bytes; no vocabulary is enforced here.
+     */
     objective?: string;
+    /**
+     * Platform is the ad network: meta, google, tiktok or x, and nothing else — a write naming another is 400. Empty stores as meta. Only meta executes today; launching any of the other three is 501.
+     */
     platform?: string;
+    /**
+     * Spend is spend-to-date in MINOR units (cents), as last written through create or update. Negative clamps to 0. It is NOT read back from the network — that is a separate insights call — so 0 means nothing was recorded here, not that nothing was spent.
+     */
     spend?: number;
+    /**
+     * Status is the lifecycle: draft, active, paused or completed, and nothing else — a write naming another is 400. Empty stores as draft; a successful launch sets active. It records what this deployment did, not what the ad network currently reports.
+     */
     status?: string;
+    /**
+     * UpdatedAt is when the row was last written, in unix seconds — set by create, update and launch. Listings are ordered by it, newest first.
+     */
     updatedAt?: number;
 }
 

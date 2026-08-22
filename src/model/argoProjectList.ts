@@ -12,7 +12,13 @@ import { ArgoListMeta } from './argoListMeta';
 
 
 export interface ArgoProjectList { 
+    /**
+     * Items is the projects visible to the caller — its own organization\'s, or every organization\'s for a SuperAdmin. A project named \"default\" is always present and is prepended when IAM does not carry one, because that is what an application with no project label groups under.
+     */
     items?: Array<ArgoProject>;
+    /**
+     * Metadata is the list envelope the SPA expects; it carries no resume point.
+     */
     metadata?: ArgoListMeta;
 }
 

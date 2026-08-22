@@ -11,12 +11,33 @@ import { Field } from './field';
 
 
 export interface TemplateView { 
+    /**
+     * Category is the corporate need the template serves: formation, equity, ops or sales. Formation and equity are the securities-class categories, which is what forces counselReview.
+     */
     category?: string;
+    /**
+     * CounselReview marks a template whose rendered documents open with the counsel notice. True for every formation and equity template whatever an override sends: the engine prepends the notice and no caller can suppress it.
+     */
     counselReview?: boolean;
+    /**
+     * Fields declares the merge fields the body consumes — every key a generation must supply, each with its human label. All are REQUIRED: a missing one is refused rather than rendered as a blank into a contract.
+     */
     fields?: Array<Field>;
+    /**
+     * ID is the template\'s stable id and the path segment that fetches its body — \"nda\", \"msa\", \"safe\". An override keeps the built-in\'s id.
+     */
     id?: string;
+    /**
+     * Origin is \"builtin\" for a template the platform ships or \"org\" for one this org saved. It separates the catalog every tenant sees from this tenant\'s own.
+     */
     origin?: string;
+    /**
+     * Title is the display name, e.g. \"Mutual Non-Disclosure Agreement\". A generated document inherits it.
+     */
     title?: string;
+    /**
+     * Version is which version of this template the caller\'s org resolves to. A built-in is version 1; the org\'s first override is 2 and each save increments, so an override version never collides with the built-in\'s.
+     */
     version?: number;
 }
 

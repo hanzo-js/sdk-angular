@@ -10,7 +10,13 @@
 
 
 export interface ArgoInfoItem { 
+    /**
+     * Name is the chip\'s label. The only one this projection produces is \"Image Tag\".
+     */
     name?: string;
+    /**
+     * Value is the chip\'s value — for \"Image Tag\", the tag the node runs.
+     */
     value?: string;
 }
 

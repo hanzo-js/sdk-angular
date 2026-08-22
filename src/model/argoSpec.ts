@@ -12,8 +12,17 @@ import { ArgoDestination } from './argoDestination';
 
 
 export interface ArgoSpec { 
+    /**
+     * Destination is which cluster and namespace it lands in. Zero-valued on a CD row: this projection reports CD\'s source, not its destination.
+     */
     destination?: ArgoDestination;
+    /**
+     * Project is the AppProject this application is grouped and filtered under. For an App CR it is the app.kubernetes.io/part-of label — the IAM project name — falling back to \"default\" when the CR carries no such label.
+     */
     project?: string;
+    /**
+     * Source is where the desired state is declared.
+     */
     source?: ArgoSource;
 }
 

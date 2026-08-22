@@ -20,9 +20,12 @@ export interface ProjectsBoundDomains {
      */
     domains?: Array<string>;
     /**
-     * Org and Slug identify the site the hosts were bound to.
+     * Org is the organisation that owns the site.
      */
     org?: string;
+    /**
+     * Slug is the site the hosts were bound to.
+     */
     slug?: string;
 }
 

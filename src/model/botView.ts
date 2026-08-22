@@ -11,7 +11,13 @@ import { AgentBinding } from './agentBinding';
 
 
 export interface BotView { 
+    /**
+     * Agent is the cloud Agent this machine runs, lifted out of the binding so a list of bots reads without following one. Empty means the machine is a bot machine with nothing bound — it costs money and answers nothing.
+     */
     agent?: string;
+    /**
+     * Binding is the record joining this machine to that agent, carrying vm\'s own reconciled status and its reason. Absent means no runtime is bound, which is also what a stopped bot looks like: stopping unbinds and leaves the machine running.
+     */
     binding?: AgentBinding;
     createdTime?: string;
     gpu?: string;

@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * Range is the window and bucket width actually used, after clamping — not what was asked for, which is why a caller reads it back rather than assuming.
+ */
 export interface O11yAvailabilityResponseRange { 
     sinceSec?: number;
     stepSec?: number;

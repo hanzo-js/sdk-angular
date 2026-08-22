@@ -11,7 +11,13 @@ import { PagesDeploymentConfig } from './pagesDeploymentConfig';
 
 
 export interface PagesDeploymentConfigs { 
+    /**
+     * Preview is the config every branch build other than the production branch runs under. It is a SEPARATE set of bindings and variables, which is what lets a preview point at test data.
+     */
     preview?: PagesDeploymentConfig;
+    /**
+     * Production is the config the production branch builds under.
+     */
     production?: PagesDeploymentConfig;
 }
 

@@ -10,10 +10,25 @@
 
 
 export interface ProjectsSite { 
+    /**
+     * Name is the site\'s display name.
+     */
     name?: string;
+    /**
+     * Slug is the site\'s handle — also the label of the host it serves at.
+     */
     slug?: string;
+    /**
+     * Status is the project\'s state behind the site — whether it is serving, still building, or failed its last build. A site that is listed is not necessarily one that answers.
+     */
     status?: string;
+    /**
+     * UpdatedAt is when the project last changed, as Unix seconds.
+     */
     updatedAt?: number;
+    /**
+     * URL is the pretty address readers use, not the object-store path behind it.
+     */
     url?: string;
 }
 

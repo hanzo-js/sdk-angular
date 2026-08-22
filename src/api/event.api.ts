@@ -19,13 +19,68 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { CaptureResult } from '../model/captureResult';
 // @ts-ignore
+import { ErrorList } from '../model/errorList';
+// @ts-ignore
+import { EventList } from '../model/eventList';
+// @ts-ignore
+import { HealthReport } from '../model/healthReport';
+// @ts-ignore
+import { InsightsStatus } from '../model/insightsStatus';
+// @ts-ignore
+import { Overview } from '../model/overview';
+// @ts-ignore
 import { PostEventRequest } from '../model/postEventRequest';
+// @ts-ignore
+import { ReplayBody } from '../model/replayBody';
+// @ts-ignore
+import { Timeseries } from '../model/timeseries';
+// @ts-ignore
+import { Top } from '../model/top';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 import { BaseService } from '../api.base.service';
 
+
+export interface EventApiGetEventErrorsRequestParams {
+    /** Limit is how many rows to return, newest first. Default 50, maximum 200; a value at or below zero, or one that is not a number, takes the default. */
+    limit?: number;
+}
+
+export interface EventApiGetEventInsightsEventsRequestParams {
+    /** Limit is how many rows to return, newest first. Default 50, maximum 200; a value at or below zero, or one that is not a number, takes the default. */
+    limit?: number;
+}
+
+export interface EventApiGetEventOverviewRequestParams {
+    /** Range is a relative window: a count and a unit — 24h, 7d, 90d, any &lt;N&gt;h or &lt;N&gt;d — or day, week, month, all. Default 24h. Ignored when both start and end are given. An unknown value, or one past the 730-day horizon, is a 400. */
+    range?: string;
+    /** Start is the inclusive lower bound of a custom window, RFC3339. Requires end. */
+    start?: string;
+    /** End is the exclusive upper bound of a custom window, RFC3339. Requires start. */
+    end?: string;
+}
+
+export interface EventApiGetEventTimeseriesRequestParams {
+    /** Range is a relative window: a count and a unit — 24h, 7d, 90d, any &lt;N&gt;h or &lt;N&gt;d — or day, week, month, all. Default 24h. Ignored when both start and end are given. An unknown value, or one past the 730-day horizon, is a 400. */
+    range?: string;
+    /** Start is the inclusive lower bound of a custom window, RFC3339. Requires end. */
+    start?: string;
+    /** End is the exclusive upper bound of a custom window, RFC3339. Requires start. */
+    end?: string;
+}
+
+export interface EventApiGetEventTopRequestParams {
+    /** Range is a relative window: a count and a unit — 24h, 7d, 90d, any &lt;N&gt;h or &lt;N&gt;d — or day, week, month, all. Default 24h. Ignored when both start and end are given. An unknown value, or one past the 730-day horizon, is a 400. */
+    range?: string;
+    /** Start is the inclusive lower bound of a custom window, RFC3339. Requires end. */
+    start?: string;
+    /** End is the exclusive upper bound of a custom window, RFC3339. Requires start. */
+    end?: string;
+    /** Limit bounds every ranked lens in the response. Default 10, maximum 100; a value at or below zero, or one that is not a number, takes the default. */
+    limit?: number;
+}
 
 export interface EventApiPostEventRequestParams {
     postEventRequest?: PostEventRequest;
@@ -41,6 +96,10 @@ export interface EventApiPostEventByProjectStoreRequestParams {
     body?: Blob;
 }
 
+export interface EventApiPostEventReplayRequestParams {
+    replayBody?: ReplayBody;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -52,8 +111,485 @@ export class EventApi extends BaseService {
     }
 
     /**
+     * Errors returns the caller org\&#39;s most recently captured errors, newest first.
+     * Errors returns the caller org\&#39;s most recently captured errors, newest first. The error-tracking read view over event.error — the plane table the write core\&#39;s error facts land in (errors are DELIBERATELY not on event.event) — each with its captured exception surfaced from the attributes map as a first-class field.  The org is the validated principal\&#39;s — never a parameter — and this read requires a real bearer, NEVER the write-only publishable key: pk- can attribute a write and can read nothing. 403 without a validated bearer, 503 when the warehouse is unreachable.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventErrors(requestParameters?: EventApiGetEventErrorsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ErrorList>;
+    public getEventErrors(requestParameters?: EventApiGetEventErrorsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ErrorList>>;
+    public getEventErrors(requestParameters?: EventApiGetEventErrorsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ErrorList>>;
+    public getEventErrors(requestParameters?: EventApiGetEventErrorsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/event/errors`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ErrorList>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Health reports whether the event plane can take a write and the warehouse can answer a read.
+     * Health reports whether the event plane can take a write and the warehouse can answer a read.  It reports the analytics subsystem\&#39;s own liveness in BOTH directions: plane is the event plane it WRITES (the bus and the JetStream stream every accepted event is published to, both named in the report), and datastore is the warehouse it READS, with each read lens\&#39;s table reported as it is provisioned (the LLM usage ledger and the product-event table).  EITHER ONE DOWN IS A 503, and the report says WHICH — they are probed independently and never collapse into a single bit. This endpoint used to report the read half only, and answered 200/ok while every POST /v1/event failed on a stream that could not bind: a total ingest outage behind a green probe. A readiness gate here now gates on the write path too.  plane.ready IS A REAL PROBE and walks the ingest path itself — the same connection and the same stream a publish uses — so it cannot answer ready while a publish would 503. plane.reason carries the plane\&#39;s own error text when it is false.  datastore IS NOT PROBED WITH A QUERY. It is the state of the process\&#39;s own shared client — established, and not since closed — so a warehouse accepting connections and failing reads still reports true. Degraded CARRIES the report (status, the failing half, reason) as its body rather than an error envelope, so a gate reads the cause off the same object it got at 200.  A MISSING LENS TABLE IS NOT A FAILURE and never moves the status: a lens reported available:false answers honest-empty rather than erroring, so a fresh deployment whose collector has not emitted yet is legitimately 200 with the product-event lens unavailable. The lens block is reported whenever the warehouse is REACHABLE — including on a report degraded by the plane, where the tables genuinely were probed — and is absent only when the warehouse is not, having nothing to say about tables it could not reach.  Unauthenticated on purpose — liveness has to be probe-able — and it reads NO tenant data: table existence and stream presence only, never a row and never an event.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HealthReport>;
+    public getEventHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<HealthReport>>;
+    public getEventHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<HealthReport>>;
+    public getEventHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/event/health`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<HealthReport>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns the caller org\&#39;s most recent product events, newest first.
+     * Returns the caller org\&#39;s most recent product events, newest first. The console\&#39;s raw-event view over event.event — the same table the capture doors fill — one row per stored event, with the row\&#39;s attributes returned as the properties object.  The org is the validated principal\&#39;s — never a parameter — and a read requires a real bearer, never the write-only publishable key. 403 without a validated bearer, 503 when the warehouse is unreachable.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventInsightsEvents(requestParameters?: EventApiGetEventInsightsEventsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EventList>;
+    public getEventInsightsEvents(requestParameters?: EventApiGetEventInsightsEventsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventList>>;
+    public getEventInsightsEvents(requestParameters?: EventApiGetEventInsightsEventsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventList>>;
+    public getEventInsightsEvents(requestParameters?: EventApiGetEventInsightsEventsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/event/insights/events`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EventList>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reports that the unified insights surface is serving.
+     * Reports that the unified insights surface is serving. It reads no tenant data and consults no dependency, so it answers 200 unconditionally and needs no principal — liveness must be probe-able. The warehouse-connectivity probe is a different question and lives at GET /v1/event/health.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventInsightsHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InsightsStatus>;
+    public getEventInsightsHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InsightsStatus>>;
+    public getEventInsightsHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InsightsStatus>>;
+    public getEventInsightsHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/event/insights/health`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<InsightsStatus>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Overview returns the caller org\&#39;s analytics KPIs for one time window.
+     * Overview returns the caller org\&#39;s analytics KPIs for one time window. Three lenses over one warehouse: llm is the live per-org LLM usage ledger (requests, tokens, spend, models, providers, errors) and is always real; web (pageviews, visitors, sessions) and commerce (orders, revenue, AOV) read the product-event table and report available&#x3D;false rather than fabricating zeros when it holds nothing yet.  The org is the validated principal\&#39;s — never a parameter — so a caller can only ever read its own tenant. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventOverview(requestParameters?: EventApiGetEventOverviewRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Overview>;
+    public getEventOverview(requestParameters?: EventApiGetEventOverviewRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Overview>>;
+    public getEventOverview(requestParameters?: EventApiGetEventOverviewRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Overview>>;
+    public getEventOverview(requestParameters?: EventApiGetEventOverviewRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const range = requestParameters?.range;
+        const start = requestParameters?.start;
+        const end = requestParameters?.end;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>range, 'range');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>start, 'start');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>end, 'end');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/event/overview`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Overview>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * The Hanzo event tag — the one-line install for a surface with no bundler
+     * Serves the browser tag that autocaptures pageviews (initial and SPA) and uncaught errors onto the canonical wire at POST /v1/event.  Install is one line, and it is the same line for a Hanzo property and for a customer\&#39;s own page:      &lt;script defer src&#x3D;\&quot;https://api.hanzo.ai/v1/event/tag.js\&quot; data-key&#x3D;\&quot;pk-…\&quot;&gt;&lt;/script&gt;  &#x60;data-key&#x60; is the publishable key the project mints; &#x60;data-product&#x60; optionally names the emitting surface. The key may also ride the src as &#x60;?key&#x3D;&#x60; for a host that strips data attributes.  WITHOUT A KEY THE TAG SENDS NOTHING. A keyless beacon is accepted 200 into $public, a reserved tenant the owning org cannot read — so silence is the honest failure, and the tag picks it rather than reporting success into a tenant nobody reads.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventTagJs(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/javascript', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public getEventTagJs(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/javascript', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public getEventTagJs(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/javascript', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public getEventTagJs(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/javascript', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/javascript'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let localVarPath = `/v1/event/tag.js`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: "blob",
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Timeseries returns the caller org\&#39;s LLM usage over time as an evenly-spaced series.
+     * Timeseries returns the caller org\&#39;s LLM usage over time as an evenly-spaced series. One point per hour or per day — the bucket the window implies, 24h giving hours and 7d/30d giving days — carrying requests, total tokens and spend in cents. Empty buckets are filled with zeros so a client charts a continuous line.  The org is the validated principal\&#39;s — never a parameter. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventTimeseries(requestParameters?: EventApiGetEventTimeseriesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Timeseries>;
+    public getEventTimeseries(requestParameters?: EventApiGetEventTimeseriesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Timeseries>>;
+    public getEventTimeseries(requestParameters?: EventApiGetEventTimeseriesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Timeseries>>;
+    public getEventTimeseries(requestParameters?: EventApiGetEventTimeseriesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const range = requestParameters?.range;
+        const start = requestParameters?.start;
+        const end = requestParameters?.end;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>range, 'range');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>start, 'start');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>end, 'end');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/event/timeseries`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Timeseries>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Top returns the caller org\&#39;s ranked lenses for one window, five of them at once.
+     * Top returns the caller org\&#39;s ranked lenses for one window, five of them at once. models ranks LLM models by spend and is always real; products ranks commerce orders by revenue; topPages ranks requested paths, topReferrers the external referrer domains (\&quot;(direct)\&quot; for a missing or same-origin one) and topSources the utm_source campaigns (\&quot;(none)\&quot; when absent), each by pageviews. Every lens carries each row\&#39;s share of the in-window total, so a top-N honestly shows the long tail.  The four event lenses report available&#x3D;false rather than fabricating zeros when the product-event table holds nothing yet. The org is the validated principal\&#39;s — never a parameter. 403 without a validated bearer, 400 on an unknown range, 503 when the warehouse is unreachable.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEventTop(requestParameters?: EventApiGetEventTopRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Top>;
+    public getEventTop(requestParameters?: EventApiGetEventTopRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Top>>;
+    public getEventTop(requestParameters?: EventApiGetEventTopRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Top>>;
+    public getEventTop(requestParameters?: EventApiGetEventTopRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const range = requestParameters?.range;
+        const start = requestParameters?.start;
+        const end = requestParameters?.end;
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>range, 'range');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>start, 'start');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>end, 'end');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/event/top`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Top>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Capture product events into your org\&#39;s warehouse
-     * Stores pageviews, browser errors, identifies and custom commerce events as rows in the caller\&#39;s own tenant, and answers a receipt {accepted, dropped} that always totals what was sent — a beacon is never silently discarded.  THE STATUS SAYS WHETHER ANYTHING LANDED, so a green check can never mean an empty warehouse. 200 means at least one event was stored (or that nothing was sent), and a nonzero &#x60;dropped&#x60; beside a nonzero &#x60;accepted&#x60; is a PARTIAL batch, never a failed one — a batch is not refused whole for its worst element. If NOTHING was stored the request is an error, and it names the one thing that fixes it: 401 &#x60;ingest_key_required&#x60; when every event was refused for want of a credential (the same events land with a key), and 400 &#x60;unroutable_events&#x60; when the caller HAD capability and the body still named nothing storable.  ONE door for every wire a Hanzo surface emits, dispatched by the SHAPE of the body and never by a second path: a bare event object, a bare array of them, the {batch:[…]} / {events:[…]} envelope, the team console\&#39;s snake_case array, and the PostHog wire (spelled &#x60;distinct_id&#x60;/&#x60;api_key&#x60;, which the canonical wire never uses). BATCH IS A BODY, NOT A PATH — there is no /v1/event/batch, because an array already is one.  WHAT THE CALLER PRESENTS DECIDES WHAT IT MAY WRITE, and the door itself grants nothing. A validated bearer or an org API key writes the full event at full fidelity. A PUBLISHABLE key (pk-, on Authorization: Bearer, x-hanzo-ingest-key, or ?ingest_key&#x3D; for navigator.sendBeacon, which cannot set headers) does the same, and is the credential a browser bundle ships: it is deliberately NOT a secret, it resolves WHICH tenant a beacon belongs to and nothing more. A pk- never authenticates and can READ NOTHING — not this org\&#39;s errors, not a lens, not any other route on this API — so a leaked one lets a stranger write into your stream, and never lets one read out of it. Reading these rows back always takes a real bearer. A Hanzo Team workspace token resolves its org at REDUCED capability: the signed account names the person, so a &#x60;distinctId&#x60; in the body cannot pin events on a colleague.  NO CREDENTIAL IS REFUSED: a write the server cannot attribute to a project is 401 &#x60;ingest_key_required&#x60;, and a credential that IS presented but resolves to no project is 403 &#x60;ingest_key_unknown&#x60;. Nothing is filed under a shared tenant — events nobody can read are worse than events nobody sent, because the caller is told it succeeded. A browser bundle therefore always ships a pk-, which is what /v1/event.js takes.  A REDUCED principal — a Hanzo Team workspace token — writes through the PROJECTION into its own org: narrowed to what the SERVER can name (pageviews and errors, plus the closed autocapture vocabulary $click, $input, $change, $submit, $view), where every one of those names is resolved through a server-owned table and stored as that table\&#39;s value, so the name on the wire is never the name in the row. Stripped, too, to the fields the projection names, so revenue, personId, groupId and every property but the element annotation cannot reach a row — and an exception is carried only on an error, never on an interaction, so a click cannot ship a stack trace into a row\&#39;s attributes. It does NOT name the person: the signed account is the identity, so a &#x60;distinctId&#x60; in the body cannot pin events on a colleague. Everything refused is counted in &#x60;dropped&#x60;.  The projected lane alone is bounded: 413 over 64 KiB, 400 over 50 events, 429 on the per-client-IP and per-peer caps, and a DNT:1 or Sec-GPC:1 request stores nothing and says so in the receipt. Two stored values carry their own bounds on top, because a request cap does not bound one value: an element annotation over 2 KiB (or a trail over 32 steps) and an exception class over 256 bytes are dropped from the row, which still lands. Authenticated bodies are offered to the observability plane first, which claims LLM-observability ingestion batches and declines everything else.
+     * Stores pageviews, browser errors, identifies and custom commerce events as rows in the caller\&#39;s own tenant, and answers a receipt {accepted, dropped} that always totals what was sent — a beacon is never silently discarded.  THE STATUS SAYS WHETHER ANYTHING LANDED, so a green check can never mean an empty warehouse. 200 means at least one event was stored (or that nothing was sent), and a nonzero &#x60;dropped&#x60; beside a nonzero &#x60;accepted&#x60; is a PARTIAL batch, never a failed one — a batch is not refused whole for its worst element. If NOTHING was stored the request is an error, and it names the one thing that fixes it: 401 &#x60;ingest_key_required&#x60; when every event was refused for want of a credential (the same events land with a key), and 400 &#x60;unroutable_events&#x60; when the caller HAD capability and the body still named nothing storable.  ONE door for every wire a Hanzo surface emits, dispatched by the SHAPE of the body and never by a second path: a bare event object, a bare array of them, the {batch:[…]} / {events:[…]} envelope, the team console\&#39;s snake_case array, and the PostHog wire (spelled &#x60;distinct_id&#x60;/&#x60;api_key&#x60;, which the canonical wire never uses). BATCH IS A BODY, NOT A PATH — there is no /v1/event/batch, because an array already is one.  WHAT THE CALLER PRESENTS DECIDES WHAT IT MAY WRITE, and the door itself grants nothing. A validated bearer or an org API key writes the full event at full fidelity. A PUBLISHABLE key (pk-, on Authorization: Bearer, x-hanzo-ingest-key, or ?ingest_key&#x3D; for navigator.sendBeacon, which cannot set headers) does the same, and is the credential a browser bundle ships: it is deliberately NOT a secret, it resolves WHICH tenant a beacon belongs to and nothing more. A pk- never authenticates and can READ NOTHING — not this org\&#39;s errors, not a lens, not any other route on this API — so a leaked one lets a stranger write into your stream, and never lets one read out of it. Reading these rows back always takes a real bearer. A Hanzo Team workspace token resolves its org at REDUCED capability: the signed account names the person, so a &#x60;distinctId&#x60; in the body cannot pin events on a colleague.  NO CREDENTIAL IS REFUSED: a write the server cannot attribute to a project is 401 &#x60;ingest_key_required&#x60;, and a credential that IS presented but resolves to no project is 403 &#x60;ingest_key_unknown&#x60;. Nothing is filed under a shared tenant — events nobody can read are worse than events nobody sent, because the caller is told it succeeded. A browser bundle therefore always ships a pk-, which is what /v1/event/tag.js takes.  A REDUCED principal — a Hanzo Team workspace token — writes through the PROJECTION into its own org: narrowed to what the SERVER can name (pageviews and errors, plus the closed autocapture vocabulary $click, $input, $change, $submit, $view), where every one of those names is resolved through a server-owned table and stored as that table\&#39;s value, so the name on the wire is never the name in the row. Stripped, too, to the fields the projection names, so revenue, personId, groupId and every property but the element annotation cannot reach a row — and an exception is carried only on an error, never on an interaction, so a click cannot ship a stack trace into a row\&#39;s attributes. It does NOT name the person: the signed account is the identity, so a &#x60;distinctId&#x60; in the body cannot pin events on a colleague. Everything refused is counted in &#x60;dropped&#x60;.  The projected lane alone is bounded: 413 over 64 KiB, 400 over 50 events, 429 on the per-client-IP and per-peer caps, and a DNT:1 or Sec-GPC:1 request stores nothing and says so in the receipt. Two stored values carry their own bounds on top, because a request cap does not bound one value: an element annotation over 2 KiB (or a trail over 32 steps) and an exception class over 256 bytes are dropped from the row, which still lands. Authenticated bodies are offered to the observability plane first, which claims LLM-observability ingestion batches and declines everything else.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -245,6 +781,72 @@ export class EventApi extends BaseService {
             {
                 context: localVarHttpContext,
                 body: body,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Record a session-replay snapshot batch
+     * Accepts a batch of rrweb events from a browser recorder and hands it to the session-replay pipeline, which stores the recording and derives the session summary a player reads back.  ONE REQUEST IS ONE BATCH, and it is all-or-nothing: the recording is made durable before this answers, so a 200 {\&quot;accepted\&quot;:1} means stored and never \&quot;buffered somewhere\&quot;. There is no partial count, because a half-written recording is not a recording.  &#x60;sessionId&#x60; is REQUIRED and bounded — at most 70 characters of ASCII letters, digits or \&#39;-\&#39;. It is the key every batch of one visit is grouped and ordered by, so an id outside that grammar is refused 400 here rather than accepted and dropped further down. &#x60;windowId&#x60; separates two tabs of one session and &#x60;distinctId&#x60; attributes the recording to a person; both are optional. &#x60;events&#x60; is the rrweb batch, each element a raw eventWithTime object, carried VERBATIM — the summary (click, keypress and mouse-activity counts, size) is derived downstream from exactly these bytes, so nothing is re-encoded or dropped.  THE CALLER\&#39;S CREDENTIAL DECIDES THE TENANT, and the body never does: the recording lands in the org the presented credential resolves to. It takes the SAME credentials as /v1/event — a validated bearer, an org API key, or a publishable pk- key on Authorization: Bearer, x-hanzo-ingest-key or ?ingest_key&#x3D; — so a browser bundle already holding a pk- for events needs nothing new to record. A caller that presents nothing is 401 &#x60;ingest_key_required&#x60;; one whose key resolves to no project is 403 &#x60;ingest_key_unknown&#x60;; a reduced principal (a Hanzo Team workspace token) is 403 &#x60;insufficient_capability&#x60;, because a full-fidelity screen recording has no projected form that is safe for a guest to write into a host org.  BOUNDS: 413 over 512 KiB of body, and that is the only bound on one batch — a recorder is expected to chunk a long session rather than send it whole, and the cap is the size one message can carry rather than an arbitrary number. 503 when the pipeline cannot take the batch: honest unavailability the caller can retry, never a 200 over a discarded recording.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postEventReplay(requestParameters?: EventApiPostEventReplayRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptureResult>;
+    public postEventReplay(requestParameters?: EventApiPostEventReplayRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptureResult>>;
+    public postEventReplay(requestParameters?: EventApiPostEventReplayRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptureResult>>;
+    public postEventReplay(requestParameters?: EventApiPostEventReplayRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const replayBody = requestParameters?.replayBody;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/event/replay`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CaptureResult>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: replayBody,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

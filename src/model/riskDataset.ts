@@ -13,9 +13,12 @@ import { RiskSplitCounts } from './riskSplitCounts';
 
 export interface RiskDataset { 
     /**
-     * At is when this version last changed state, and By who.
+     * At is when this version last changed state, RFC 3339 UTC.
      */
     at?: string;
+    /**
+     * By is who moved it there: the validated user, or the org itself when the caller is a machine with no user behind it.
+     */
     by?: string;
     /**
      * Counts is how the rows fall across the splits.
@@ -26,7 +29,7 @@ export interface RiskDataset {
      */
     digest?: string;
     /**
-     * Name and Version identify the version.
+     * Name identifies the dataset across all of its versions.
      */
     name?: string;
     /**
@@ -57,6 +60,9 @@ export interface RiskDataset {
      * Truncated is true when the row cap bound before the window ran out. The trailing subject is dropped whole when that happens, because half a subject on one side of a split is exactly the leak the grouping prevents.
      */
     truncated?: boolean;
+    /**
+     * Version is which version this is, from 1 and monotone within the dataset. A number is never reused — not even after a disposal, where the next declare continues the count — so \"signups v3\" means one thing forever, which is what makes a model\'s citation of it checkable.
+     */
     version?: number;
 }
 

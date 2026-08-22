@@ -18,8 +18,17 @@ export interface Metrics {
      * 0..1 aggregate utilization
      */
     gpuUtil?: number;
+    /**
+     * Load1 is the machine\'s own one-minute load average — a count of runnable and uninterruptible tasks, NOT a percentage and NOT already divided by core count, so it is read against Spec.CPUs: 8.0 is idle on 16 cores and swamped on 4. Coerced finite and non-negative on write, so 0 means either genuinely idle or nothing reported.
+     */
     load1?: number;
+    /**
+     * Load5 is the same figure averaged over five minutes.
+     */
     load5?: number;
+    /**
+     * Load15 is the same figure over fifteen. The three together are what separate a machine that is busy right now from one that has been busy all along — which is the question a dispatcher is really asking.
+     */
     load15?: number;
     /**
      * bytes

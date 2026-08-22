@@ -11,7 +11,7 @@
 
 export interface CodeFile { 
     /**
-     * ID is the file\'s path RELATIVE to its session\'s artifact directory, which is also how it is fetched: GET /v1/download/{session}/{id}.
+     * ID is the file\'s path RELATIVE to its session\'s artifact directory, which is also how it is fetched: GET /v1/exec/download/{session}/{id}.
      */
     id?: string;
     /**

@@ -10,22 +10,28 @@
 
 
 export interface SampleIngest { 
+    /**
+     * GPUModel names the representative accelerator (\"GB10\"); GPUs carries how many. A heterogeneous host names its first card rather than inventing a summary.
+     */
     gpuModel?: string;
     /**
      * GPUUtil is accelerator utilization as a fraction 0..1; the warehouse clamps anything outside that.
      */
     gpuUtil?: number;
     /**
-     * GPUs is how many accelerators the reading covers, GPUModel the representative model name.
+     * GPUs is how many accelerators this reading covers.
      */
     gpus?: number;
     /**
      * Host is the node\'s hostname, for display.
      */
     host?: string;
+    /**
+     * MemFree is host memory still available, in BYTES.
+     */
     memFree?: number;
     /**
-     * MemUsed and MemFree are host memory in bytes.
+     * MemUsed is host memory in use, in BYTES.
      */
     memUsed?: number;
     /**

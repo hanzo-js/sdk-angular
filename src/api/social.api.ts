@@ -16,6 +16,26 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+// @ts-ignore
+import { SocialAccount } from '../model/socialAccount';
+// @ts-ignore
+import { SocialAccountBody } from '../model/socialAccountBody';
+// @ts-ignore
+import { SocialAccountWrite } from '../model/socialAccountWrite';
+// @ts-ignore
+import { SocialAccounts } from '../model/socialAccounts';
+// @ts-ignore
+import { SocialPost } from '../model/socialPost';
+// @ts-ignore
+import { SocialPostBody } from '../model/socialPostBody';
+// @ts-ignore
+import { SocialPostWrite } from '../model/socialPostWrite';
+// @ts-ignore
+import { SocialPosts } from '../model/socialPosts';
+// @ts-ignore
+import { SocialProviders } from '../model/socialProviders';
+// @ts-ignore
+import { SocialSummary } from '../model/socialSummary';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -24,31 +44,60 @@ import { BaseService } from '../api.base.service';
 
 
 export interface SocialApiDeleteSocialAccountsByIdRequestParams {
+    /** ID is the account or post to act on, taken from the path. */
     id: string;
 }
 
 export interface SocialApiDeleteSocialPostsByIdRequestParams {
+    /** ID is the account or post to act on, taken from the path. */
     id: string;
+}
+
+export interface SocialApiGetSocialAccountsRequestParams {
+    /** Provider keeps only accounts on one network — x, facebook, instagram, linkedin, tiktok, youtube or threads. Omit it for every network. It is lower-cased and trimmed before it is matched, and a value that names no network simply matches nothing rather than being refused. */
+    provider?: string;
+    /** Limit bounds the page, defaulting to 200 and capped at 1000. It is a string rather than an integer on purpose: the route parses it with a leading trim and falls back to the default on anything it cannot read, so &#x60;?limit&#x3D;%2050&#x60; is a page of fifty today. An integer field would refuse the space and read an unparseable value as zero, which is a different page. */
+    limit?: string;
 }
 
 export interface SocialApiGetSocialAccountsByIdRequestParams {
+    /** ID is the account or post to act on, taken from the path. */
     id: string;
+}
+
+export interface SocialApiGetSocialPostsRequestParams {
+    /** Status keeps only posts in one state — draft, scheduled, published or failed. Omit it for every state. The transient publishing claim is not a user-visible state and matching it is not useful. */
+    status?: string;
+    /** Limit bounds the page, defaulting to 200 and capped at 1000. A string for the same reason accountFilter.Limit is. */
+    limit?: string;
 }
 
 export interface SocialApiGetSocialPostsByIdRequestParams {
+    /** ID is the account or post to act on, taken from the path. */
     id: string;
 }
 
+export interface SocialApiPostSocialAccountsRequestParams {
+    socialAccountBody: SocialAccountBody;
+}
+
+export interface SocialApiPostSocialPostsRequestParams {
+    socialPostBody: SocialPostBody;
+}
+
 export interface SocialApiPostSocialPostsByIdPublishRequestParams {
+    /** ID is the account or post to act on, taken from the path. */
     id: string;
 }
 
 export interface SocialApiPutSocialAccountsByIdRequestParams {
     id: string;
+    socialAccountWrite: SocialAccountWrite;
 }
 
 export interface SocialApiPutSocialPostsByIdRequestParams {
     id: string;
+    socialPostWrite: SocialPostWrite;
 }
 
 
@@ -62,8 +111,8 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Disconnect one account
-     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.  It removes the account record only. Posts that already published through it keep their published state and their recorded external ids — this does not retract anything from the network.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.
+     * Removes one connected account from the org and answers 204 with no body; an id that is not there is 404.  It removes the account record only. Posts that already published through it keep their published state and their recorded external ids — this does not retract anything from the network.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -120,8 +169,8 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Delete one post
-     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.  It deletes the record here only. A post that has already published is not retracted from the network by deleting it.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.
+     * Removes one post from the org and answers 204 with no body; an id that is not there is 404.  It deletes the record here only. A post that has already published is not retracted from the network by deleting it.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -178,15 +227,24 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * List the social accounts connected to your org
-     * Returns the org\&#39;s connected accounts — each one\&#39;s id, network, handle, status and timestamps. &#x60;provider&#x60; filters to one network; &#x60;limit&#x60; bounds the page, defaulting to 200 and capped at 1000.  An account\&#39;s provider access token is NEVER included in any response on this surface. Only the publisher reads it.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Returns the org\&#39;s connected accounts — each one\&#39;s id, network, handle, status and timestamps, most-recently-updated first.
+     * Returns the org\&#39;s connected accounts — each one\&#39;s id, network, handle, status and timestamps, most-recently-updated first.  An account\&#39;s provider access token is NEVER included in any response on this surface. Only the publisher reads it.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSocialAccounts(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getSocialAccounts(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getSocialAccounts(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getSocialAccounts(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSocialAccounts(requestParameters?: SocialApiGetSocialAccountsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialAccounts>;
+    public getSocialAccounts(requestParameters?: SocialApiGetSocialAccountsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialAccounts>>;
+    public getSocialAccounts(requestParameters?: SocialApiGetSocialAccountsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialAccounts>>;
+    public getSocialAccounts(requestParameters?: SocialApiGetSocialAccountsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const provider = requestParameters?.provider;
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>provider, 'provider');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -194,6 +252,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -217,9 +276,10 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/accounts`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialAccounts>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -231,16 +291,16 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Read one connected account
-     * Returns one of the org\&#39;s connected accounts by id — its network, handle, status and timestamps — or 404. The provider access token is not part of the response.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Returns one of the org\&#39;s connected accounts by id — its network, handle, status and timestamps — or 404.
+     * Returns one of the org\&#39;s connected accounts by id — its network, handle, status and timestamps — or 404. The provider access token is not part of the response.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialAccount>;
+    public getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialAccount>>;
+    public getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialAccount>>;
+    public getSocialAccountsById(requestParameters: SocialApiGetSocialAccountsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getSocialAccountsById.');
@@ -252,6 +312,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -275,7 +336,7 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/accounts/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialAccount>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -289,15 +350,24 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * List your org\&#39;s posts
-     * Returns the org\&#39;s posts — content, channel, status, scheduled time, media and timestamps. &#x60;status&#x60; filters to one of draft, scheduled, published or failed; &#x60;limit&#x60; bounds the page, defaulting to 200 and capped at 1000.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Returns the org\&#39;s posts — content, channel, status, scheduled time, media and timestamps — most-recently-updated first.
+     * Returns the org\&#39;s posts — content, channel, status, scheduled time, media and timestamps — most-recently-updated first.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSocialPosts(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getSocialPosts(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getSocialPosts(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getSocialPosts(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSocialPosts(requestParameters?: SocialApiGetSocialPostsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialPosts>;
+    public getSocialPosts(requestParameters?: SocialApiGetSocialPostsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialPosts>>;
+    public getSocialPosts(requestParameters?: SocialApiGetSocialPostsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialPosts>>;
+    public getSocialPosts(requestParameters?: SocialApiGetSocialPostsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const status = requestParameters?.status;
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>status, 'status');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -305,6 +375,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -328,9 +399,10 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/posts`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialPosts>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -342,16 +414,16 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Read one post
-     * Returns one of the org\&#39;s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under. 404 when there is no such post for this org.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Returns one of the org\&#39;s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under.
+     * Returns one of the org\&#39;s posts by id, with its current status, scheduled time, media and — once it has published — the account and external id it published under. 404 when there is no such post for this org.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialPost>;
+    public getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialPost>>;
+    public getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialPost>>;
+    public getSocialPostsById(requestParameters: SocialApiGetSocialPostsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getSocialPostsById.');
@@ -363,6 +435,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -386,7 +459,7 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/posts/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialPost>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -400,15 +473,15 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Which networks this deployment can actually publish to
-     * Reports each supported network\&#39;s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.  This is a live read of the deployment\&#39;s own configuration, not a static list of networks — it answers \&quot;can I connect this today\&quot;, which is what a connect affordance and a pre-cutover checklist both need. It says nothing about whether the caller has connected an account; that is the accounts listing.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Reports each supported network\&#39;s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.
+     * Reports each supported network\&#39;s publish-readiness: whether this deployment holds the OAuth application credentials for it and, when it does not, exactly which environment variables are missing.  This is a live read of the deployment\&#39;s own configuration, not a static list of networks — it answers \&quot;can I connect this today\&quot;, which is what a connect affordance and a pre-cutover checklist both need. It says nothing about whether the caller has connected an account; that is the accounts listing.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSocialProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getSocialProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getSocialProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getSocialProviders(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSocialProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialProviders>;
+    public getSocialProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialProviders>>;
+    public getSocialProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialProviders>>;
+    public getSocialProviders(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -416,6 +489,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -439,7 +513,7 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/providers`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialProviders>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -453,15 +527,15 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Counts across your org\&#39;s social presence
-     * Returns four counts for the caller\&#39;s org: total posts, how many are scheduled, how many have published, and how many accounts are connected. It is the dashboard roll-up, computed over the org\&#39;s own rows in one read.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Returns four counts for the caller\&#39;s org: total posts, how many are scheduled, how many have published, and how many accounts are connected.
+     * Returns four counts for the caller\&#39;s org: total posts, how many are scheduled, how many have published, and how many accounts are connected. It is the dashboard roll-up, computed over the org\&#39;s own rows in one read.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSocialSummary(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getSocialSummary(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getSocialSummary(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getSocialSummary(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getSocialSummary(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialSummary>;
+    public getSocialSummary(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialSummary>>;
+    public getSocialSummary(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialSummary>>;
+    public getSocialSummary(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -469,6 +543,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -492,7 +567,7 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/summary`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialSummary>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -506,15 +581,20 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Connect a social account to your org
-     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.  &#x60;provider&#x60; must be one of x, facebook, instagram, linkedin, tiktok, youtube or threads, defaulting to x when omitted. &#x60;status&#x60; is one of connected, disconnected or error, defaulting to connected. The handle is trimmed and bounded at 1024 characters.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.
+     * Records a social account for the org and answers 201 with the stored row, including the generated id later calls address it by.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postSocialAccounts(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postSocialAccounts(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postSocialAccounts(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postSocialAccounts(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postSocialAccounts(requestParameters: SocialApiPostSocialAccountsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialAccount>;
+    public postSocialAccounts(requestParameters: SocialApiPostSocialAccountsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialAccount>>;
+    public postSocialAccounts(requestParameters: SocialApiPostSocialAccountsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialAccount>>;
+    public postSocialAccounts(requestParameters: SocialApiPostSocialAccountsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const socialAccountBody = requestParameters?.socialAccountBody;
+        if (socialAccountBody === null || socialAccountBody === undefined) {
+            throw new Error('Required parameter socialAccountBody was null or undefined when calling postSocialAccounts.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -522,6 +602,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -531,6 +612,15 @@ export class SocialApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -545,9 +635,10 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/accounts`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialAccount>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: socialAccountBody,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -559,15 +650,20 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Create a post, and publish it if it is already due
-     * Stores a post for the org and answers 201 with the stored row.  A post created as scheduled for a time that has already passed is published IMMEDIATELY, and the row returned carries that outcome — this is the one behaviour a reader would otherwise miss. A future-scheduled post is left for the scheduler, and a draft is left alone. Publishing never fails the creation: the post is stored either way, and a publish that could not run leaves the row for the scheduler to retry.  &#x60;content&#x60; is required and bounded at 8192 characters; &#x60;channel&#x60; is one of the seven supported networks, defaulting to x; &#x60;status&#x60; is one of draft, scheduled, published or failed, defaulting to draft; up to 10 media URLs are kept, each bounded at 1024 characters.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Stores a post for the org and answers 201 with the stored row.
+     * Stores a post for the org and answers 201 with the stored row.  A post created as scheduled for a time that has already passed is published IMMEDIATELY, and the row returned carries that outcome — this is the one behaviour a reader would otherwise miss. A future-scheduled post is left for the scheduler, and a draft is left alone. Publishing never fails the creation: the post is stored either way, and a publish that could not run leaves the row for the scheduler to retry.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postSocialPosts(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postSocialPosts(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postSocialPosts(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postSocialPosts(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postSocialPosts(requestParameters: SocialApiPostSocialPostsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialPost>;
+    public postSocialPosts(requestParameters: SocialApiPostSocialPostsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialPost>>;
+    public postSocialPosts(requestParameters: SocialApiPostSocialPostsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialPost>>;
+    public postSocialPosts(requestParameters: SocialApiPostSocialPostsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const socialPostBody = requestParameters?.socialPostBody;
+        if (socialPostBody === null || socialPostBody === undefined) {
+            throw new Error('Required parameter socialPostBody was null or undefined when calling postSocialPosts.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -575,6 +671,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -584,6 +681,15 @@ export class SocialApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -598,9 +704,10 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/posts`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialPost>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: socialPostBody,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -612,16 +719,16 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Publish one post now
-     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.  It is IDEMPOTENT: a post that has already published, or that another caller is publishing right now, comes back unchanged rather than being posted twice. That claim is taken before any network call, which is what makes a double submit safe.  The two failure shapes differ on purpose. Having no connected account for the channel is the caller\&#39;s to fix, so it is recorded ON the post as failed with the reason and answers normally. A deployment that lacks the network\&#39;s own credentials cannot publish for anyone, so that is a 503 naming exactly what is missing.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.
+     * Publishes the post immediately to the connected accounts on its channel and answers with the updated row, carrying the account and external id it published under.  It is IDEMPOTENT: a post that has already published, or that another caller is publishing right now, comes back unchanged rather than being posted twice. That claim is taken before any network call, which is what makes a double submit safe.  The two failure shapes differ on purpose. Having no connected account for the channel is the caller\&#39;s to fix, so it is recorded ON the post as failed with the reason and answers normally. A deployment that lacks the network\&#39;s own credentials cannot publish for anyone, so that is a 503 naming exactly what is missing.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialPost>;
+    public postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialPost>>;
+    public postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialPost>>;
+    public postSocialPostsByIdPublish(requestParameters: SocialApiPostSocialPostsByIdPublishRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling postSocialPostsByIdPublish.');
@@ -633,6 +740,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -656,7 +764,7 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/posts/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/publish`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialPost>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -670,19 +778,23 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Replace one connected account
-     * Replaces the account\&#39;s network, handle and status with what the body carries, and answers with the stored row.  This is a REPLACEMENT, not a merge, which is the rule most easily got wrong: a field the body omits is written as its default, so leaving out the handle blanks it and leaving out the status resets it to connected. Send the whole record. The same vocabularies as create apply, and an unknown network or status is refused rather than coerced.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Replaces the account\&#39;s network, handle and status with what the body carries, and answers with the stored row.
+     * Replaces the account\&#39;s network, handle and status with what the body carries, and answers with the stored row.  This is a REPLACEMENT, not a merge, which is the rule most easily got wrong: a field the body omits is written as its default, so leaving out the handle blanks it and leaving out the status resets it to connected. Send the whole record. The same vocabularies as create apply, and an unknown network or status is refused rather than coerced.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialAccount>;
+    public putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialAccount>>;
+    public putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialAccount>>;
+    public putSocialAccountsById(requestParameters: SocialApiPutSocialAccountsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling putSocialAccountsById.');
+        }
+        const socialAccountWrite = requestParameters?.socialAccountWrite;
+        if (socialAccountWrite === null || socialAccountWrite === undefined) {
+            throw new Error('Required parameter socialAccountWrite was null or undefined when calling putSocialAccountsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -691,6 +803,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -700,6 +813,15 @@ export class SocialApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -714,9 +836,10 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/accounts/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialAccount>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: socialAccountWrite,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -728,19 +851,23 @@ export class SocialApi extends BaseService {
     }
 
     /**
-     * Replace one post
-     * Replaces the post\&#39;s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.  A REPLACEMENT, not a merge: an omitted field is written as its default, so omitting media clears it and omitting the status resets the post to draft. &#x60;content&#x60; is required on every update. Unlike create, this never triggers a publish — moving a post\&#39;s scheduled time into the past here leaves it for the scheduler; publish now is its own operation.  A validated principal is required; 403 without one. Every row is keyed by the caller\&#39;s org taken from that principal and never from the request, so an id belonging to another tenant reads as not found rather than as a refusal.
+     * Replaces the post\&#39;s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.
+     * Replaces the post\&#39;s content, channel, status, scheduled time and media with what the body carries, and answers with the stored row.  A REPLACEMENT, not a merge: an omitted field is written as its default, so omitting media clears it and omitting the status resets the post to draft. &#x60;content&#x60; is required on every update. Unlike create, this never triggers a publish — moving a post\&#39;s scheduled time into the past here leaves it for the scheduler; publish now is its own operation.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SocialPost>;
+    public putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SocialPost>>;
+    public putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SocialPost>>;
+    public putSocialPostsById(requestParameters: SocialApiPutSocialPostsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling putSocialPostsById.');
+        }
+        const socialPostWrite = requestParameters?.socialPostWrite;
+        if (socialPostWrite === null || socialPostWrite === undefined) {
+            throw new Error('Required parameter socialPostWrite was null or undefined when calling putSocialPostsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -749,6 +876,7 @@ export class SocialApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -758,6 +886,15 @@ export class SocialApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -772,9 +909,10 @@ export class SocialApi extends BaseService {
 
         let localVarPath = `/v1/social/posts/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SocialPost>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: socialPostWrite,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

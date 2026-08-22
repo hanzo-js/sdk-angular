@@ -11,7 +11,13 @@ import { IssueHit } from './issueHit';
 
 
 export interface IssueHits { 
+    /**
+     * Count is how many rows Issues carries — the size of THIS answer after the cap, not how many issues matched. A count equal to the limit means there are probably more; there is no total and no cursor.
+     */
     count?: number;
+    /**
+     * Issues are the matching rows grouped by status and oldest-first within a group, capped by the search\'s limit (50 by default, 200 at most). The cap is applied to that order, so a broad search returns the head of it rather than a sample.
+     */
     issues?: Array<IssueHit>;
 }
 

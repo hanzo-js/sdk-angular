@@ -10,12 +10,21 @@
 
 
 export interface BalanceLine { 
+    /**
+     * Account is the chart-of-accounts number this line reports on. ABSENT marks a DERIVED line that no account holds — retained earnings is the one such line, computed from cumulative income minus expense.
+     */
     account?: string;
     /**
-     * cents, display sign
+     * Amount is the balance as of the statement date, in whole cents, in its NATURAL sign: positive when the account behaved normally, on all three sides. Assets are debit-normal and shown as stored; liabilities and equity are credit-normal and flipped once here for display. A negative asset is a real overdraft, not a sign convention.
      */
     amount?: number;
+    /**
+     * Name is the account\'s human name, or the derived line\'s own name.
+     */
     name?: string;
+    /**
+     * Type is the account\'s fundamental class. Absent on a derived line, which belongs to no account and therefore has none.
+     */
     type?: string;
 }
 

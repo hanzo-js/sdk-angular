@@ -17,21 +17,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { ActivityView } from '../model/activityView';
-// @ts-ignore
-import { BackfillQuery } from '../model/backfillQuery';
-// @ts-ignore
-import { BackfillResult } from '../model/backfillResult';
-// @ts-ignore
 import { DashResp } from '../model/dashResp';
-// @ts-ignore
-import { LeaderboardView } from '../model/leaderboardView';
-// @ts-ignore
-import { OptinView } from '../model/optinView';
-// @ts-ignore
-import { OrgOptinReq } from '../model/orgOptinReq';
-// @ts-ignore
-import { OrgOptinView } from '../model/orgOptinView';
 // @ts-ignore
 import { ReportReq } from '../model/reportReq';
 // @ts-ignore
@@ -42,27 +28,12 @@ import { UsageAnalyticsAccess } from '../model/usageAnalyticsAccess';
 import { UsageAnalyticsView } from '../model/usageAnalyticsView';
 // @ts-ignore
 import { UsageSummary } from '../model/usageSummary';
-// @ts-ignore
-import { UserOptinReq } from '../model/userOptinReq';
-// @ts-ignore
-import { UserOptinView } from '../model/userOptinView';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 import { BaseService } from '../api.base.service';
 
-
-export interface UsageApiGetUsageActivityRequestParams {
-    /** Subject is what the series is about: \&quot;user\&quot; (default), \&quot;org\&quot; or \&quot;project\&quot;. */
-    subject?: string;
-    /** ID names the subject within what the caller is entitled to see. Omitted (or \&quot;me\&quot;) it is the caller themselves, or their own org. Another user requires org admin and must belong to the caller\&#39;s org; another org requires a SuperAdmin. */
-    id?: string;
-    /** From is the first day of the range, \&quot;2006-01-02\&quot;. Defaults to 90 days back. */
-    from?: string;
-    /** To is the last day of the range, \&quot;2006-01-02\&quot;. Defaults to today; the span is clamped to 366 days. */
-    to?: string;
-}
 
 export interface UsageApiGetUsageAnalyticsRequestParams {
     /** End is the exclusive window end, RFC3339. Read only when Range is custom. */
@@ -78,17 +49,6 @@ export interface UsageApiGetUsageAnalyticsRequestParams {
 export interface UsageApiGetUsageAnalyticsAccessRequestParams {
     /** Plan is a plan id from the live @hanzo/plans catalog. Empty resolves the free floor, and so does an id the catalog does not know — this never fails on an unknown plan. */
     plan?: string;
-}
-
-export interface UsageApiGetUsageLeaderboardRequestParams {
-    /** Scope picks the board: \&quot;personal\&quot; (default) ranks the caller among their own org\&#39;s users, \&quot;org\&quot; is that same org board named for an admin, \&quot;global\&quot; ranks organizations against each other. */
-    scope?: string;
-    /** Metric is the value ranked: tokens (default), requests, or cost. */
-    metric?: string;
-    /** Period is the window ranked: day, week, month (default) or all. */
-    period?: string;
-    /** Limit caps the rows returned, clamped to 100. Defaults to 10, which is also what a non-positive or unparseable value takes. */
-    limit?: number;
 }
 
 export interface UsageApiGetUsageSamplesRequestParams {
@@ -115,18 +75,6 @@ export interface UsageApiPostUsageRequestParams {
     reportReq: ReportReq;
 }
 
-export interface UsageApiPostUsageRollupBackfillRequestParams {
-    backfillQuery: BackfillQuery;
-}
-
-export interface UsageApiPutUsageLeaderboardOptinRequestParams {
-    userOptinReq: UserOptinReq;
-}
-
-export interface UsageApiPutUsageLeaderboardOptinOrgRequestParams {
-    orgOptinReq: OrgOptinReq;
-}
-
 
 @Injectable({
   providedIn: 'root'
@@ -135,76 +83,6 @@ export class UsageApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
-    }
-
-    /**
-     * Activity returns the per-day usage series for ONE authorized subject — the points a contribution heatmap and a timeline are drawn from, gap-filled so every day in the range is present.
-     * Activity returns the per-day usage series for ONE authorized subject — the points a contribution heatmap and a timeline are drawn from, gap-filled so every day in the range is present. Authorization is resolved server-side from the validated principal, so a caller can never widen the subject past what they are entitled to: a non-admin reads only themselves and their own org. subject&#x3D;project answers empty with a note, because the usage ledger records no project column yet. When the warehouse is not connected the series answers empty with available&#x3D;false rather than fabricated days.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getUsageActivity(requestParameters?: UsageApiGetUsageActivityRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivityView>;
-    public getUsageActivity(requestParameters?: UsageApiGetUsageActivityRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivityView>>;
-    public getUsageActivity(requestParameters?: UsageApiGetUsageActivityRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivityView>>;
-    public getUsageActivity(requestParameters?: UsageApiGetUsageActivityRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const subject = requestParameters?.subject;
-        const id = requestParameters?.id;
-        const from = requestParameters?.from;
-        const to = requestParameters?.to;
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>subject, 'subject');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>id, 'id');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>from, 'from');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>to, 'to');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/usage/activity`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ActivityView>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
     }
 
     /**
@@ -328,130 +206,6 @@ export class UsageApi extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Leaderboard ranks AI usage over a window, either the users of the caller\&#39;s own org or organizations against each other, and always reports the caller\&#39;s own standing even when it falls outside the returned page.
-     * Leaderboard ranks AI usage over a window, either the users of the caller\&#39;s own org or organizations against each other, and always reports the caller\&#39;s own standing even when it falls outside the returned page. Identities are private by default: a caller sees themselves, plus the peers or orgs that opted into public listing, and only an admin sees their own org\&#39;s members named. Cross-org spend is restricted to platform admins. When the warehouse is not connected the board answers empty with available&#x3D;false rather than a fabricated rank.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getUsageLeaderboard(requestParameters?: UsageApiGetUsageLeaderboardRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LeaderboardView>;
-    public getUsageLeaderboard(requestParameters?: UsageApiGetUsageLeaderboardRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LeaderboardView>>;
-    public getUsageLeaderboard(requestParameters?: UsageApiGetUsageLeaderboardRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LeaderboardView>>;
-    public getUsageLeaderboard(requestParameters?: UsageApiGetUsageLeaderboardRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const scope = requestParameters?.scope;
-        const metric = requestParameters?.metric;
-        const period = requestParameters?.period;
-        const limit = requestParameters?.limit;
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>scope, 'scope');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>metric, 'metric');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>period, 'period');
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/usage/leaderboard`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<LeaderboardView>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Returns the caller\&#39;s own public-listing preference and their org\&#39;s, each with whether the caller may change it.
-     * Returns the caller\&#39;s own public-listing preference and their org\&#39;s, each with whether the caller may change it. Public listing is opt-in and private by default, so a fresh caller reads listed&#x3D;false for both.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getUsageLeaderboardOptin(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OptinView>;
-    public getUsageLeaderboardOptin(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OptinView>>;
-    public getUsageLeaderboardOptin(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OptinView>>;
-    public getUsageLeaderboardOptin(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/usage/leaderboard/optin`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<OptinView>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -601,7 +355,7 @@ export class UsageApi extends BaseService {
 
     /**
      * Ingests a batch of account-usage samples — what a developer\&#39;s OWN AI accounts have consumed of their OWN plans, metered from each provider\&#39;s own login — and appends them to the warehouse series.
-     * Ingests a batch of account-usage samples — what a developer\&#39;s OWN AI accounts have consumed of their OWN plans, metered from each provider\&#39;s own login — and appends them to the warehouse series. Answers 202.  Send either a &#x60;samples&#x60; array or one sample\&#39;s fields at the top level. Every sample needs a provider, a machine and a known window class; an unknown window or kind is refused rather than silently rewritten, because a dash filled with a class nobody reported is worse than an error. There is no timestamp field: the server owns the observation clock, and a sample says which window it measured with windowStart or resetsAt.  It is FAIL-SOFT on storage: a warehouse outage costs a poll of history (stored:false), never a failed request. It records usage ONLY — the link registry is refreshed separately via POST /v1/links, so there is one and only one way to update an account row.
+     * Ingests a batch of account-usage samples — what a developer\&#39;s OWN AI accounts have consumed of their OWN plans, metered from each provider\&#39;s own login — and appends them to the warehouse series. Answers 202.  Send either a &#x60;samples&#x60; array or one sample\&#39;s fields at the top level. Every sample needs a provider, a machine and a known window class; an unknown window or kind is refused rather than silently rewritten, because a dash filled with a class nobody reported is worse than an error. There is no timestamp field: the server owns the observation clock, and a sample says which window it measured with windowStart or resetsAt.  It is FAIL-SOFT on storage: a warehouse outage costs a poll of history (stored:false), never a failed request. It records usage ONLY — the link registry is refreshed separately via POST /v1/link, so there is one and only one way to update an account row.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -658,213 +412,6 @@ export class UsageApi extends BaseService {
             {
                 context: localVarHttpContext,
                 body: reportReq,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Backfill seeds the derived usage rollup from ledger history — the rows written before the incremental view existed, which that view can never capture.
-     * Backfill seeds the derived usage rollup from ledger history — the rows written before the incremental view existed, which that view can never capture. SuperAdmin only. Because the rollup accumulates, a second unguarded run would double every day it re-reads, so it refuses with 409 when the rollup already holds rows unless force&#x3D;true is passed; forcing WILL double-count.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postUsageRollupBackfill(requestParameters: UsageApiPostUsageRollupBackfillRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BackfillResult>;
-    public postUsageRollupBackfill(requestParameters: UsageApiPostUsageRollupBackfillRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BackfillResult>>;
-    public postUsageRollupBackfill(requestParameters: UsageApiPostUsageRollupBackfillRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BackfillResult>>;
-    public postUsageRollupBackfill(requestParameters: UsageApiPostUsageRollupBackfillRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const backfillQuery = requestParameters?.backfillQuery;
-        if (backfillQuery === null || backfillQuery === undefined) {
-            throw new Error('Required parameter backfillQuery was null or undefined when calling postUsageRollupBackfill.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/usage/rollup/backfill`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BackfillResult>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: backfillQuery,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Sets the CALLER\&#39;s own public-listing preference on the leaderboard.
-     * Sets the CALLER\&#39;s own public-listing preference on the leaderboard. Self only: the row written is keyed by the caller\&#39;s validated ledger identity, so this can never edit another member\&#39;s visibility whatever the request says. A caller opting in with no handle is given their username, so a listed row never renders as \&quot;Anonymous\&quot; to its own owner.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public putUsageLeaderboardOptin(requestParameters: UsageApiPutUsageLeaderboardOptinRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserOptinView>;
-    public putUsageLeaderboardOptin(requestParameters: UsageApiPutUsageLeaderboardOptinRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserOptinView>>;
-    public putUsageLeaderboardOptin(requestParameters: UsageApiPutUsageLeaderboardOptinRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserOptinView>>;
-    public putUsageLeaderboardOptin(requestParameters: UsageApiPutUsageLeaderboardOptinRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const userOptinReq = requestParameters?.userOptinReq;
-        if (userOptinReq === null || userOptinReq === undefined) {
-            throw new Error('Required parameter userOptinReq was null or undefined when calling putUsageLeaderboardOptin.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/usage/leaderboard/optin`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<UserOptinView>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: userOptinReq,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Sets the ORG\&#39;s listing on the cross-org global board.
-     * Sets the ORG\&#39;s listing on the cross-org global board. Only an admin of the caller\&#39;s own org — an org admin or a platform SuperAdmin — may change it, and the org written is the caller\&#39;s validated tenant, never a value from the request. Listing consents to publishing the org\&#39;s usage VOLUME; cross-org spend stays restricted to platform admins regardless.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public putUsageLeaderboardOptinOrg(requestParameters: UsageApiPutUsageLeaderboardOptinOrgRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OrgOptinView>;
-    public putUsageLeaderboardOptinOrg(requestParameters: UsageApiPutUsageLeaderboardOptinOrgRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OrgOptinView>>;
-    public putUsageLeaderboardOptinOrg(requestParameters: UsageApiPutUsageLeaderboardOptinOrgRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OrgOptinView>>;
-    public putUsageLeaderboardOptinOrg(requestParameters: UsageApiPutUsageLeaderboardOptinOrgRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const orgOptinReq = requestParameters?.orgOptinReq;
-        if (orgOptinReq === null || orgOptinReq === undefined) {
-            throw new Error('Required parameter orgOptinReq was null or undefined when calling putUsageLeaderboardOptinOrg.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/usage/leaderboard/optin/org`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<OrgOptinView>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: orgOptinReq,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

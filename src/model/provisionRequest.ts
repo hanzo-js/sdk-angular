@@ -10,7 +10,13 @@
 
 
 export interface ProvisionRequest { 
+    /**
+     * Instance binds a DEDICATED add-on to the app instance whose <instance>-addons Secret receives the <KIND>_URL (e.g. \"commerce\"). Optional: empty means \"not instance-bound\" — the DSN is returned once and wired by the caller.
+     */
     instance?: string;
+    /**
+     * Name is the org-unique slug for the new resource, matching ^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$. Every physical name derives from it.
+     */
     name?: string;
 }
 

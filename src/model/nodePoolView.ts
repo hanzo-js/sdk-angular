@@ -10,12 +10,33 @@
 
 
 export interface NodePoolView { 
+    /**
+     * AutoScale reports whether the provider\'s cluster autoscaler owns this pool\'s size, moving Count between MinNodes and MaxNodes as workloads demand. False means Count changes only when someone scales the pool.
+     */
     autoScale?: boolean;
+    /**
+     * Count is how many nodes the pool has right now. Always present, so 0 means a pool that is genuinely empty rather than a figure the provider withheld.
+     */
     count?: number;
+    /**
+     * MaxNodes is the ceiling the autoscaler will not grow the pool past, and so the bound on what this pool can cost. Read it only with AutoScale set.
+     */
     maxNodes?: number;
+    /**
+     * MinNodes is the floor the autoscaler will not shrink the pool below. Read it only with AutoScale set — the provider ignores it otherwise.
+     */
     minNodes?: number;
+    /**
+     * Name is the pool\'s name as the provider knows it.
+     */
     name?: string;
+    /**
+     * PoolID is the provider\'s id for the pool — the value the scale and delete routes address it by. It falls back to the pool\'s name when the provider answered without one, so it is always something the routes accept.
+     */
     poolId?: string;
+    /**
+     * Size is the provider size slug every node in the pool runs at (\"s-4vcpu-8gb\", \"gpu-h100x8-640gb\"). One pool is one size — a mixed cluster is several pools.
+     */
     size?: string;
 }
 

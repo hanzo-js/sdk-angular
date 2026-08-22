@@ -11,13 +11,16 @@
 
 export interface PoolScale { 
     /**
-     * ClusterID and PoolID address the pool, from the URL path.
+     * ClusterID is the cluster holding the pool, from the URL path.
      */
     clusterId?: string;
     /**
      * Count is the node count to scale TO — an absolute target, not a delta, and never negative.
      */
     count?: number;
+    /**
+     * PoolID is the pool to resize, from the URL path — the `poolId` a cluster read reports for it. Required.
+     */
     poolId?: string;
     /**
      * Provider is the cloud the cluster lives on. Required; body or ?provider=.

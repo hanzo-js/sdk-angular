@@ -11,6 +11,9 @@ import { Enrollment } from './enrollment';
 
 
 export interface EnrollmentList { 
+    /**
+     * Data is the page: every contact walking this ONE sequence, in any state — active, completed and canceled walks all appear, since the history of who was reached is the point. An empty array when nobody has been enrolled.
+     */
     data?: Array<Enrollment>;
 }
 

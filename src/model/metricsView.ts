@@ -16,6 +16,9 @@ export interface MetricsView {
      * echoes the requested window (24H|7D|30D)
      */
     range?: string;
+    /**
+     * Resource is the Resource Usage panel\'s rollup, and every field of it is currently null — see resourceUsage. It is present rather than omitted so a panel renders \"—\" instead of guessing.
+     */
     resource?: ResourceUsage;
     /**
      * per-agent invocation histogram (real)

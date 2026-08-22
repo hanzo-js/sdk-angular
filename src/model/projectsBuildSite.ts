@@ -10,9 +10,21 @@
 
 
 export interface ProjectsBuildSite { 
+    /**
+     * Brief is what the site should be, in plain language. It is the whole input the model gets and it is size-bounded.
+     */
     brief?: string;
+    /**
+     * Model names which model writes the site. Absent takes the deployment\'s default — this route spends inference on the caller\'s org either way.
+     */
     model?: string;
+    /**
+     * Name is the site\'s display name. Taken from what the model writes when omitted.
+     */
     name?: string;
+    /**
+     * Slug is the handle and public host label to publish under. Derived from the name, or from the brief, when omitted.
+     */
     slug?: string;
 }
 

@@ -21,6 +21,10 @@ import { Admission } from '../model/admission';
 // @ts-ignore
 import { BenchmarkCatalog } from '../model/benchmarkCatalog';
 // @ts-ignore
+import { ClaimsOut } from '../model/claimsOut';
+// @ts-ignore
+import { HistoryOut } from '../model/historyOut';
+// @ts-ignore
 import { Leaderboard } from '../model/leaderboard';
 // @ts-ignore
 import { Pairing } from '../model/pairing';
@@ -31,6 +35,10 @@ import { PresetAccepted } from '../model/presetAccepted';
 // @ts-ignore
 import { PresetList } from '../model/presetList';
 // @ts-ignore
+import { PutClaimsIn } from '../model/putClaimsIn';
+// @ts-ignore
+import { PutClaimsOut } from '../model/putClaimsOut';
+// @ts-ignore
 import { Suite } from '../model/suite';
 
 // @ts-ignore
@@ -38,6 +46,19 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 import { BaseService } from '../api.base.service';
 
+
+export interface BenchmarkApiGetBenchmarkClaimsRequestParams {
+    /** Benchmark filters to one benchmark id. Empty returns every benchmark. */
+    benchmark?: string;
+    /** Model filters to one model. Empty returns every model. */
+    model?: string;
+    /** Provider filters to one lab or leaderboard — the way to read what a single source claims across every model it covers. */
+    provider?: string;
+    /** Source filters to one citation, which is the finest grain there is: a source is what makes two claims about one model independent rather than a restatement of each other. */
+    source?: string;
+    /** Protocol filters by HOW a claim was scored, so provider cards can be read apart from third parties running their own harness. */
+    protocol?: string;
+}
 
 export interface BenchmarkApiGetBenchmarkCompareRequestParams {
     /** A is the first model id. It is required. */
@@ -48,9 +69,20 @@ export interface BenchmarkApiGetBenchmarkCompareRequestParams {
     benchmark?: string;
 }
 
+export interface BenchmarkApiGetBenchmarkHistoryRequestParams {
+    /** Benchmark is the catalog id to read, defaulting to gpqa_diamond. */
+    benchmark?: string;
+    /** Model filters to one model. Empty returns every model measured. */
+    model?: string;
+}
+
 export interface BenchmarkApiGetBenchmarkLeaderboardRequestParams {
     /** Benchmark is the catalog id to read, defaulting to gpqa_diamond. */
     benchmark?: string;
+}
+
+export interface BenchmarkApiPostBenchmarkClaimsRequestParams {
+    putClaimsIn: PutClaimsIn;
 }
 
 export interface BenchmarkApiPostBenchmarkPresetsRequestParams {
@@ -126,6 +158,79 @@ export class BenchmarkApi extends BaseService {
     }
 
     /**
+     * Lists the effective published claims: what the leaderboard will use for each (benchmark, model) after the seed, the import and any stored correction are layered.
+     * Lists the effective published claims: what the leaderboard will use for each (benchmark, model) after the seed, the import and any stored correction are layered. It answers the operator\&#39;s question — what does this arena currently believe someone else reported, and did we ship that or fix it.  Effective values only. The history of a key lives in the append-only file and is not what this op is for; a list that returned every superseded row would make the common question the hard one.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getBenchmarkClaims(requestParameters?: BenchmarkApiGetBenchmarkClaimsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClaimsOut>;
+    public getBenchmarkClaims(requestParameters?: BenchmarkApiGetBenchmarkClaimsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClaimsOut>>;
+    public getBenchmarkClaims(requestParameters?: BenchmarkApiGetBenchmarkClaimsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClaimsOut>>;
+    public getBenchmarkClaims(requestParameters?: BenchmarkApiGetBenchmarkClaimsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const benchmark = requestParameters?.benchmark;
+        const model = requestParameters?.model;
+        const provider = requestParameters?.provider;
+        const source = requestParameters?.source;
+        const protocol = requestParameters?.protocol;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>benchmark, 'Benchmark');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>model, 'Model');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>provider, 'Provider');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>source, 'Source');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>protocol, 'Protocol');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/benchmark/claims`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ClaimsOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Is the ONLY valid arm-vs-arm test: it pairs the two models on the items BOTH completed, and answers rescue and damage counts with an exact-McNemar p.
      * Is the ONLY valid arm-vs-arm test: it pairs the two models on the items BOTH completed, and answers rescue and damage counts with an exact-McNemar p.  Pairing is what prevents the subset artifact — comparing one model\&#39;s easy subset against another\&#39;s full run — so n_common, not either arm\&#39;s own coverage, is the number to read this by.  Both a and b are required. The benchmark defaults to gpqa_diamond.
      * @param requestParameters
@@ -185,6 +290,70 @@ export class BenchmarkApi extends BaseService {
         let localVarPath = `/v1/benchmark/compare`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Pairing>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns each model\&#39;s measured score per run over time, oldest first, with the change between runs.
+     * Returns each model\&#39;s measured score per run over time, oldest first, with the change between runs.  This is the counterweight to a leaderboard: the board shows the latest run because that is what \&quot;how good is it\&quot; means, and a single latest number cannot distinguish a model that has always been strong from one that just improved, or from one that regressed after a provider changed something. Both matter for routing, and only one of them is visible on a board.  Runs with no id — attempts recorded before runs existed — group under the empty run, which is honestly what they are: one undated measurement.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getBenchmarkHistory(requestParameters?: BenchmarkApiGetBenchmarkHistoryRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HistoryOut>;
+    public getBenchmarkHistory(requestParameters?: BenchmarkApiGetBenchmarkHistoryRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<HistoryOut>>;
+    public getBenchmarkHistory(requestParameters?: BenchmarkApiGetBenchmarkHistoryRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<HistoryOut>>;
+    public getBenchmarkHistory(requestParameters?: BenchmarkApiGetBenchmarkHistoryRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const benchmark = requestParameters?.benchmark;
+        const model = requestParameters?.model;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>benchmark, 'Benchmark');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>model, 'Model');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/benchmark/history`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<HistoryOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -303,6 +472,75 @@ export class BenchmarkApi extends BaseService {
         return this.httpClient.request<PresetList>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Records published claims: one to correct a number, many to import a leaderboard.
+     * Records published claims: one to correct a number, many to import a leaderboard. Every row must carry a Source, because a claim without its citation is a number nobody can check — and an unattributed number in the published plane is indistinguishable from a measurement, which is the one confusion this whole surface is built to prevent.  Writes are append-only, so this never destroys the value it replaces. A vendor restating a score leaves both rows on disk, which is how the restating itself becomes visible.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postBenchmarkClaims(requestParameters: BenchmarkApiPostBenchmarkClaimsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PutClaimsOut>;
+    public postBenchmarkClaims(requestParameters: BenchmarkApiPostBenchmarkClaimsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PutClaimsOut>>;
+    public postBenchmarkClaims(requestParameters: BenchmarkApiPostBenchmarkClaimsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PutClaimsOut>>;
+    public postBenchmarkClaims(requestParameters: BenchmarkApiPostBenchmarkClaimsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const putClaimsIn = requestParameters?.putClaimsIn;
+        if (putClaimsIn === null || putClaimsIn === undefined) {
+            throw new Error('Required parameter putClaimsIn was null or undefined when calling postBenchmarkClaims.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/benchmark/claims`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PutClaimsOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: putClaimsIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

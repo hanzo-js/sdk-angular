@@ -11,7 +11,7 @@
 
 export interface NetworkView { 
     /**
-     * ID is the org-derived id of the overlay network — the key GET /v1/networks/{id} addresses.
+     * ID is the org-derived id of the overlay network — the key GET /v1/network/{id} addresses.
      */
     id?: string;
     /**

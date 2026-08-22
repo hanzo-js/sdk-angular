@@ -11,62 +11,20 @@
 
 export interface ProductRow { 
     /**
-     * hanzo-k8s
+     * Orders is how many order_completed events carried it.
      */
-    cluster?: string;
+    orders?: number;
     /**
-     * spec.image.tag on the App CR (declared truth)
+     * ProductID is the product the order events named.
      */
-    declaredTag?: string;
+    productId?: string;
     /**
-     * any drift flag present
+     * Revenue is the total they carried, in the events\' own currency unit.
      */
-    drift?: boolean;
+    revenue?: number;
     /**
-     * ok|yellow|red (rolled-up)
+     * Units is the summed quantity sold.
      */
-    driftSeverity?: string;
-    /**
-     * main|test|dev (lifecycle namespace)
-     */
-    env?: string;
-    /**
-     * green|yellow|red|unknown
-     */
-    health?: string;
-    /**
-     * operator App CR spec.role (sql|kv|generic|ingress) or \"\"
-     */
-    kind?: string;
-    /**
-     * newest released tag (GH release reader — empty until wired)
-     */
-    latestTag?: string;
-    name?: string;
-    /**
-     * k8s namespace
-     */
-    namespace?: string;
-    /**
-     * image namespace (hanzoai|luxfi|docker.io/…)
-     */
-    org?: string;
-    /**
-     * operator status.phase (Running/Creating/…)
-     */
-    phase?: string;
-    /**
-     * owner/repo image coordinate
-     */
-    repo?: string;
-    /**
-     * observed from the live Deployment
-     */
-    runningTag?: string;
-    /**
-     * derived: cloud|data|edge|daemon|paas|app (grouping)
-     */
-    tier?: string;
-    updated?: string;
+    units?: number;
 }
 

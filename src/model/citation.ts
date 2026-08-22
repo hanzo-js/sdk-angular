@@ -10,10 +10,25 @@
 
 
 export interface Citation { 
+    /**
+     * EndLine is its last line, inclusive.
+     */
     endLine?: number;
+    /**
+     * File is the path inside the repo, relative to its root.
+     */
     file?: string;
+    /**
+     * Line is the first line of the cited region, 1-based.
+     */
     line?: number;
+    /**
+     * Repo is the repository the cited code lives in (\"owner/name\"), absent when the ask was already scoped to one.
+     */
     repo?: string;
+    /**
+     * Symbol is the declaration the region belongs to, when it belongs to one.
+     */
     symbol?: string;
 }
 

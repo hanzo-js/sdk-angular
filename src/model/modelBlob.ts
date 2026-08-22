@@ -10,9 +10,21 @@
 
 
 export interface ModelBlob { 
+    /**
+     * Data is the file\'s bytes, verbatim, base64 on the wire. Empty for a directory and for an empty file alike; Dir is what tells those apart.
+     */
     data?: string;
+    /**
+     * Dir says which of the two answers this is: true and the path is a directory, so read Entries; false and it is a file, so read Data. Nothing else distinguishes them — an empty file and an empty directory look alike here.
+     */
     dir?: boolean;
+    /**
+     * Entries is a directory\'s contents as bare NAMES, not paths — one level, no recursion, dotfiles included, \".\" and \"..\" excluded (`ls -1A`). Empty for a file, and for an empty directory.
+     */
     entries?: Array<string>;
+    /**
+     * Path is the RESOLVED absolute path that was read — the caller\'s relative path joined onto the sandbox\'s working directory (Leased.Workdir), so it names the same file for a reader who does not know the class.
+     */
     path?: string;
 }
 

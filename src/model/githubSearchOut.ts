@@ -11,7 +11,13 @@ import { GithubSearchHit } from './githubSearchHit';
 
 
 export interface GithubSearchOut { 
+    /**
+     * Count is how many hits Repos carries. It is that array\'s length, NOT GitHub\'s total_count, so it never exceeds limit and says nothing about how many more repositories matched.
+     */
     count?: number;
+    /**
+     * Repos are the matching repositories in GitHub\'s own relevance order, capped at limit. Always an array, never null.
+     */
     repos?: Array<GithubSearchHit>;
 }
 

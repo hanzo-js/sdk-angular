@@ -10,9 +10,21 @@
 
 
 export interface MessageInput { 
+    /**
+     * From is the number to send FROM, in E.164. It must be one this org holds and it must be sms-capable.
+     */
     from?: string;
+    /**
+     * Media are URLs to attach. A message with any is an MMS to the carrier — the distinction is the carrier\'s to make, not something the caller declares.
+     */
     media?: Array<string>;
+    /**
+     * Text is the message body. It may be empty when Media carries the message.
+     */
     text?: string;
+    /**
+     * To is the number to send to, in E.164.
+     */
     to?: string;
 }
 

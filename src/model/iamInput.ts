@@ -10,15 +10,19 @@
 
 
 export interface IamInput { 
+    action?: string;
+    clientIp?: string;
     createdTime?: string;
-    description?: string;
-    displayName?: string;
-    isDefault?: boolean;
-    metadata?: string;
+    isTriggered?: boolean;
+    language?: string;
+    method?: string;
     name?: string;
+    object?: string;
     organization?: string;
     owner?: string;
-    tags?: Array<string>;
-    workspace?: string;
+    requestUri?: string;
+    response?: string;
+    statusCode?: number;
+    user?: string;
 }
 

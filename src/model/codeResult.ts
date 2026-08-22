@@ -12,7 +12,7 @@ import { CodeFile } from './codeFile';
 
 export interface CodeResult { 
     /**
-     * Files are what this run CREATED OR CHANGED, decided by mtime against a marker taken before the program started — so it is the run\'s output, not a listing of the directory. Fetch each from GET /v1/download/{session}/{id}.
+     * Files are what this run CREATED OR CHANGED, decided by mtime against a marker taken before the program started — so it is the run\'s output, not a listing of the directory. Fetch each from GET /v1/exec/download/{session}/{id}.
      */
     files?: Array<CodeFile>;
     /**

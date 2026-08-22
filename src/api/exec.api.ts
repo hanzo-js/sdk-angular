@@ -27,6 +27,10 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
+export interface ExecApiGetExecFilesBySidRequestParams {
+    sid: string;
+}
+
 export interface ExecApiPostExecRequestParams {
     codeRun: CodeRun;
 }
@@ -42,8 +46,66 @@ export class ExecApi extends BaseService {
     }
 
     /**
+     * List the files in an execution session
+     * Lists what a session\&#39;s sandbox holds — the uploads a run can read and the artifacts it produced — each then fetched from /v1/exec/download.  It answers a BARE JSON ARRAY of {name, lastModified}, where &#x60;name&#x60; is the same {session_id}/{fileId} identifier download takes, because that is what the client matches on. An object wrapper would be a wire change, which is why this is not a typed operation.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getExecFilesBySid(requestParameters: ExecApiGetExecFilesBySidRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getExecFilesBySid(requestParameters: ExecApiGetExecFilesBySidRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getExecFilesBySid(requestParameters: ExecApiGetExecFilesBySidRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getExecFilesBySid(requestParameters: ExecApiGetExecFilesBySidRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const sid = requestParameters?.sid;
+        if (sid === null || sid === undefined) {
+            throw new Error('Required parameter sid was null or undefined when calling getExecFilesBySid.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/exec/files/${this.configuration.encodeParam({name: "sid", value: sid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Run a code snippet in a sandboxed interpreter
-     * Executes a program in a throwaway sandbox and answers with what it printed and what it left behind.  &#x60;lang&#x60; names one of the thirteen the sandbox image carries — py, js, ts, bash, r, php, go, rs, c, cpp, java, d, f90 — and &#x60;code&#x60; is the whole program, not a fragment: a compiled language is compiled and then run, an interpreted one is interpreted, and &#x60;args&#x60; becomes the program\&#39;s own argv either way. Nothing is installed for you; the image is the environment.  A PROGRAM THAT FAILS IS A SUCCESSFUL CALL. A non-zero exit answers 200 with the diagnostics on &#x60;stderr&#x60;, because \&quot;the code threw\&quot; and \&quot;the interpreter is down\&quot; are different facts a caller renders differently. Only the second is an error status.  Runs are stateful through &#x60;session_id&#x60;. Omit it and the run gets a fresh sandbox whose id comes back on the answer; pass that id again and the next run sees the same filesystem, so a program can write a file one call and read it the next. &#x60;files&#x60; names bytes already uploaded to a session (POST /v1/upload), copied in before the program starts. &#x60;files&#x60; on the ANSWER is what the program created or changed, by comparison against a marker taken at start — so it is the run\&#39;s real output, not a listing of the directory — and each is fetched from GET /v1/download/{session}/{name}.  The tenant is the caller\&#39;s, never the body\&#39;s, at every door. A typed op is also an MCP tool and an op-plane op; MCP\&#39;s tools/call invokes it directly, with no route and therefore no middleware, so nothing there could have checked a credential. tenantOf refuses a context carrying neither a validated principal nor exec\&#39;s own admission marker, so those doors fail closed without a second gate to keep in step.
+     * Executes a program in a throwaway sandbox and answers with what it printed and what it left behind.  &#x60;lang&#x60; names one of the thirteen the sandbox image carries — py, js, ts, bash, r, php, go, rs, c, cpp, java, d, f90 — and &#x60;code&#x60; is the whole program, not a fragment: a compiled language is compiled and then run, an interpreted one is interpreted, and &#x60;args&#x60; becomes the program\&#39;s own argv either way. Nothing is installed for you; the image is the environment.  A PROGRAM THAT FAILS IS A SUCCESSFUL CALL. A non-zero exit answers 200 with the diagnostics on &#x60;stderr&#x60;, because \&quot;the code threw\&quot; and \&quot;the interpreter is down\&quot; are different facts a caller renders differently. Only the second is an error status.  Runs are stateful through &#x60;session_id&#x60;. Omit it and the run gets a fresh sandbox whose id comes back on the answer; pass that id again and the next run sees the same filesystem, so a program can write a file one call and read it the next. &#x60;files&#x60; names bytes already uploaded to a session (POST /v1/exec/upload), copied in before the program starts. &#x60;files&#x60; on the ANSWER is what the program created or changed, by comparison against a marker taken at start — so it is the run\&#39;s real output, not a listing of the directory — and each is fetched from GET /v1/exec/download/{session}/{name}.  The tenant is the caller\&#39;s, never the body\&#39;s, at every door. A typed op is also an MCP tool and an op-plane op; MCP\&#39;s tools/call invokes it directly, with no route and therefore no middleware, so nothing there could have checked a credential. tenantOf refuses a context carrying neither a validated principal nor exec\&#39;s own admission marker, so those doors fail closed without a second gate to keep in step.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -149,6 +211,59 @@ export class ExecApi extends BaseService {
         }
 
         let localVarPath = `/v1/exec/programmatic`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Upload a file into an execution session
+     * Takes a multipart upload and writes the file into the session\&#39;s sandbox, so a later run can read it. Answers the session id and the identifier the file is addressed by; &#x60;session_id&#x60; in the form joins an existing session instead of opening one.  The body is multipart/form-data, which is why this is not a typed operation: every non-empty typed body is decoded as JSON.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postExecUpload(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postExecUpload(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postExecUpload(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postExecUpload(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/exec/upload`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
