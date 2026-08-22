@@ -10,10 +10,25 @@
 
 
 export interface Section { 
+    /**
+     * Detail is what this phase of the journey is for, in prose.
+     */
     detail?: string;
+    /**
+     * Enabled is the admin lever. Absent reads as ON, so only an explicit false turns a phase off — and it takes every step filed under it out of the journey, not just the heading.
+     */
     enabled?: boolean;
+    /**
+     * ID is the slug a step\'s `section` names to file itself under this phase.
+     */
     id?: string;
+    /**
+     * Order places the phase in the journey, ascending. Ties fall back to authoring order, and an omitted order sorts as 0 — ahead of everything.
+     */
     order?: number;
+    /**
+     * Title is the phase heading a person reads above its steps.
+     */
     title?: string;
 }
 

@@ -10,8 +10,17 @@
 
 
 export interface ProjectsComplete { 
+    /**
+     * Bytes is their total size in bytes.
+     */
     bytes?: number;
+    /**
+     * Commit is the revision that was built, recorded on the deployment.
+     */
     commit?: string;
+    /**
+     * Files is how many objects CI published.
+     */
     files?: number;
     /**
      * ID is the queued deployment to complete, from the path.
@@ -21,14 +30,20 @@ export interface ProjectsComplete {
      * Keys is the manifest CI just uploaded, RELATIVE to the deployment prefix. It is what replaces `aws s3 sync --delete`: an upload grant authorizes writes only, so CI cannot remove a file, and cloud reconciles the prefix against this list instead (grant.go). Omit it and nothing is deleted — the prefix only grows, which is the old pre-grant behaviour and a safe default.
      */
     keys?: Array<string>;
+    /**
+     * LiveURL is a HINT at the address the site should serve at. The public host is claimed by cloud first, so this can refine the URL a deployment reports but can never assert a subdomain another tenant holds.
+     */
     liveUrl?: string;
+    /**
+     * Message is what happened, in words — on an error completion, why it failed.
+     */
     message?: string;
     /**
      * Slug is the project the deployment belongs to, from the path.
      */
     slug?: string;
     /**
-     * live | error
+     * Status is how the build ended: `live` if it succeeded, `error` if it did not. Nothing else is accepted.
      */
     status?: string;
 }

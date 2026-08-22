@@ -10,10 +10,25 @@
 
 
 export interface BlueprintCounts { 
+    /**
+     * Principles is how many spine archetypes the playbook carries (64 in the shipped corpus).
+     */
     principles?: number;
+    /**
+     * Sections is how many phases the journey has.
+     */
     sections?: number;
+    /**
+     * Steps is how many checklist items the playbook holds, DISABLED ONES INCLUDED — this counts the authored document, not the journey an org runs, so it is normally larger than the `total` on a progress view.
+     */
     steps?: number;
+    /**
+     * Strategies is how many tactics the corpus holds, again counting disabled ones.
+     */
     strategies?: number;
+    /**
+     * Templates is how many reusable prompts the playbook carries.
+     */
     templates?: number;
 }
 

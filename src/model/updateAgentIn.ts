@@ -10,17 +10,41 @@
 
 
 export interface UpdateAgentIn { 
+    /**
+     * ComputeRef re-binds (or, with \"\", unbinds) the visor machine. Opaque here.
+     */
     computeRef?: string;
+    /**
+     * Description replaces the line other agents read in the tool catalogue.
+     */
     description?: string;
+    /**
+     * ExecutionMode switches between one-shot and long-running. The RESULTING mode+schedule are validated together, so switching to long-running without a stored or supplied cron is refused rather than accepted into an agent the scheduler would skip forever. A switch INTO long-running counts against the per-org cap and can be a 409.
+     */
     executionMode?: string;
+    /**
+     * Instructions replaces the system prompt whole, up to 32 KiB. There is no append: a prompt is one text, and sending \"\" clears it.
+     */
     instructions?: string;
+    /**
+     * Model re-points the agent at another model, checked against the gateway\'s served catalogue exactly as create checks it. Empty STRING is refused — say nothing to keep the current one. Past runs keep the model that served them.
+     */
     model?: string;
     /**
      * Ref is the agent to update — its public id or org-unique name, from the path.
      */
     ref?: string;
+    /**
+     * Schedule replaces the cron. It is validated against the mode this update leaves behind, and dropped if that mode is one-shot.
+     */
     schedule?: string;
+    /**
+     * ServiceAccountID re-points (or, with \"\", clears) the IAM service account a scheduled run is billed as. Clearing it puts that spend back on the org.
+     */
     serviceAccountId?: string;
+    /**
+     * Tools replaces the whole allow-list, it does not add to it. Sending [] takes every tool away, which is the only way to say that.
+     */
     tools?: Array<string>;
 }
 

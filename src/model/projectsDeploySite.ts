@@ -11,8 +11,17 @@ import { ProjectsFile } from './projectsFile';
 
 
 export interface ProjectsDeploySite { 
+    /**
+     * Files is the whole site, inline — every file it consists of. It REPLACES what is there rather than merging, so an omitted file is a deleted one.
+     */
     files?: Array<ProjectsFile>;
+    /**
+     * Name is the site\'s display name.
+     */
     name?: string;
+    /**
+     * Slug is the handle and public host label to publish under.
+     */
     slug?: string;
 }
 

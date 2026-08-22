@@ -10,7 +10,13 @@
 
 
 export interface ArgoSyncStatus { 
+    /**
+     * Revision is what Status was reached against. For an App CR that is the declared IMAGE TAG, not a commit — the CR is image-pinned. For a CD row it is the commit CD last applied.
+     */
     revision?: string;
+    /**
+     * Status is the ArgoCD sync vocabulary, Capitalized: Synced, OutOfSync or Unknown. For an App CR it compares the tag the CR DECLARES against the tag the cluster\'s Deployment is RUNNING — equal is Synced, both known and different is OutOfSync, either unknown is Unknown. For a CD row it is CD\'s own git-versus-cluster verdict.
+     */
     status?: string;
 }
 

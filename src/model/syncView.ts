@@ -11,16 +11,40 @@ import { EndpointView } from './endpointView';
 
 
 export interface SyncView { 
+    /**
+     * Actor is the identity a reconcile writes AS. It is the loop guard: a change this identity made is one we already have, so it is not synced back.
+     */
     actor?: string;
+    /**
+     * CreatedAt is when the link was first declared, RFC3339 in UTC.
+     */
     createdAt?: string;
+    /**
+     * Direction is which way work flows: \"both\", \"pull\" (target ← source), \"push\" (source → target), or \"off\" — which keeps the link declared and moves nothing.
+     */
     direction?: string;
+    /**
+     * ID is the link\'s handle, derived from its source and target — which is what makes re-declaring the same pair an update rather than a duplicate.
+     */
     id?: string;
+    /**
+     * Kind is what is being synced. \"git\" today; the field exists so a storage or database link is a value here rather than a second route family.
+     */
     kind?: string;
+    /**
+     * Source is the side read FROM on a pull.
+     */
     source?: EndpointView;
+    /**
+     * Target is the side written TO on a push.
+     */
     target?: EndpointView;
+    /**
+     * Trigger is what starts a reconcile: \"webhook\" (the provider tells us), \"poll\" (we ask on a schedule), or \"manual\" (only an explicit call).
+     */
     trigger?: string;
     /**
-     * bumped on every reconcile — the last-synced time
+     * UpdatedAt is bumped by every reconcile, so it reads as the LAST-SYNCED time rather than the last edit. Absent until the first one runs.
      */
     updatedAt?: string;
 }

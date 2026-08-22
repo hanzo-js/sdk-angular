@@ -11,7 +11,7 @@
 
 export interface ValidatorClaim { 
     /**
-     * Nonce is the value GET /v1/validators/challenge issued for this slot.
+     * Nonce is the value GET /v1/validator/challenge issued for this slot.
      */
     nonce?: string;
     /**

@@ -18,15 +18,45 @@ export interface Answer {
      * Cold reports that this request paid to PREPARE the revision — the tree write, the dependency fetch and the language server\'s first index. It is the billed event, surfaced so a caller can see what it was charged for.
      */
     cold?: boolean;
+    /**
+     * Completions is complete\'s answer: the candidates at the position, typed and resolved through the repository\'s dependencies rather than guessed from text.
+     */
     completions?: Array<Completion>;
+    /**
+     * Diagnostics is diagnostics\' answer: every problem the server finds in the whole file, position ignored. Empty means it found none.
+     */
     diagnostics?: Array<Diagnostic>;
+    /**
+     * Hover is hover\'s answer: the type and documentation as the language server itself renders them, so it is prose meant to be shown, not parsed.
+     */
     hover?: string;
+    /**
+     * Lang is the language the server that answered speaks (\"go\"), as the daemon reports it. Empty when the daemon named none.
+     */
     lang?: string;
+    /**
+     * Locations is locate\'s answer: where the symbol is defined, referenced, typed or implemented, per the relation asked for. Empty means the server resolved nothing there, which is an answer.
+     */
     locations?: Array<Location>;
+    /**
+     * Op is the question that was asked: hover, locate, symbols, diagnostics or complete. It names which result field below is the populated one.
+     */
     op?: string;
+    /**
+     * Path is the repo-relative file the question was about, echoed back.
+     */
     path?: string;
+    /**
+     * Repo is the repository the question was about, echoed back.
+     */
     repo?: string;
+    /**
+     * Rev is the RESOLVED commit sha, never the branch or tag that was asked for. It is what makes an answer re-askable: a branch moves, this does not.
+     */
     rev?: string;
+    /**
+     * Symbols is symbols\' answer: the file\'s whole outline, position ignored.
+     */
     symbols?: Array<Symbol>;
 }
 

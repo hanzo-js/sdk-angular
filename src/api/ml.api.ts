@@ -17,6 +17,8 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
+import { MlCreate } from '../model/mlCreate';
+// @ts-ignore
 import { MlResource } from '../model/mlResource';
 // @ts-ignore
 import { MlResourceList } from '../model/mlResourceList';
@@ -39,6 +41,10 @@ export interface MlApiGetMlModelsByNameRequestParams {
 
 export interface MlApiPatchMlModelsByNameRequestParams {
     name: string;
+}
+
+export interface MlApiPostMlModelsRequestParams {
+    mlCreate: MlCreate;
 }
 
 export interface MlApiPostMlModelsByNamePredictRequestParams {
@@ -338,15 +344,20 @@ export class MlApi extends BaseService {
     }
 
     /**
-     * Deploy an inference model
-     * Deploys a model into the caller\&#39;s own tenant namespace and answers the created resource, 201. The spec is the kserve InferenceService spec, relayed as given, so anything kserve serves is deployable here without this layer knowing what it is.  THE BALANCE GATE RUNS FIRST, before a namespace or a resource exists, so an unfunded org cannot start GPU compute and then be billed for it. It fails CLOSED: a commerce that cannot be reached refuses rather than admits. The refusal carries the fleet\&#39;s nested error body — the 402 shape a funded-balance client already parses — which is precisely why this route is not a typed op. On success the submission fee is debited from the caller org\&#39;s own ledger, asynchronously and best-effort; ongoing GPU-hour cost is metered elsewhere.  The tenant namespace is derived from the VALIDATED org and project — never from a field — and the mapping is injective in both, so two tenants can never land in one namespace. An unvalidated caller is refused before any of that. The name must be a DNS-1123 label; a name already taken in the tenant\&#39;s namespace is a 409.
+     * Deploys one inference model for the caller\&#39;s org, and answers 201 with the model as Kubernetes admitted it.
+     * Deploys one inference model for the caller\&#39;s org, and answers 201 with the model as Kubernetes admitted it.  The &#x60;spec&#x60; is a kserve InferenceService spec, passed through unchanged — this plane owns the tenancy, the billing and the namespace, and kserve owns what a model IS. An unfunded org is refused BEFORE anything is created, so nobody runs free GPU compute and nobody is charged for a resource that was never made.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postMlModels(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postMlModels(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postMlModels(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postMlModels(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postMlModels(requestParameters: MlApiPostMlModelsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MlResource>;
+    public postMlModels(requestParameters: MlApiPostMlModelsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MlResource>>;
+    public postMlModels(requestParameters: MlApiPostMlModelsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MlResource>>;
+    public postMlModels(requestParameters: MlApiPostMlModelsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const mlCreate = requestParameters?.mlCreate;
+        if (mlCreate === null || mlCreate === undefined) {
+            throw new Error('Required parameter mlCreate was null or undefined when calling postMlModels.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -354,6 +365,7 @@ export class MlApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -363,6 +375,15 @@ export class MlApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -377,9 +398,10 @@ export class MlApi extends BaseService {
 
         let localVarPath = `/v1/ml/models`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<MlResource>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: mlCreate,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

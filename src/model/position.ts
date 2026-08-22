@@ -10,7 +10,13 @@
 
 
 export interface Position { 
+    /**
+     * Character is a 0-based UTF-16 code-unit offset within Line, per the LSP specification: not a byte offset and not a rune index. An emoji before the cursor counts as one here and as two in Go\'s arithmetic.
+     */
     character?: number;
+    /**
+     * Line is 0-BASED, per the LSP specification — one less than the line an editor shows a human.
+     */
     line?: number;
 }
 

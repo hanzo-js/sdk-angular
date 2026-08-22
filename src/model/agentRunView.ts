@@ -10,22 +10,61 @@
 
 
 export interface AgentRunView { 
+    /**
+     * Actor is the \"org/sub\" identity the run was executed and billed AS. Empty means there was no PERSON — a schedule or a service token — which is a different fact from \"we do not know\", and the difference is what an audit asks about.
+     */
     actor?: string;
     /**
      * What an operator needs to answer \"what ran, for whom, and what did it do\" — and, through traceId, to leave this record for the waterfall of the very same run rather than a search that hopefully lands near it.  Agent is on the row because the org-wide feed lists runs across agents, and a run that cannot name its agent is an orphan in exactly the view built to make sense of many of them. Every field is omitempty: a run recorded before these columns existed reports absence rather than a zero it never measured.
      */
     agent?: string;
+    /**
+     * CompletionTokens is the same measurement for what the model produced, on the same final completion. It is a count of TOKENS, not of turns and not of money.
+     */
     completionTokens?: number;
+    /**
+     * CreatedAt is when the run finished, RFC 3339 in UTC to the second — the duration above already says how long it had been going.
+     */
     createdAt?: string;
+    /**
+     * DurationMs is wall-clock milliseconds around the completion, including a failover\'s retries. It is time SPENT, not time billed.
+     */
     durationMs?: number;
+    /**
+     * Error is why an \"ok\"-less run failed, as the failing call reported it. Empty on every successful run.
+     */
     error?: string;
+    /**
+     * ID is the run\'s handle, minted as \"run_\" + 32 hex characters. It is the key the metering ledger records this run\'s per-round token spend under, so it is how a bill and a run are joined.
+     */
     id?: string;
+    /**
+     * Input is the text the run was given, verbatim.
+     */
     input?: string;
+    /**
+     * Model is the model that actually SERVED this run, which is not always the one the agent is defined on — a failover records what answered. Normalized to our name on the way out; the stored row is left exactly as it happened, because a run is a record and rewriting it would be worse than the name it carries.
+     */
     model?: string;
+    /**
+     * Output is what the model produced. Empty on an error run, and empty is also a legitimate answer from a run that succeeded with nothing to say — Status is what separates those.
+     */
     output?: string;
+    /**
+     * PromptTokens is what the gateway reported for the run\'s FINAL completion, and only that one — a tool loop\'s earlier rounds are the metering ledger\'s account, joined by this run\'s id. Reading it as the run\'s total spend undercounts a loop.
+     */
     promptTokens?: number;
+    /**
+     * Status is the run\'s outcome, and there are exactly two: \"ok\" when the model answered, \"error\" when it did not. It is written when the run ends, so no row here is in flight.
+     */
     status?: string;
+    /**
+     * ToolCalls is how many tool dispatches the run made — a count of ACTIONS, which is a different measurement from the token counts above and from the turns a build reports. Zero is a run that answered straight from the model.
+     */
     toolCalls?: number;
+    /**
+     * TraceID is the trace this run IS, so the record and its spans are one thing to move between: it opens the waterfall for THIS run rather than a search that lands near it. Empty when the process had no tracer, never a fabricated id.
+     */
     traceId?: string;
 }
 

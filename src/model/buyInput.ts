@@ -10,6 +10,9 @@
 
 
 export interface BuyInput { 
+    /**
+     * E164 is the number to buy, in E.164 (a leading + and digits), exactly as the search returned it. This is the number itself, not the id from a search result.
+     */
     e164?: string;
 }
 

@@ -11,8 +11,17 @@ import { Range } from './range';
 
 
 export interface Location { 
+    /**
+     * External is true when the answer left the repository — the case a static index cannot answer, and the reason this service resolves through dependencies.
+     */
     external?: boolean;
+    /**
+     * Path is repo-relative while External is false, and the module coordinate (\"golang.org/x/mod@v0.14.0/semver/semver.go\") once it is true.
+     */
     path?: string;
+    /**
+     * Range is the span inside that file, in LSP positions.
+     */
     range?: Range;
 }
 

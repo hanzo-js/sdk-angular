@@ -24,7 +24,7 @@ export interface BoardResp {
      */
     current?: Array<ReadingView>;
     /**
-     * From and To are the resolved [from, to) window, RFC 3339 UTC.
+     * From is when the resolved window opens, RFC 3339 UTC.
      */
     from?: string;
     /**
@@ -43,6 +43,9 @@ export interface BoardResp {
      * Source is always \"account\": the provider\'s own meter, not a Hanzo charge.
      */
     source?: string;
+    /**
+     * To is where it closes, EXCLUSIVE, RFC 3339 UTC — the instant the read was served, so the window walks forward with the clock and two reads a minute apart do not cover the same period.
+     */
     to?: string;
     /**
      * Windows is every window instance in range, newest first.

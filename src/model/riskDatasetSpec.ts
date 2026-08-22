@@ -19,7 +19,7 @@ export interface RiskDatasetSpec {
      */
     dims?: Array<string>;
     /**
-     * From and To bound the event window, half-open, RFC 3339. The window may not be longer than the source\'s own retention: past that, its older half is already gone and the dataset would silently be shorter than it says.
+     * From is where the event window opens, RFC 3339, INCLUSIVE. The window may not be longer than the source\'s own retention: past that, its older half is already gone and the dataset would silently be shorter than it says.
      */
     from?: string;
     /**
@@ -42,6 +42,9 @@ export interface RiskDatasetSpec {
      * Seed decides WHICH subjects are admitted when the window holds more rows than the cap allows. It is recorded on the version, so a capped dataset is reproducible rather than being whichever rows the store returned first. Omit it to seed from the dataset\'s name.
      */
     seed?: string;
+    /**
+     * To is where the window ends, EXCLUSIVE, so two datasets meeting at one instant share no row. A materialisation reads less than this — the end is pulled back by Horizon, and the lineage reports the window it actually read.
+     */
     to?: string;
 }
 

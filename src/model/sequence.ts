@@ -11,7 +11,7 @@
 
 export interface Sequence { 
     /**
-     * CreatedAt and UpdatedAt are unix seconds, both server-assigned.
+     * CreatedAt is unix seconds when the sequence was registered, server-assigned and never rewritten.
      */
     createdAt?: number;
     /**
@@ -26,6 +26,9 @@ export interface Sequence {
      * Status is the lifecycle: draft, active or archived. Empty means draft, and ONLY an active sequence accepts enrollments.
      */
     status?: string;
+    /**
+     * UpdatedAt is unix seconds of the last status flip, server-assigned, and the key the sequence list is ordered by (newest first). Adding a step or enrolling a contact does NOT touch it — only draft/active/archived does — so it tracks activation rather than activity.
+     */
     updatedAt?: number;
 }
 

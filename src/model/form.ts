@@ -7,19 +7,24 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { FormItem } from './formItem';
 
 
 export interface Form { 
-    category?: string;
-    createdTime?: string;
-    displayName?: string;
-    formItems?: Array<FormItem>;
+    /**
+     * Code is the IRS designation, e.g. \"SS-4\".
+     */
+    code?: string;
+    /**
+     * Name is the form\'s own title, so a reader need not already know the code.
+     */
     name?: string;
-    owner?: string;
-    position?: string;
-    tag?: string;
-    type?: string;
-    url?: string;
+    /**
+     * Signed reports whether we hold the signature.
+     */
+    signed?: boolean;
+    /**
+     * Why states what this form is for in this application — the same form is owed for different reasons on different paths.
+     */
+    why?: string;
 }
 

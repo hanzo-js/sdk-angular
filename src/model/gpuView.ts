@@ -10,17 +10,41 @@
 
 
 export interface GpuView { 
+    /**
+     * ID is the card\'s address: its host machine\'s id, \"#\", and the card\'s ordinal within that machine (\"gpu-1#0\"). Stable for as long as the machine is, and the only id a single accelerator has — providers do not name cards.
+     */
     id?: string;
+    /**
+     * Location is where the card physically sits, which for every source today is the same value Region carries — the console renders it in its own column.
+     */
     location?: string;
+    /**
+     * Machine is the id of the machine holding this card, addressable as-is on /v1/visor/machines/:id.
+     */
     machine?: string;
+    /**
+     * Memory is the card\'s VRAM as its own tooling reported it (\"122880 MiB\") — a display string in the reporter\'s units, not a byte count. BYO cards carry it (nvidia-smi); Visor\'s machine object states no VRAM, so a rented card leaves it empty and the console renders \"—\" rather than a fabricated 0.
+     */
     memory?: string;
+    /**
+     * Model is the accelerator: the model token read out of the size slug for a Visor GPU droplet (\"H100\", \"MI300X\"), or the name nvidia-smi reported for a BYO card (\"NVIDIA GB10\").
+     */
     model?: string;
+    /**
+     * Name is the HOST MACHINE\'s display name, not the card\'s — every card in a gpu-h100x8 node repeats it. Model is what says which accelerator this is.
+     */
     name?: string;
     /**
-     * Provider distinguishes a BYO accelerator (\"byo\") from a Visor-provisioned one (the machine\'s real provider). Memory is VRAM when known (BYO reports it from nvidia-smi; Visor\'s machine object carries none, so it stays empty and the UI renders \"—\"). Both are additive + omitempty: existing rows are unaffected and the console normalizer ignores fields it does not read.
+     * Provider distinguishes a BYO accelerator (\"byo\") from a Visor-provisioned one (the host machine\'s real provider). It is what tells a card the org owns from a card the org rents.
      */
     provider?: string;
+    /**
+     * Region is the host machine\'s provider region slug; \"on-prem\" for a BYO card.
+     */
     region?: string;
+    /**
+     * Status is the HOST MACHINE\'s lifecycle state, because nothing upstream reports a card\'s own health. A card reads running because its machine does.
+     */
     status?: string;
 }
 

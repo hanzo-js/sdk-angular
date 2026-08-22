@@ -10,14 +10,29 @@
 
 
 export interface Call { 
+    /**
+     * Agent names the Hanzo assistant handling the call. Set means the call was answered by that assistant rather than connected to a person.
+     */
     agent?: string;
+    /**
+     * From is the calling number in E.164. It must be one this org holds: a carrier refuses an origination from a number nobody proved they own.
+     */
     from?: string;
+    /**
+     * ID is the carrier\'s handle for the call — what a hangup or a lookup names.
+     */
     id?: string;
+    /**
+     * Org is the tenant the call was placed for or received by.
+     */
     org?: string;
     /**
-     * queued | ringing | answered | completed | failed
+     * Status is where the call is: \"queued\", \"ringing\", \"answered\", \"completed\" or \"failed\". Only the last two are terminal.
      */
     status?: string;
+    /**
+     * To is the called number in E.164.
+     */
     to?: string;
 }
 

@@ -14,7 +14,13 @@ export interface O11yStatusComponent {
      * CurrentStatus is this component\'s own condition: \"full_outage\" for a service that did not answer its health probe at all.
      */
     current_status?: string;
+    /**
+     * ID is the component\'s stable handle, which on this platform IS the service name — there is no separate component registry to allocate ids from.
+     */
     id?: string;
+    /**
+     * Name is the service as the fleet prober knows it (the `service` label on hanzo_service_up), so a reader can match a component to what is being probed.
+     */
     name?: string;
 }
 

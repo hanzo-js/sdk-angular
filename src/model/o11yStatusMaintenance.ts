@@ -11,14 +11,41 @@ import { O11yStatusComponent } from './o11yStatusComponent';
 
 
 export interface O11yStatusMaintenance { 
+    /**
+     * AffectedComponents is what the window touches.
+     */
     affected_components?: Array<O11yStatusComponent>;
+    /**
+     * EndsAt is when it is expected to finish, RFC3339 UTC.
+     */
     ends_at?: string;
+    /**
+     * ID is the window\'s handle.
+     */
     id?: string;
+    /**
+     * LastUpdateAt is when the window was last revised, RFC3339 UTC.
+     */
     last_update_at?: string;
+    /**
+     * LastUpdateMessage is the text of that revision.
+     */
     last_update_message?: string;
+    /**
+     * Name is its one-line headline.
+     */
     name?: string;
+    /**
+     * StartsAt is when work begins, RFC3339 UTC.
+     */
     starts_at?: string;
+    /**
+     * Status is where the window is in its life, in the client\'s own vocabulary.
+     */
     status?: string;
+    /**
+     * URL points at the human status page, as every link in this document does.
+     */
     url?: string;
 }
 

@@ -11,16 +11,37 @@ import { BalanceLine } from './balanceLine';
 
 
 export interface BalanceSheet { 
+    /**
+     * AsOf is the posting time the statement is taken at, inclusive. A balance sheet is a snapshot, not a window, so there is no From. Absent means as of now.
+     */
     asOf?: string;
+    /**
+     * Assets are what the org OWNS at that instant, one line per account that has a balance. Cash, receivables, funds captured but not yet settled.
+     */
     assets?: Array<BalanceLine>;
     /**
-     * TotalAssets == TotalLiabilities + TotalEquity
+     * Balanced is whether assets equal liabilities plus equity — the accounting equation, computed from the totals above rather than assumed. False means the ledger is broken, not that the statement is.
      */
     balanced?: boolean;
+    /**
+     * Equity is what is left over for the owners. It carries a DERIVED retained earnings line holding cumulative income minus expense, because this ledger has no period close that sweeps the P&L into equity — without that line the equation would not close.
+     */
     equity?: Array<BalanceLine>;
+    /**
+     * Liabilities are what the org OWES — including customers\' unspent prepaid credit, which is their money until it is consumed and so is carried here rather than counted as revenue.
+     */
     liabilities?: Array<BalanceLine>;
+    /**
+     * TotalAssets is the sum of the asset lines, in cents.
+     */
     totalAssets?: number;
+    /**
+     * TotalEquity is the sum of the equity lines including retained earnings, in cents.
+     */
     totalEquity?: number;
+    /**
+     * TotalLiabilities is the sum of the liability lines, in cents.
+     */
     totalLiabilities?: number;
 }
 

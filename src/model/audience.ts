@@ -11,7 +11,7 @@
 
 export interface Audience { 
     /**
-     * CreatedAt and UpdatedAt are unix seconds, both server-assigned.
+     * CreatedAt is unix seconds when the filter was saved, server-assigned.
      */
     createdAt?: number;
     /**
@@ -26,6 +26,9 @@ export interface Audience {
      * Name is the audience\'s label. Required, trimmed, capped at 1024 bytes.
      */
     name?: string;
+    /**
+     * UpdatedAt is unix seconds of the last write, server-assigned, and the key the audience list is ordered by (newest first). A saved audience has no update route, so in practice it stays equal to CreatedAt: to change a filter you save another one.
+     */
     updatedAt?: number;
     /**
      * WindowDays is how far back the event counts, ending now. 0 means 30 and nothing above 3650 is honoured. Ignored when Event is empty.

@@ -13,10 +13,25 @@ import { ArgoSpec } from './argoSpec';
 
 
 export interface ArgoApp { 
+    /**
+     * APIVersion is the constant \"argoproj.io/v1alpha1\" — the shape, not the source. These are projections of operator App CRs and Hanzo CD Applications; no argoproj.io object is stored anywhere behind this plane.
+     */
     apiVersion?: string;
+    /**
+     * Kind is the constant \"Application\".
+     */
     kind?: string;
+    /**
+     * Metadata is the projected object\'s identity.
+     */
     metadata?: ArgoMeta;
+    /**
+     * Spec is the desired state: where it comes from, where it lands, what project it belongs to.
+     */
     spec?: ArgoSpec;
+    /**
+     * Status is what was observed: the sync verdict, the health, and the owned objects when this is a detail read.
+     */
     status?: ArgoStatus;
 }
 

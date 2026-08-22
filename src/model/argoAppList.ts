@@ -12,9 +12,21 @@ import { ArgoListMeta } from './argoListMeta';
 
 
 export interface ArgoAppList { 
+    /**
+     * APIVersion is the constant \"argoproj.io/v1alpha1\".
+     */
     apiVersion?: string;
+    /**
+     * Items is one entry per operator App CR the caller may see — its own org\'s, or every platform namespace\'s for a SuperAdmin — followed, for a SuperAdmin only, by every Hanzo CD Application in the cluster. Empty (never null) rather than absent when the caller owns nothing.
+     */
     items?: Array<ArgoApp>;
+    /**
+     * Kind is the constant \"ApplicationList\".
+     */
     kind?: string;
+    /**
+     * Metadata is the list envelope the SPA expects; it carries no resume point.
+     */
     metadata?: ArgoListMeta;
 }
 

@@ -20,9 +20,12 @@ export interface ProjectsDomains {
      */
     domains?: Array<string>;
     /**
-     * Org and Slug identify the site the panel belongs to.
+     * Org is the organisation that owns the site.
      */
     org?: string;
+    /**
+     * Slug is the site the panel belongs to.
+     */
     slug?: string;
 }
 

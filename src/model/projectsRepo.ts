@@ -10,8 +10,17 @@
 
 
 export interface ProjectsRepo { 
+    /**
+     * Branch is the ref a push has to touch for this project to rebuild. Pushes to any other branch are ignored.
+     */
     branch?: string;
+    /**
+     * Provider is the forge the URL was recognised as — it decides which webhook and which credential reach the repository, and is DERIVED from the URL rather than chosen by the caller.
+     */
     provider?: string;
+    /**
+     * URL is the clone address of the repository this project builds from.
+     */
     url?: string;
 }
 

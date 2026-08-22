@@ -11,6 +11,9 @@ import { Call } from './call';
 
 
 export interface CallList { 
+    /**
+     * Data is this org\'s own calls, newest first — what this platform placed or received on its behalf, which is our record rather than the carrier\'s.
+     */
     data?: Array<Call>;
 }
 

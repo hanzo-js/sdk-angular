@@ -10,22 +10,28 @@
 
 
 export interface Question { 
+    /**
+     * Account is the chart number the questioned entry posted to, where one applies.
+     */
     account?: string;
     /**
-     * formatted figure ($…)
+     * Amount is the figure that makes the question concrete, already FORMATTED for display with its currency symbol — a string, not cents, and not for arithmetic.
      */
     amount?: string;
     /**
-     * the source transaction id it concerns
+     * ID is the source transaction the question is about, so answering it leads straight back to the entry that raised it.
      */
     id?: string;
     /**
-     * outlier|reversal|roundoff|uncosted|overdrawn
+     * Kind is what looked wrong: outlier (a charge far above the usual), reversal (a posting undone), roundoff (a balancing plug big enough to be worth explaining), uncosted (revenue booked with no cost matched to it), or overdrawn (a wallet spent past its balance).
      */
     kind?: string;
+    /**
+     * PostedAt anchors the question in time — when the entry it concerns posted.
+     */
     postedAt?: string;
     /**
-     * the specific question to ask the founder
+     * Text is the question itself, written for a founder to answer directly.
      */
     text?: string;
 }

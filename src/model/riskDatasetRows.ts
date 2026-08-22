@@ -11,6 +11,9 @@ import { RiskDatasetRow } from './riskDatasetRow';
 
 
 export interface RiskDatasetRows { 
+    /**
+     * Dataset is the dataset the page was read from.
+     */
     dataset?: string;
     /**
      * Digest is the version\'s fingerprint. An exported page that did not carry it would be bytes with no way to say which dataset they are.
@@ -20,15 +23,21 @@ export interface RiskDatasetRows {
      * Dims names what each coordinate of Point means, in Point\'s own order.
      */
     dims?: Array<string>;
+    /**
+     * Limit is the page size actually served: the one asked for, clamped to the plane\'s own bound of 5000. Fewer rows than Limit means the version ended.
+     */
     limit?: number;
     /**
-     * Offset and Limit are the page actually served, which may be smaller than the one asked for.
+     * Offset is where this page starts in the version\'s own row order, which is by row id and therefore stable forever.
      */
     offset?: number;
     /**
      * Rows is the page. Never null.
      */
     rows?: Array<RiskDatasetRow>;
+    /**
+     * Version is which published version it was read from — the one asked for, or the newest published one when the request named none.
+     */
     version?: number;
 }
 

@@ -15,6 +15,7 @@ import { IamAccountItem } from './iamAccountItem';
 export interface IamUpdateOrganizationInput { 
     accountItems?: Array<IamAccountItem>;
     accountMenu?: string;
+    avatar?: string;
     balanceCredit?: number;
     balanceCurrency?: string;
     countryCodes?: Array<string>;
@@ -27,6 +28,7 @@ export interface IamUpdateOrganizationInput {
     deleted?: boolean;
     disableSignin?: boolean;
     displayName?: string;
+    emoji?: string;
     enableSoftDeletion?: boolean;
     enableTour?: boolean;
     failedSigninFrozenTime?: number;

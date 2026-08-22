@@ -10,8 +10,17 @@
 
 
 export interface TreeEntry { 
+    /**
+     * Lang is the language the indexer parsed the file as (\"go\", \"python\", …), or empty when it recognised none — in which case Symbols is 0 because nothing was extracted, not because the file declares nothing.
+     */
     lang?: string;
+    /**
+     * Path is the file, relative to the repo root. The list is ordered by it, so a reader can see module layout without sorting.
+     */
     path?: string;
+    /**
+     * Symbols is how many top-level declarations the file defines. A file with none is still listed: the file set is the authority here and the counts decorate it.
+     */
     symbols?: number;
 }
 

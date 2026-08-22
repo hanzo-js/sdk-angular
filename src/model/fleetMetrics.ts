@@ -10,10 +10,25 @@
 
 
 export interface FleetMetrics { 
+    /**
+     * At is when this reading was MEASURED, RFC 3339 in UTC — not when the board was built. A console decides staleness by comparing it to now; the board deliberately does not decide that for it.
+     */
     at?: string;
+    /**
+     * GPUUtil is aggregate accelerator utilization as a FRACTION of 1 — 0.42 is 42% busy, never 42. Across all of the unit\'s cards, not one of them.
+     */
     gpuUtil?: number;
+    /**
+     * Load1 is the host\'s 1-minute load average — runnable processes, not a percentage, so it is read against the unit\'s core count and can exceed 1.
+     */
     load1?: number;
+    /**
+     * MemFree is host memory still available, in BYTES. It is what the source reported, not fleetSpec.Memory minus MemUsed.
+     */
     memFree?: number;
+    /**
+     * MemUsed is host memory in use, in BYTES.
+     */
     memUsed?: number;
 }
 

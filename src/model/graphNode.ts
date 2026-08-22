@@ -18,6 +18,9 @@ export interface GraphNode {
      * the document name (empty for synthetic nodes)
      */
     name?: string;
+    /**
+     * Project is the project scope the underlying document was saved under. Absent for a document saved with none, and for the synthetic nodes — unresolved link targets and connectors belong to no project. When ?project= narrows the graph, every page, memory and source node carries that value.
+     */
     project?: string;
     /**
      * display label

@@ -10,21 +10,69 @@
 
 
 export interface SampleView { 
+    /**
+     * At is when the reading was MEASURED, RFC 3339 in UTC — the x-axis a chart plots against. The series is returned oldest first, so it only increases.
+     */
     at?: string;
+    /**
+     * CostCents is what this unit resold for over the hour the reading falls in, in whole US cents. 0 means UNPRICED, not free: the operator\'s own machines — a linked run-target, a dialed-in BYO worker — are metered for utilization and never resold, so only a priced source ever fills it.
+     */
     costCents?: number;
+    /**
+     * CPUs is logical cores. The static capability rides every row on purpose: a chart can size load against cores without joining a registry whose row may since have been rewritten or the unit deregistered.
+     */
     cpus?: number;
+    /**
+     * GPUModel names the representative accelerator (\"GB10\"); GPUs carries how many.
+     */
     gpuModel?: string;
+    /**
+     * GPUUtil is aggregate accelerator utilization as a FRACTION of 1 — 0.42 is 42% busy. Anything a reporter sends outside 0..1 is clamped into it on write.
+     */
     gpuUtil?: number;
+    /**
+     * GPUs is how many accelerators the reading covers.
+     */
     gpus?: number;
+    /**
+     * Host is the hostname the unit reported at the time of the reading.
+     */
     host?: string;
+    /**
+     * Kind is what the measured unit is: laptop, cloud, gpu, cluster, machine or worker.
+     */
     kind?: string;
+    /**
+     * Load1 is the 1-minute load average — runnable processes, not a percentage.
+     */
     load1?: number;
+    /**
+     * Load5 is the 5-minute load average, the same units as Load1.
+     */
     load5?: number;
+    /**
+     * Load15 is the 15-minute load average, the same units as Load1.
+     */
     load15?: number;
+    /**
+     * MemFree is host memory available, in BYTES, as reported rather than derived.
+     */
     memFree?: number;
+    /**
+     * MemUsed is host memory in use, in BYTES.
+     */
     memUsed?: number;
+    /**
+     * Memory is total system RAM in BYTES at the time of the reading.
+     */
     memory?: number;
+    /**
+     * Source is the plane that reported the reading: \"agent\", \"byo\" or \"visor\" — the same vocabulary the board\'s rows carry, and what ?source= narrows on.
+     */
     source?: string;
+    /**
+     * Unit is the source\'s own id for the measured unit. With Source it is the key the chart groups by, and the key the board joins a unit\'s latest reading on.
+     */
     unit?: string;
 }
 

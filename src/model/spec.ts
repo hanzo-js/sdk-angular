@@ -19,6 +19,9 @@ export interface Spec {
      * logical cores
      */
     cpus?: number;
+    /**
+     * GPUs is every accelerator the machine advertises, one entry each, capped at 32 on write. Empty means the probe found none — and that is the answer a Need is checked against, so a machine with no entry here clears no accelerator floor. The list is not vendor-filtered: what satisfies a job is counts and VRAM, never a brand (see Need).
+     */
     gpus?: Array<GPU>;
     /**
      * total RAM, bytes

@@ -10,11 +10,29 @@
 
 
 export interface ArgoResourceRef { 
+    /**
+     * Group is the object\'s API group: empty for the core group (Pod, Service, ConfigMap), otherwise apps, networking.k8s.io, autoscaling or policy — and hanzo.ai for the App CR at the root.
+     */
     group?: string;
+    /**
+     * Kind is the object kind. The root is the App CR; below it come Deployment, ReplicaSet, Pod, Service, Ingress, HorizontalPodAutoscaler, PodDisruptionBudget and ConfigMap. Never Secret — the walk does not visit them, so no materialized environment can reach the tree.
+     */
     kind?: string;
+    /**
+     * Name is the object\'s metadata.name.
+     */
     name?: string;
+    /**
+     * Namespace is the namespace the walk ran in, the same for every node of one tree.
+     */
     namespace?: string;
+    /**
+     * UID is the object\'s metadata.uid. Absent on a PARENT reference, which addresses its target by kind and name rather than by identity.
+     */
     uid?: string;
+    /**
+     * Version is the object\'s API version as the live object reports it: v1 for every kind the walk reaches except the HorizontalPodAutoscaler, which is autoscaling/v2.
+     */
     version?: string;
 }
 

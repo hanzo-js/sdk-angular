@@ -10,8 +10,17 @@
 
 
 export interface VersionMeta { 
+    /**
+     * Brand is the white-label key this revision was authored under; empty is the shared base playbook. Revisions of two brands never share a number line.
+     */
     brand?: string;
+    /**
+     * UpdatedAt is when this revision was written, as Unix seconds — the \"who changed the playbook, and when\" half of the audit trail.
+     */
     updatedAt?: number;
+    /**
+     * Version is the store\'s own revision counter for that brand, starting at 1 for the seeded playbook and incrementing on every edit. Nothing is overwritten, so the highest number is the live one and every lower number is still readable. It is not the playbook\'s authored `version` string.
+     */
     version?: number;
 }
 

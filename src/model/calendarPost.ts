@@ -19,7 +19,7 @@ export interface CalendarPost {
      */
     channel?: string;
     /**
-     * CreatedAt and UpdatedAt are unix seconds, both server-assigned.
+     * CreatedAt is unix seconds when the post was added, server-assigned and never rewritten.
      */
     createdAt?: number;
     /**
@@ -46,6 +46,9 @@ export interface CalendarPost {
      * Title is the post\'s internal label, capped at 1024 bytes.
      */
     title?: string;
+    /**
+     * UpdatedAt is unix seconds of the last write, server-assigned. The durable sweep writes too — claiming a due post, publishing it and recording a failure each bump it — so this moves without anyone editing the post.
+     */
     updatedAt?: number;
 }
 

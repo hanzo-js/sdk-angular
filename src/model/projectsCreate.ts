@@ -15,14 +15,29 @@ export interface ProjectsCreate {
      * Analytics is the opt-OUT for the wired-by-default analytics beacon: absent (nil) ⇒ ON (the default); explicit false ⇒ off. A pointer so \"unset\" is distinguishable from \"false\" — the only way to turn the default off.
      */
     analytics?: boolean;
+    /**
+     * Description is the one-line summary, copied onto anything forked from this project.
+     */
     description?: string;
+    /**
+     * Framework is a BUILD HINT from a closed set, defaulting to static. It tells CI how to build a linked repo and never gates a deploy.
+     */
     framework?: string;
+    /**
+     * License is the terms that upstream work carries.
+     */
     license?: string;
+    /**
+     * Name is the project\'s display name and the only REQUIRED field. When slug is omitted it is also what the slug is derived from.
+     */
     name?: string;
     repo?: ProjectsCreateRepo;
+    /**
+     * Slug is the handle everything else addresses this project by: the public host `<slug>.hanzo.app`, the object-store key segment, and the path parameter of every later call. Derived from the name when omitted. It is a hostname label, so it is constrained and reserved labels such as `api` or `admin` are refused.
+     */
     slug?: string;
     /**
-     * Upstream/License credit the third-party work this project was published from. Taken from any caller: disclaiming authorship can only cost the publisher credit, so it needs no gate (see Project.Upstream).
+     * Upstream credits the third-party work this project was published from. It is accepted from any caller: giving away credit can only cost the publisher, so it needs no gate.
      */
     upstream?: string;
     /**

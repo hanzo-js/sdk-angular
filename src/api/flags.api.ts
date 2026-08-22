@@ -28,8 +28,6 @@ import { DeletedOut } from '../model/deletedOut';
 import { EvaluateIn } from '../model/evaluateIn';
 // @ts-ignore
 import { HealthOut } from '../model/healthOut';
-// @ts-ignore
-import { WaitlistModeView } from '../model/waitlistModeView';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -50,11 +48,6 @@ export interface FlagsApiGetFlagsActivityRequestParams {
 export interface FlagsApiGetFlagsDefsByKeyRequestParams {
     /** Key is the flag key to act on, from the path. */
     key: string;
-}
-
-export interface FlagsApiGetFlagsWaitlistRequestParams {
-    /** Host is the host to resolve, e.g. \&quot;chat.hanzo.ai\&quot;. Defaults to the request\&#39;s own Host header when omitted, which is what lets a guard running on the governed host ask about itself with no argument. */
-    host?: string;
 }
 
 export interface FlagsApiPostFlagsRequestParams {
@@ -358,67 +351,6 @@ export class FlagsApi extends BaseService {
         return this.httpClient.request<HealthOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Reports whether ONE host is currently gated by the launch waitlist.
-     * Reports whether ONE host is currently gated by the launch waitlist. It resolves the host to the service that governs it and reads that service\&#39;s waitlist switch, so a guard sitting in front of a hosted surface can decide in one call whether to show the waitlist or the product. It answers for the ONE host asked about and never enumerates the registry, which is why it needs no credential. It FAILS OPEN: an unregistered host, an unmounted registry and a store fault all answer known&#x3D;false with mode&#x3D;false, so a request is never gated pre-boot or on a registry fault.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getFlagsWaitlist(requestParameters?: FlagsApiGetFlagsWaitlistRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WaitlistModeView>;
-    public getFlagsWaitlist(requestParameters?: FlagsApiGetFlagsWaitlistRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WaitlistModeView>>;
-    public getFlagsWaitlist(requestParameters?: FlagsApiGetFlagsWaitlistRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WaitlistModeView>>;
-    public getFlagsWaitlist(requestParameters?: FlagsApiGetFlagsWaitlistRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const host = requestParameters?.host;
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>host, 'host');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/flags/waitlist`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WaitlistModeView>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

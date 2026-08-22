@@ -10,14 +10,41 @@
 
 
 export interface DeliveryRow { 
+    /**
+     * Attempt is which try this row is, starting at 1. The ladder waits 1s, then 5s, then 25s before the next one.
+     */
     attempt?: number;
+    /**
+     * Created is when the attempt was made, RFC3339 in UTC.
+     */
     created?: string;
+    /**
+     * DeliveryID groups the attempts for ONE event to ONE endpoint. Rows sharing it are the same delivery being retried, not separate events.
+     */
     delivery?: string;
+    /**
+     * DurationMs is how long this attempt took end to end, in MILLISECONDS.
+     */
     durationMs?: number;
+    /**
+     * EndpointID is which subscriber this attempt was for.
+     */
     endpoint?: string;
+    /**
+     * Error says what went wrong on a non-ok attempt. Empty on success.
+     */
     error?: string;
+    /**
+     * HTTPStatus is what the subscriber answered. ZERO means it never answered — a refused connection, a DNS failure or a timeout — which is why a zero here is not a 200.
+     */
     httpStatus?: number;
+    /**
+     * Status is \"ok\" when the subscriber accepted it, \"retrying\" while a further attempt will follow, and \"failed\" when none will. Exactly one row of a delivery is terminal.
+     */
     status?: string;
+    /**
+     * Subject is the event that was delivered (\"commerce.order.created\"). A manual test send carries \"webhook.test\".
+     */
     subject?: string;
 }
 

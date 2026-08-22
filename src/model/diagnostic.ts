@@ -11,10 +11,25 @@ import { Range } from './range';
 
 
 export interface Diagnostic { 
+    /**
+     * Code is the checker\'s own identifier for the rule, a string or a number depending on the server. Absent when it published none.
+     */
     code?: object;
+    /**
+     * Message is the problem in the server\'s own words, meant to be shown.
+     */
     message?: string;
+    /**
+     * Range is the span the problem is about.
+     */
     range?: Range;
+    /**
+     * Severity is the LSP\'s: 1 error, 2 warning, 3 information, 4 hint. A file with only 3s and 4s still compiles.
+     */
     severity?: number;
+    /**
+     * Source is which checker reported it (\"compiler\", \"go vet\", a linter\'s name), which is what separates a build error from a style opinion.
+     */
     source?: string;
 }
 

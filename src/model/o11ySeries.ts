@@ -10,10 +10,8 @@
 
 
 export interface O11ySeries { 
-    costCents?: number;
-    errors?: number;
-    requests?: number;
-    tokens?: number;
-    ts?: string;
+    labels?: { [key: string]: string; };
+    labelsArray?: Array<{ [key: string]: string; }>;
+    values?: Array<any>;
 }
 

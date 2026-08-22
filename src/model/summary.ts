@@ -10,8 +10,17 @@
 
 
 export interface Summary { 
+    /**
+     * Calls is how many calls this org has placed or received, over its whole history — a running total, not a window.
+     */
     calls?: number;
+    /**
+     * Messages is the same running total for messages.
+     */
     messages?: number;
+    /**
+     * Numbers is how many numbers this org holds right now.
+     */
     numbers?: number;
 }
 

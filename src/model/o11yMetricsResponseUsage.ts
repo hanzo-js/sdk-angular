@@ -10,6 +10,9 @@
 import { O11yUsageBucket } from './o11yUsageBucket';
 
 
+/**
+ * Usage is the LLM side of the same window: how many calls, how many tokens and what they cost. It counts model traffic, not HTTP requests, so it does not reconcile with series.requests.
+ */
 export interface O11yMetricsResponseUsage { 
     calls?: number;
     costCents?: number;

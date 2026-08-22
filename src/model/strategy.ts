@@ -11,27 +11,45 @@ import { Blog } from './blog';
 
 
 export interface Strategy { 
+    /**
+     * Action is the tactic itself: the thing to go and do, stated imperatively.
+     */
     action?: string;
     /**
-     * long-form explainer (nil for un-blogged tactics)
+     * Blog is the tactic\'s long-form explainer; absent for tactics that have none.
      */
     blog?: Blog;
+    /**
+     * Category is the growth discipline the tactic belongs to — the axis `?category=` narrows the corpus on, and one of the facets a caller browses by.
+     */
     category?: string;
+    /**
+     * Enabled is the admin lever. Absent reads as ON; an explicit false drops the tactic from every org-facing corpus read while leaving it in the document.
+     */
     enabled?: boolean;
     /**
-     * modern | heritage
+     * Era separates an AI-era tactic (`modern`) from a classical one (`heritage`).
      */
     era?: string;
+    /**
+     * ID is the tactic\'s stable slug, unique across the corpus.
+     */
     id?: string;
     /**
-     * the spine slug this tactic files under
+     * Principle is the spine slug this tactic files under (a Principle.Slug).
      */
     principle?: string;
     /**
-     * provenance / attribution
+     * Source is where the tactic came from — the attribution a reader is owed.
      */
     source?: string;
+    /**
+     * Tags are PRECONDITIONS, not labels — every one must be satisfied by the org\'s observed profile before the tactic surfaces, so an untagged tactic is universally applicable. Two vocabularies: `stage:<research|formed|launched| activated|scaling>` reads the org\'s growth stage, `has:<capability>` reads an observed signal.
+     */
     tags?: Array<string>;
+    /**
+     * Workload is how much effort running the tactic costs, so a corpus can be narrowed to what an org has the hands for right now.
+     */
     workload?: string;
 }
 

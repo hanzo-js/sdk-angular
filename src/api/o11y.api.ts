@@ -167,6 +167,10 @@ import { O11yO11yDeprecatedUserUpdate } from '../model/o11yO11yDeprecatedUserUpd
 // @ts-ignore
 import { O11yO11yDeprecatedUsersOut } from '../model/o11yO11yDeprecatedUsersOut';
 // @ts-ignore
+import { O11yO11yDiscoverIn } from '../model/o11yO11yDiscoverIn';
+// @ts-ignore
+import { O11yO11yDiscoverOut } from '../model/o11yO11yDiscoverOut';
+// @ts-ignore
 import { O11yO11yDisk } from '../model/o11yO11yDisk';
 // @ts-ignore
 import { O11yO11yDomainsIn } from '../model/o11yO11yDomainsIn';
@@ -332,6 +336,8 @@ import { O11yO11yLogPromotePath } from '../model/o11yO11yLogPromotePath';
 import { O11yO11yLogPromotedOut } from '../model/o11yO11yLogPromotedOut';
 // @ts-ignore
 import { O11yO11yLogRecordsOut } from '../model/o11yO11yLogRecordsOut';
+// @ts-ignore
+import { O11yO11yLogsOut } from '../model/o11yO11yLogsOut';
 // @ts-ignore
 import { O11yO11yMessage } from '../model/o11yO11yMessage';
 // @ts-ignore
@@ -513,6 +519,18 @@ import { O11yO11ySavedViewOut } from '../model/o11yO11ySavedViewOut';
 // @ts-ignore
 import { O11yO11ySavedViewUpdateIn } from '../model/o11yO11ySavedViewUpdateIn';
 // @ts-ignore
+import { O11yO11ySentryEventOut } from '../model/o11yO11ySentryEventOut';
+// @ts-ignore
+import { O11yO11ySentryIssueEventsOut } from '../model/o11yO11ySentryIssueEventsOut';
+// @ts-ignore
+import { O11yO11ySentryPostableProject } from '../model/o11yO11ySentryPostableProject';
+// @ts-ignore
+import { O11yO11ySentryProjectOut } from '../model/o11yO11ySentryProjectOut';
+// @ts-ignore
+import { O11yO11ySentryProjectsOut } from '../model/o11yO11ySentryProjectsOut';
+// @ts-ignore
+import { O11yO11ySentryUpdateIssueIn } from '../model/o11yO11ySentryUpdateIssueIn';
+// @ts-ignore
 import { O11yO11yServiceAccountCreateIn } from '../model/o11yO11yServiceAccountCreateIn';
 // @ts-ignore
 import { O11yO11yServiceAccountCreateOut } from '../model/o11yO11yServiceAccountCreateOut';
@@ -561,6 +579,8 @@ import { O11yO11ySpanPercentileOut } from '../model/o11yO11ySpanPercentileOut';
 // @ts-ignore
 import { O11yO11yStatefulSetListOut } from '../model/o11yO11yStatefulSetListOut';
 // @ts-ignore
+import { O11yO11yStatsOut } from '../model/o11yO11yStatsOut';
+// @ts-ignore
 import { O11yO11ySubstituteVarsOut } from '../model/o11yO11ySubstituteVarsOut';
 // @ts-ignore
 import { O11yO11yTestNotificationOut } from '../model/o11yO11yTestNotificationOut';
@@ -579,11 +599,15 @@ import { O11yO11yTraceFlamegraphIn } from '../model/o11yO11yTraceFlamegraphIn';
 // @ts-ignore
 import { O11yO11yTraceFlamegraphOut } from '../model/o11yO11yTraceFlamegraphOut';
 // @ts-ignore
+import { O11yO11yTraceOut } from '../model/o11yO11yTraceOut';
+// @ts-ignore
 import { O11yO11yTraceSpanWindow } from '../model/o11yO11yTraceSpanWindow';
 // @ts-ignore
 import { O11yO11yTraceWaterfallIn } from '../model/o11yO11yTraceWaterfallIn';
 // @ts-ignore
 import { O11yO11yTraceWaterfallOut } from '../model/o11yO11yTraceWaterfallOut';
+// @ts-ignore
+import { O11yO11yTracesOut } from '../model/o11yO11yTracesOut';
 // @ts-ignore
 import { O11yO11yTransaction } from '../model/o11yO11yTransaction';
 // @ts-ignore
@@ -662,6 +686,8 @@ import { O11ySavedView } from '../model/o11ySavedView';
 import { O11yStatefulSetListRequest } from '../model/o11yStatefulSetListRequest';
 // @ts-ignore
 import { O11yStatusResult } from '../model/o11yStatusResult';
+// @ts-ignore
+import { O11yStatusSummary } from '../model/o11yStatusSummary';
 // @ts-ignore
 import { O11yTracesOut } from '../model/o11yTracesOut';
 // @ts-ignore
@@ -864,6 +890,11 @@ export interface O11yApiDeleteO11yExplorerViewsByViewidRequestParams {
 
 export interface O11yApiDeleteO11yReviewsByIdRequestParams {
     /** ID is the annotation queue to act on, from the path. */
+    id: string;
+}
+
+export interface O11yApiDeleteO11ySentinelProjectsByIdRequestParams {
+    /** ID is the project id. */
     id: string;
 }
 
@@ -1656,6 +1687,91 @@ export interface O11yApiGetO11yReviewsByIdItemsRequestParams {
     limit?: number;
 }
 
+export interface O11yApiGetO11ySentinelEventsByIdRequestParams {
+    /** ID is the event id. */
+    id: string;
+    /** Project is the project the event belongs to, by its id. Required. */
+    project: string;
+}
+
+export interface O11yApiGetO11ySentinelIssuesRequestParams {
+    /** Status narrows to one lifecycle state: unresolved, resolved or ignored. */
+    status?: string;
+    /** Level narrows to one severity, e.g. error, warning, info. */
+    level?: string;
+    /** Environment narrows to one deployment environment. */
+    environment?: string;
+    /** ServiceName narrows to one reporting service. */
+    serviceName?: string;
+    /** Query narrows to issues whose text contains it. */
+    query?: string;
+    /** Sort orders the page, e.g. lastSeen, firstSeen, count. */
+    sort?: string;
+    /** Offset is how many issues to skip. Zero starts at the first. */
+    offset?: number;
+    /** Limit caps how many issues come back. Zero means the default. */
+    limit?: number;
+    /** Project narrows the org\&#39;s issues to one project, by its id. */
+    project?: string;
+    /** Period is the window to read, relative to now — 1h, 24h, 7d, 14d, 30d. */
+    period?: string;
+}
+
+export interface O11yApiGetO11ySentinelIssuesByIdRequestParams {
+    /** ID is the issue id. */
+    id: string;
+}
+
+export interface O11yApiGetO11ySentinelIssuesByIdEventsRequestParams {
+    /** ID is the issue id. */
+    id: string;
+    /** Project is the project whose occurrences to read, by its id. Required. */
+    project: string;
+    /** Limit caps how many occurrences come back. Zero means the default. */
+    limit?: number;
+}
+
+export interface O11yApiGetO11ySentinelLogsRequestParams {
+    /** Project is the project to read, as its id. Required. */
+    project: string;
+    /** Query narrows the page to events whose text contains it. */
+    query?: string;
+    /** Period is the window to read, relative to now — 1h, 24h, 7d, 14d, 30d. */
+    period?: string;
+    /** Limit caps how many events come back. */
+    limit?: number;
+}
+
+export interface O11yApiGetO11ySentinelProjectsByIdRequestParams {
+    /** ID is the project id. */
+    id: string;
+}
+
+export interface O11yApiGetO11ySentinelStatsRequestParams {
+    /** Project is the project to read, as its id. Required. */
+    project: string;
+    /** Field is the dimension to count over. Empty counts all events. */
+    field?: string;
+    /** Period is the window to read, relative to now — 1h, 24h, 7d, 14d, 30d. */
+    period?: string;
+}
+
+export interface O11yApiGetO11ySentinelTracesRequestParams {
+    /** Project is the project to read, as its id. Required. */
+    project: string;
+    /** Period is the window to read, relative to now — 1h, 24h, 7d, 14d, 30d. */
+    period?: string;
+    /** Limit caps how many traces come back. */
+    limit?: number;
+}
+
+export interface O11yApiGetO11ySentinelTracesByIdRequestParams {
+    /** ID is the trace id. */
+    id: string;
+    /** Project is the project the trace\&#39;s errors belong to. Required. */
+    project: string;
+}
+
 export interface O11yApiGetO11ySettingsApdexRequestParams {
     /** Services are the service names, comma separated. */
     services?: string;
@@ -2419,6 +2535,19 @@ export interface O11yApiPostO11yReviewsByIdItemsRequestParams {
     o11yAddItemsIn: O11yAddItemsIn;
 }
 
+export interface O11yApiPostO11ySentinelDiscoverRequestParams {
+    o11yO11yDiscoverIn: O11yO11yDiscoverIn;
+}
+
+export interface O11yApiPostO11ySentinelProjectsRequestParams {
+    o11yO11ySentryPostableProject: O11yO11ySentryPostableProject;
+}
+
+export interface O11yApiPostO11ySentinelProjectsByIdKeysRotateRequestParams {
+    /** ID is the project id. */
+    id: string;
+}
+
 export interface O11yApiPostO11yServiceEntryPointOperationsRequestParams {
     o11yO11yOperationsIn: O11yO11yOperationsIn;
 }
@@ -2479,6 +2608,12 @@ export interface O11yApiPutO11yExplorerViewsByViewidRequestParams {
     /** ViewID is the id of the view to replace, taken from the URL. */
     viewId: string;
     o11yO11ySavedViewUpdateIn: O11yO11ySavedViewUpdateIn;
+}
+
+export interface O11yApiPutO11ySentinelIssuesByIdRequestParams {
+    /** ID is the issue id. */
+    id: string;
+    o11yO11ySentryUpdateIssueIn: O11yO11ySentryUpdateIssueIn;
 }
 
 export interface O11yApiPutProfileRequestParams {
@@ -5569,6 +5704,64 @@ export class O11yApi extends BaseService {
         let localVarPath = `/v1/o11y/reviews/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<O11yAnnQueueDeleted>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Deletes one Sentry project of the caller\&#39;s org.
+     * Deletes one Sentry project of the caller\&#39;s org. Its DSN stops resolving immediately, so ingest for that id fails closed exactly as an unknown project does; retained events are not touched. Answers 204.  Callers need the editor role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteO11ySentinelProjectsById(requestParameters: O11yApiDeleteO11ySentinelProjectsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteO11ySentinelProjectsById(requestParameters: O11yApiDeleteO11ySentinelProjectsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteO11ySentinelProjectsById(requestParameters: O11yApiDeleteO11ySentinelProjectsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteO11ySentinelProjectsById(requestParameters: O11yApiDeleteO11ySentinelProjectsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteO11ySentinelProjectsById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/projects/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -12553,7 +12746,7 @@ export class O11yApi extends BaseService {
 
     /**
      * Watch one running query\&#39;s progress
-     * Reports how far a submitted query has got — rows scanned, bytes read, elapsed — and HOLDS the connection until the next update rather than answering immediately.  The long poll is the whole point, and the reason this cannot be a typed operation: an answer that arrived only when the query finished would report progress on nothing. The websocket form of the same read is /ws/query_progress.  A validated, org-scoped principal is required; a query id belonging to another tenant is simply not found.
+     * Reports how far a submitted query has got — rows scanned, bytes read, elapsed — and HOLDS the connection until the next update rather than answering immediately.  ONE ADDRESS, TWO PROTOCOLS. Send an Upgrade and this is a websocket carrying the same progress; send an ordinary GET and it is a long poll. The Upgrade is a property of the request, not of the address, so the read that used to answer at /ws/query_progress answers here.  The long poll is the whole point, and the reason this cannot be a typed operation: an answer that arrived only when the query finished would report progress on nothing, and an upgraded connection has no JSON response to declare.  A validated, org-scoped principal is required; a query id belonging to another tenant is simply not found.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -12926,6 +13119,686 @@ export class O11yApi extends BaseService {
         let localVarPath = `/v1/o11y/reviews/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/items`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<O11yAnnItemList>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns one captured error event of a project, by its id.
+     * Returns one captured error event of a project, by its id.  Callers need the viewer role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelEventsById(requestParameters: O11yApiGetO11ySentinelEventsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11ySentryEventOut>;
+    public getO11ySentinelEventsById(requestParameters: O11yApiGetO11ySentinelEventsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11ySentryEventOut>>;
+    public getO11ySentinelEventsById(requestParameters: O11yApiGetO11ySentinelEventsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11ySentryEventOut>>;
+    public getO11ySentinelEventsById(requestParameters: O11yApiGetO11ySentinelEventsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getO11ySentinelEventsById.');
+        }
+        const project = requestParameters?.project;
+        if (project === null || project === undefined) {
+            throw new Error('Required parameter project was null or undefined when calling getO11ySentinelEventsById.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>project, 'project');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/events/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11ySentryEventOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lists the caller\&#39;s org\&#39;s grouped error issues, optionally narrowed to one project and one time window, and filtered by status, level, environment, service, a free-text query and a sort.
+     * Lists the caller\&#39;s org\&#39;s grouped error issues, optionally narrowed to one project and one time window, and filtered by status, level, environment, service, a free-text query and a sort.  Callers need the viewer role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelIssues(requestParameters?: O11yApiGetO11ySentinelIssuesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11yErrorIssuesOut>;
+    public getO11ySentinelIssues(requestParameters?: O11yApiGetO11ySentinelIssuesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11yErrorIssuesOut>>;
+    public getO11ySentinelIssues(requestParameters?: O11yApiGetO11ySentinelIssuesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11yErrorIssuesOut>>;
+    public getO11ySentinelIssues(requestParameters?: O11yApiGetO11ySentinelIssuesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const status = requestParameters?.status;
+        const level = requestParameters?.level;
+        const environment = requestParameters?.environment;
+        const serviceName = requestParameters?.serviceName;
+        const query = requestParameters?.query;
+        const sort = requestParameters?.sort;
+        const offset = requestParameters?.offset;
+        const limit = requestParameters?.limit;
+        const project = requestParameters?.project;
+        const period = requestParameters?.period;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>status, 'status');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>level, 'level');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>environment, 'environment');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>serviceName, 'serviceName');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>query, 'query');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>sort, 'sort');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>offset, 'offset');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>project, 'project');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>period, 'period');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/issues`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11yErrorIssuesOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns one grouped issue of the caller\&#39;s org with its latest occurrence sample.
+     * Returns one grouped issue of the caller\&#39;s org with its latest occurrence sample.  Callers need the viewer role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelIssuesById(requestParameters: O11yApiGetO11ySentinelIssuesByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11yErrorGettableIssueOut>;
+    public getO11ySentinelIssuesById(requestParameters: O11yApiGetO11ySentinelIssuesByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11yErrorGettableIssueOut>>;
+    public getO11ySentinelIssuesById(requestParameters: O11yApiGetO11ySentinelIssuesByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11yErrorGettableIssueOut>>;
+    public getO11ySentinelIssuesById(requestParameters: O11yApiGetO11ySentinelIssuesByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getO11ySentinelIssuesById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/issues/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11yErrorGettableIssueOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lists one issue\&#39;s captured occurrences, scoped to a project — a project is an isolation unit, so the caller declares which project\&#39;s occurrences to read.
+     * Lists one issue\&#39;s captured occurrences, scoped to a project — a project is an isolation unit, so the caller declares which project\&#39;s occurrences to read.  Callers need the viewer role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelIssuesByIdEvents(requestParameters: O11yApiGetO11ySentinelIssuesByIdEventsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11ySentryIssueEventsOut>;
+    public getO11ySentinelIssuesByIdEvents(requestParameters: O11yApiGetO11ySentinelIssuesByIdEventsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11ySentryIssueEventsOut>>;
+    public getO11ySentinelIssuesByIdEvents(requestParameters: O11yApiGetO11ySentinelIssuesByIdEventsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11ySentryIssueEventsOut>>;
+    public getO11ySentinelIssuesByIdEvents(requestParameters: O11yApiGetO11ySentinelIssuesByIdEventsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getO11ySentinelIssuesByIdEvents.');
+        }
+        const project = requestParameters?.project;
+        if (project === null || project === undefined) {
+            throw new Error('Required parameter project was null or undefined when calling getO11ySentinelIssuesByIdEvents.');
+        }
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>project, 'project');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/issues/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/events`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11ySentryIssueEventsOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lists a project\&#39;s captured error events, newest first, optionally narrowed to those whose message or exception text contains a search string.
+     * Lists a project\&#39;s captured error events, newest first, optionally narrowed to those whose message or exception text contains a search string.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelLogs(requestParameters: O11yApiGetO11ySentinelLogsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11yLogsOut>;
+    public getO11ySentinelLogs(requestParameters: O11yApiGetO11ySentinelLogsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11yLogsOut>>;
+    public getO11ySentinelLogs(requestParameters: O11yApiGetO11ySentinelLogsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11yLogsOut>>;
+    public getO11ySentinelLogs(requestParameters: O11yApiGetO11ySentinelLogsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const project = requestParameters?.project;
+        if (project === null || project === undefined) {
+            throw new Error('Required parameter project was null or undefined when calling getO11ySentinelLogs.');
+        }
+        const query = requestParameters?.query;
+        const period = requestParameters?.period;
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>project, 'project');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>query, 'query');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>period, 'period');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/logs`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11yLogsOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lists the caller\&#39;s org\&#39;s Sentry projects, each with its freshly-derived DSN.
+     * Lists the caller\&#39;s org\&#39;s Sentry projects, each with its freshly-derived DSN.  Callers need the viewer role; the runtime\&#39;s own gate enforces it.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelProjects(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11ySentryProjectsOut>;
+    public getO11ySentinelProjects(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11ySentryProjectsOut>>;
+    public getO11ySentinelProjects(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11ySentryProjectsOut>>;
+    public getO11ySentinelProjects(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/projects`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11ySentryProjectsOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns one Sentry project of the caller\&#39;s org, DSN included.
+     * Returns one Sentry project of the caller\&#39;s org, DSN included.  Callers need the viewer role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelProjectsById(requestParameters: O11yApiGetO11ySentinelProjectsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11ySentryProjectOut>;
+    public getO11ySentinelProjectsById(requestParameters: O11yApiGetO11ySentinelProjectsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11ySentryProjectOut>>;
+    public getO11ySentinelProjectsById(requestParameters: O11yApiGetO11ySentinelProjectsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11ySentryProjectOut>>;
+    public getO11ySentinelProjectsById(requestParameters: O11yApiGetO11ySentinelProjectsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getO11ySentinelProjectsById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/projects/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11ySentryProjectOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a project\&#39;s event-rate timeseries: one bucket per interval over the requested period, counting the events in it.
+     * Returns a project\&#39;s event-rate timeseries: one bucket per interval over the requested period, counting the events in it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelStats(requestParameters: O11yApiGetO11ySentinelStatsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11yStatsOut>;
+    public getO11ySentinelStats(requestParameters: O11yApiGetO11ySentinelStatsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11yStatsOut>>;
+    public getO11ySentinelStats(requestParameters: O11yApiGetO11ySentinelStatsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11yStatsOut>>;
+    public getO11ySentinelStats(requestParameters: O11yApiGetO11ySentinelStatsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const project = requestParameters?.project;
+        if (project === null || project === undefined) {
+            throw new Error('Required parameter project was null or undefined when calling getO11ySentinelStats.');
+        }
+        const field = requestParameters?.field;
+        const period = requestParameters?.period;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>project, 'project');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>field, 'field');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>period, 'period');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/stats`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11yStatsOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lists the traces a project\&#39;s captured errors reference, each with how many errors landed on it, when they started and stopped, and the latest message seen — the entry point for \&quot;which requests are failing\&quot;.
+     * Lists the traces a project\&#39;s captured errors reference, each with how many errors landed on it, when they started and stopped, and the latest message seen — the entry point for \&quot;which requests are failing\&quot;.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelTraces(requestParameters: O11yApiGetO11ySentinelTracesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11yTracesOut>;
+    public getO11ySentinelTraces(requestParameters: O11yApiGetO11ySentinelTracesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11yTracesOut>>;
+    public getO11ySentinelTraces(requestParameters: O11yApiGetO11ySentinelTracesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11yTracesOut>>;
+    public getO11ySentinelTraces(requestParameters: O11yApiGetO11ySentinelTracesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const project = requestParameters?.project;
+        if (project === null || project === undefined) {
+            throw new Error('Required parameter project was null or undefined when calling getO11ySentinelTraces.');
+        }
+        const period = requestParameters?.period;
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>project, 'project');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>period, 'period');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/traces`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11yTracesOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns one trace\&#39;s captured errors for a project — every error event that carried the trace id, in the order the events plane holds them.
+     * Returns one trace\&#39;s captured errors for a project — every error event that carried the trace id, in the order the events plane holds them.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySentinelTracesById(requestParameters: O11yApiGetO11ySentinelTracesByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11yTraceOut>;
+    public getO11ySentinelTracesById(requestParameters: O11yApiGetO11ySentinelTracesByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11yTraceOut>>;
+    public getO11ySentinelTracesById(requestParameters: O11yApiGetO11ySentinelTracesByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11yTraceOut>>;
+    public getO11ySentinelTracesById(requestParameters: O11yApiGetO11ySentinelTracesByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getO11ySentinelTracesById.');
+        }
+        const project = requestParameters?.project;
+        if (project === null || project === undefined) {
+            throw new Error('Required parameter project was null or undefined when calling getO11ySentinelTracesById.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>project, 'project');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/traces/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11yTraceOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -13424,6 +14297,60 @@ export class O11yApi extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reports whether the platform is up.
+     * Reports whether the platform is up. It returns the public status document: the incidents currently open against Hanzo\&#39;s own services, derived from the fleet health probes, plus the address of the human status page. No authentication is required and no tenant data is involved — the answer is the same for every caller.  A service that fails its health probe becomes one incident naming that service. When the availability source itself cannot be read the endpoint answers 503 rather than an empty incident list, because \&quot;we cannot tell\&quot; and \&quot;everything is fine\&quot; are different answers and only one of them is true.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getO11ySummary(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yStatusSummary>;
+    public getO11ySummary(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yStatusSummary>>;
+    public getO11ySummary(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yStatusSummary>>;
+    public getO11ySummary(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/summary`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yStatusSummary>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -18743,7 +19670,7 @@ export class O11yApi extends BaseService {
 
     /**
      * Receive a Sentry envelope on the SDK\&#39;s own DSN path
-     * Accepts an application/x-sentry-envelope frame from a Sentry SDK — the batched wire format carrying events, sessions and attachments — and ingests it against the project named in the path.  THE /api/ SEGMENT IS NOT OURS TO NAME. An SDK appends its own fixed /api/&lt;project&gt;/envelope/ suffix to whatever DSN it is given, so this address is the SDK\&#39;s, received verbatim. We receive this shape; we do not publish it. The clean spelling of the same wire is /v1/sentry/{project}/envelope/.  AUTHENTICATED BY THE DSN PUBLIC KEY, never a Hanzo session, and therefore exempt from the principal gate: the ingest verifier checks the key in constant time, fails closed, and derives the org from it. A keyless submission is a 401 from that verifier — not a 403 from the gate, and not a 404 — which is how you tell the hops apart. The exemption is matched by method plus prefix plus suffix, never a bare prefix, so no read is reachable through it.
+     * Accepts an application/x-sentry-envelope frame from a Sentry SDK — the batched wire format carrying events, sessions and attachments — and ingests it against the project named in the path.  THE /api/ SEGMENT IS NOT OURS TO NAME. An SDK appends its own fixed /api/&lt;project&gt;/envelope/ suffix to whatever DSN it is given, so this address is the SDK\&#39;s, received verbatim. We receive this shape; we do not publish it. The clean spelling of the same wire is /v1/event/{project}/envelope/.  AUTHENTICATED BY THE DSN PUBLIC KEY, never a Hanzo session, and therefore exempt from the principal gate: the ingest verifier checks the key in constant time, fails closed, and derives the org from it. A keyless submission is a 401 from that verifier — not a 403 from the gate, and not a 404 — which is how you tell the hops apart. The exemption is matched by method plus prefix plus suffix, never a bare prefix, so no read is reachable through it.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -22560,6 +23487,203 @@ export class O11yApi extends BaseService {
     }
 
     /**
+     * Aggregates a project\&#39;s captured errors into a table — the caller names the filters, the groupings and the aggregations, and gets back the columns and rows they asked for.
+     * Aggregates a project\&#39;s captured errors into a table — the caller names the filters, the groupings and the aggregations, and gets back the columns and rows they asked for.  The project is mandatory and is checked against the caller\&#39;s own org before it scopes anything, so a project id belonging to someone else reads as absent rather than as data.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postO11ySentinelDiscover(requestParameters: O11yApiPostO11ySentinelDiscoverRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11yDiscoverOut>;
+    public postO11ySentinelDiscover(requestParameters: O11yApiPostO11ySentinelDiscoverRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11yDiscoverOut>>;
+    public postO11ySentinelDiscover(requestParameters: O11yApiPostO11ySentinelDiscoverRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11yDiscoverOut>>;
+    public postO11ySentinelDiscover(requestParameters: O11yApiPostO11ySentinelDiscoverRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const o11yO11yDiscoverIn = requestParameters?.o11yO11yDiscoverIn;
+        if (o11yO11yDiscoverIn === null || o11yO11yDiscoverIn === undefined) {
+            throw new Error('Required parameter o11yO11yDiscoverIn was null or undefined when calling postO11ySentinelDiscover.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/discover`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11yDiscoverOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: o11yO11yDiscoverIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Creates a Sentry project under the caller\&#39;s org and returns it, DSN included.
+     * Creates a Sentry project under the caller\&#39;s org and returns it, DSN included. Only the name, and optionally a slug and platform, are the caller\&#39;s to set; the org, id and key are server-assigned.  Callers need the editor role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postO11ySentinelProjects(requestParameters: O11yApiPostO11ySentinelProjectsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11ySentryProjectOut>;
+    public postO11ySentinelProjects(requestParameters: O11yApiPostO11ySentinelProjectsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11ySentryProjectOut>>;
+    public postO11ySentinelProjects(requestParameters: O11yApiPostO11ySentinelProjectsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11ySentryProjectOut>>;
+    public postO11ySentinelProjects(requestParameters: O11yApiPostO11ySentinelProjectsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const o11yO11ySentryPostableProject = requestParameters?.o11yO11ySentryPostableProject;
+        if (o11yO11ySentryPostableProject === null || o11yO11ySentryPostableProject === undefined) {
+            throw new Error('Required parameter o11yO11ySentryPostableProject was null or undefined when calling postO11ySentinelProjects.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/projects`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11ySentryProjectOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: o11yO11ySentryPostableProject,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Rotates a project\&#39;s DSN key — bumping its rotation watermark so keys below it stop verifying — and returns the project with its new DSN.
+     * Rotates a project\&#39;s DSN key — bumping its rotation watermark so keys below it stop verifying — and returns the project with its new DSN.  Callers need the editor role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postO11ySentinelProjectsByIdKeysRotate(requestParameters: O11yApiPostO11ySentinelProjectsByIdKeysRotateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11ySentryProjectOut>;
+    public postO11ySentinelProjectsByIdKeysRotate(requestParameters: O11yApiPostO11ySentinelProjectsByIdKeysRotateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11ySentryProjectOut>>;
+    public postO11ySentinelProjectsByIdKeysRotate(requestParameters: O11yApiPostO11ySentinelProjectsByIdKeysRotateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11ySentryProjectOut>>;
+    public postO11ySentinelProjectsByIdKeysRotate(requestParameters: O11yApiPostO11ySentinelProjectsByIdKeysRotateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postO11ySentinelProjectsByIdKeysRotate.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/projects/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/keys/rotate`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11ySentryProjectOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns one service\&#39;s entry-point operations with the same latency and error profile topOperations reports.
      * Returns one service\&#39;s entry-point operations with the same latency and error profile topOperations reports.
      * @param requestParameters
@@ -23587,6 +24711,79 @@ export class O11yApi extends BaseService {
             {
                 context: localVarHttpContext,
                 body: o11yO11ySavedViewUpdateIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Changes an issue\&#39;s lifecycle — resolve, ignore, reopen or assign — and returns the updated issue.
+     * Changes an issue\&#39;s lifecycle — resolve, ignore, reopen or assign — and returns the updated issue. Fields left unset are left unchanged.  Callers need the editor role; the runtime\&#39;s own gate enforces it.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putO11ySentinelIssuesById(requestParameters: O11yApiPutO11ySentinelIssuesByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<O11yO11yErrorIssueOut>;
+    public putO11ySentinelIssuesById(requestParameters: O11yApiPutO11ySentinelIssuesByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<O11yO11yErrorIssueOut>>;
+    public putO11ySentinelIssuesById(requestParameters: O11yApiPutO11ySentinelIssuesByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<O11yO11yErrorIssueOut>>;
+    public putO11ySentinelIssuesById(requestParameters: O11yApiPutO11ySentinelIssuesByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling putO11ySentinelIssuesById.');
+        }
+        const o11yO11ySentryUpdateIssueIn = requestParameters?.o11yO11ySentryUpdateIssueIn;
+        if (o11yO11ySentryUpdateIssueIn === null || o11yO11ySentryUpdateIssueIn === undefined) {
+            throw new Error('Required parameter o11yO11ySentryUpdateIssueIn was null or undefined when calling putO11ySentinelIssuesById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/o11y/sentinel/issues/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<O11yO11yErrorIssueOut>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: o11yO11ySentryUpdateIssueIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

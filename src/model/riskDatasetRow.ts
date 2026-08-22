@@ -19,7 +19,7 @@ export interface RiskDatasetRow {
      */
     id?: string;
     /**
-     * Kind and Subject name whose row this is.
+     * Kind is the subject kind: person, session or account.
      */
     kind?: string;
     /**
@@ -30,6 +30,9 @@ export interface RiskDatasetRow {
      * Split is train, val or test.
      */
     split?: string;
+    /**
+     * Subject is the identity within that kind — whose row this is. Every row of one subject is in ONE split, decided by that subject\'s earliest instant, so a subject is never on both sides of a cut.
+     */
     subject?: string;
 }
 

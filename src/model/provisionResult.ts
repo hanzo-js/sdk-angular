@@ -10,15 +10,45 @@
 
 
 export interface ProvisionResult { 
+    /**
+     * ConnectionString is the ready-to-use DSN, credential included. RETURNED HERE ONCE: no read beside this one carries it, so a caller that does not keep it must provision again.
+     */
     connectionString?: string;
+    /**
+     * Database is the logical database, collection, index or bucket this resource resolves to on its backend. It is derived from Name under an org-namespacing hash, so it is not Name and two orgs cannot land on one.
+     */
     database?: string;
+    /**
+     * Host is the address that routes to this resource — a dedicated instance\'s own in-cluster Service, or the public gateway for a shared one. Never the internal admin address of a shared backend.
+     */
     host?: string;
+    /**
+     * ID is the resource\'s server-minted handle, \"rs_\"-prefixed. The caller does not choose it, and it is what every read and the delete address.
+     */
     id?: string;
+    /**
+     * Kind is the product provisioned: sql, vector, datastore, kv, search, s3 or docdb. It is the route that was called, not a body field.
+     */
     kind?: string;
+    /**
+     * Name is the org-unique slug the caller asked for, lower-cased. Every physical name on the backend derives from it.
+     */
     name?: string;
+    /**
+     * Password is the minted credential, in plaintext, for the kinds that have one. RETURNED HERE ONCE — where KMS is configured it is sealed there and only a reference is persisted; where it is not, it is stored nowhere at all. It is never held in plaintext on either side.
+     */
     password?: string;
+    /**
+     * Port is the port a client connects to on Host.
+     */
     port?: number;
+    /**
+     * Status is \"ready\", or \"provisioning\" while a dedicated instance is still being materialized by the operator. A shared-backend create is \"ready\" here; a dedicated one answers 201 still launching, and reaches ready only when a later read reconciles it against the operator\'s live CR — never fabricated.
+     */
     status?: string;
+    /**
+     * Username is the credential\'s user, for the kinds that mint one per resource. Absent for a kind whose backend authenticates with a shared, out-of-band key.
+     */
     username?: string;
 }
 

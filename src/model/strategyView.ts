@@ -10,10 +10,25 @@
 
 
 export interface StrategyView { 
+    /**
+     * Action is the tactic itself: the thing to go and do.
+     */
     action?: string;
+    /**
+     * Category is the growth discipline the tactic belongs to — the axis `?category=` narrows on.
+     */
     category?: string;
+    /**
+     * ID is the tactic\'s stable slug in the corpus.
+     */
     id?: string;
+    /**
+     * Tags are the PRECONDITIONS this tactic already satisfied to appear in the answer — `stage:<name>` and `has:<capability>` predicates over the org\'s observed profile. They are carried back so a caller can show why a tactic surfaced, not so it can filter again.
+     */
     tags?: Array<string>;
+    /**
+     * Workload is how much effort running the tactic costs, so a corpus can be cut to what the org has the hands for.
+     */
     workload?: string;
 }
 

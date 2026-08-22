@@ -10,8 +10,17 @@
 
 
 export interface GitSource { 
+    /**
+     * Branch is the branch a push-to-deploy build tracks, `main` when the create named none — a push to any other branch, and every tag push, builds nothing here. A deploy may name a commit instead, for that deploy alone.
+     */
     branch?: string;
+    /**
+     * Provider is derived from the URL — github, gitlab, bitbucket, or `git` for anything else. It is a label for display; no behaviour keys on it.
+     */
     provider?: string;
+    /**
+     * URL is the clone URL a git app builds from, stored as sent once the build path\'s allowlist accepted it (validateRepoURL). It is also what a landed push is MATCHED against, so a push to any other repo never builds this app.
+     */
     url?: string;
 }
 

@@ -10,10 +10,25 @@
 
 
 export interface ArgoRevisionMetadata { 
+    /**
+     * Author is the commit author. Always absent: an App CR pins an IMAGE, so this process has no commit to read one from and will not invent one.
+     */
     author?: string;
+    /**
+     * Date is when the App CR was created, RFC 3339 UTC — the only real timestamp there is here. It is NOT the date of the revision asked for.
+     */
     date?: string;
+    /**
+     * Message is the revision asked for, echoed back — not a commit message. The empty revision and \"HEAD\" resolve to the image tag the CR declares (spec.image.tag), and anything longer than 256 characters is truncated to it.
+     */
     message?: string;
+    /**
+     * SignatureInfo is the GPG verification result for the revision. Always absent: nothing here verifies a signature, and an empty field says so rather than implying an unsigned commit.
+     */
     signatureInfo?: string;
+    /**
+     * Tags are the git tags pointing at the revision. Always absent, for the same reason as Author.
+     */
     tags?: Array<string>;
 }
 

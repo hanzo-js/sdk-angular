@@ -11,10 +11,25 @@ import { Span } from './span';
 
 
 export interface ContextBundle { 
+    /**
+     * BudgetTokens is the ceiling the caller asked for. Packing stops under it, so this is a bound and not a target.
+     */
     budgetTokens?: number;
+    /**
+     * Query is the ask this bundle was packed for, echoed back so a cached or forwarded bundle still says what it answers.
+     */
     query?: string;
+    /**
+     * Repo narrows the retrieval to one repository. Absent means every indexed repo was searched.
+     */
     repo?: string;
+    /**
+     * Spans are the packed chunks, most relevant first, each expanded with the definitions it calls and its notable callers. The top match is always present even if it had to be truncated to fit, so a matched query never comes back with nothing.
+     */
     spans?: Array<Span>;
+    /**
+     * UsedTokens is what the returned spans actually cost, by the same estimate the packer used (roughly one token per four characters — an estimate, not a tokenizer\'s count, so size a real window with headroom).
+     */
     usedTokens?: number;
 }
 

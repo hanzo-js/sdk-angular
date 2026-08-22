@@ -17,13 +17,17 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { ProvisionRequest } from '../model/provisionRequest';
+import { BucketRecord } from '../model/bucketRecord';
 // @ts-ignore
-import { ProvisionResult } from '../model/provisionResult';
+import { BucketWrite } from '../model/bucketWrite';
 // @ts-ignore
-import { ProvisionedResource } from '../model/provisionedResource';
+import { KvAck } from '../model/kvAck';
 // @ts-ignore
-import { ProvisionedSummary } from '../model/provisionedSummary';
+import { KvEntry } from '../model/kvEntry';
+// @ts-ignore
+import { KvPage } from '../model/kvPage';
+// @ts-ignore
+import { KvWrite } from '../model/kvWrite';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -31,18 +35,44 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface KvApiDeleteKvByNameRequestParams {
-    /** Name is the resource\&#39;s org-unique slug, from the path. Lower-cased and trimmed before lookup, exactly as it was at create. */
-    name: string;
+export interface KvApiDeleteKvByBucketRequestParams {
+    /** Bucket is the bucket\&#39;s name, from the path. */
+    bucket: string;
 }
 
-export interface KvApiGetKvByNameRequestParams {
-    /** Name is the resource\&#39;s org-unique slug, from the path. Lower-cased and trimmed before lookup, exactly as it was at create. */
-    name: string;
+export interface KvApiDeleteKvByBucketByKeyRequestParams {
+    /** Bucket is the bucket, from the path. */
+    bucket: string;
+    /** Key is the key, from the path. */
+    key: string;
 }
 
-export interface KvApiPostKvRequestParams {
-    provisionRequest?: ProvisionRequest;
+export interface KvApiGetKvByBucketByKeyRequestParams {
+    /** Bucket is the bucket, from the path. */
+    bucket: string;
+    /** Key is the key, from the path. */
+    key: string;
+}
+
+export interface KvApiGetKvByBucketByKeyHistoryRequestParams {
+    /** Bucket is the bucket, from the path. */
+    bucket: string;
+    /** Key is the key, from the path. */
+    key: string;
+}
+
+export interface KvApiPostKvByBucketRequestParams {
+    /** Bucket is the bucket\&#39;s name within the org, from the path: 1–64 of [A-Za-z0-9_], no dash. */
+    bucket: string;
+    bucketWrite: BucketWrite;
+}
+
+export interface KvApiPutKvByBucketByKeyRequestParams {
+    /** Bucket is the bucket, from the path. */
+    bucket: string;
+    /** Key is the key, from the path. */
+    key: string;
+    kvWrite: KvWrite;
 }
 
 
@@ -56,19 +86,19 @@ export class KvApi extends BaseService {
     }
 
     /**
-     * DropKV deprovisions one Hanzo KV store.
-     * DropKV deprovisions one Hanzo KV store. It reverts any app instance bound to it back to Base BEFORE tearing down the org\&#39;s dedicated Valkey instance, then deletes the sealed credential and removes the metadata row. Answers 204 with no body; a second call is a 404.
+     * Removes one bucket of the caller\&#39;s org — every key and every revision with it — and answers 204 with no body.
+     * Removes one bucket of the caller\&#39;s org — every key and every revision with it — and answers 204 with no body. 404 when the org has no bucket of that name.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteKvByName(requestParameters: KvApiDeleteKvByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteKvByName(requestParameters: KvApiDeleteKvByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteKvByName(requestParameters: KvApiDeleteKvByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteKvByName(requestParameters: KvApiDeleteKvByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const name = requestParameters?.name;
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling deleteKvByName.');
+    public deleteKvByBucket(requestParameters: KvApiDeleteKvByBucketRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteKvByBucket(requestParameters: KvApiDeleteKvByBucketRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteKvByBucket(requestParameters: KvApiDeleteKvByBucketRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteKvByBucket(requestParameters: KvApiDeleteKvByBucketRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bucket = requestParameters?.bucket;
+        if (bucket === null || bucket === undefined) {
+            throw new Error('Required parameter bucket was null or undefined when calling deleteKvByBucket.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -98,7 +128,7 @@ export class KvApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/kv/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/kv/${this.configuration.encodeParam({name: "bucket", value: bucket, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -114,15 +144,86 @@ export class KvApi extends BaseService {
     }
 
     /**
-     * ListKV lists the caller org\&#39;s Hanzo KV stores.
-     * ListKV lists the caller org\&#39;s Hanzo KV stores. Each one is a DEDICATED Valkey instance the org alone runs, so the host is that instance\&#39;s own in-cluster Service and the port is 6379.
+     * Delete removes one key — a delete marker in the key\&#39;s history, so watchers see it and Get answers 404 — and answers 204 with no body.
+     * Delete removes one key — a delete marker in the key\&#39;s history, so watchers see it and Get answers 404 — and answers 204 with no body. 404 when the bucket does not exist.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getKv(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProvisionedSummary>>;
-    public getKv(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProvisionedSummary>>>;
-    public getKv(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProvisionedSummary>>>;
-    public getKv(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteKvByBucketByKey(requestParameters: KvApiDeleteKvByBucketByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteKvByBucketByKey(requestParameters: KvApiDeleteKvByBucketByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteKvByBucketByKey(requestParameters: KvApiDeleteKvByBucketByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteKvByBucketByKey(requestParameters: KvApiDeleteKvByBucketByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bucket = requestParameters?.bucket;
+        if (bucket === null || bucket === undefined) {
+            throw new Error('Required parameter bucket was null or undefined when calling deleteKvByBucketByKey.');
+        }
+        const key = requestParameters?.key;
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling deleteKvByBucketByKey.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/kv/${this.configuration.encodeParam({name: "bucket", value: bucket, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get returns one key\&#39;s current value and revision.
+     * Get returns one key\&#39;s current value and revision. 404 when the bucket does not exist, the key was never written, or its latest revision is a delete.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getKvByBucketByKey(requestParameters: KvApiGetKvByBucketByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<KvEntry>;
+    public getKvByBucketByKey(requestParameters: KvApiGetKvByBucketByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<KvEntry>>;
+    public getKvByBucketByKey(requestParameters: KvApiGetKvByBucketByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<KvEntry>>;
+    public getKvByBucketByKey(requestParameters: KvApiGetKvByBucketByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bucket = requestParameters?.bucket;
+        if (bucket === null || bucket === undefined) {
+            throw new Error('Required parameter bucket was null or undefined when calling getKvByBucketByKey.');
+        }
+        const key = requestParameters?.key;
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling getKvByBucketByKey.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -152,9 +253,9 @@ export class KvApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/kv`;
+        let localVarPath = `/v1/kv/${this.configuration.encodeParam({name: "bucket", value: bucket, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ProvisionedSummary>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<KvEntry>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -168,19 +269,23 @@ export class KvApi extends BaseService {
     }
 
     /**
-     * GetKV returns one Hanzo KV store\&#39;s metadata.
-     * GetKV returns one Hanzo KV store\&#39;s metadata. It carries the store\&#39;s status, its instance address and the Valkey user it authenticates as (\&quot;default\&quot;, the only user a requirepass instance has) — never the password. A still-booting instance reads \&quot;provisioning\&quot;, reconciled from the operator\&#39;s live view.
+     * History returns one key\&#39;s retained revisions, oldest first — every put and every delete marker up to the bucket\&#39;s History depth.
+     * History returns one key\&#39;s retained revisions, oldest first — every put and every delete marker up to the bucket\&#39;s History depth. 404 when the bucket does not exist or the key was never written.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getKvByName(requestParameters: KvApiGetKvByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProvisionedResource>;
-    public getKvByName(requestParameters: KvApiGetKvByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProvisionedResource>>;
-    public getKvByName(requestParameters: KvApiGetKvByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProvisionedResource>>;
-    public getKvByName(requestParameters: KvApiGetKvByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const name = requestParameters?.name;
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getKvByName.');
+    public getKvByBucketByKeyHistory(requestParameters: KvApiGetKvByBucketByKeyHistoryRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<KvPage>;
+    public getKvByBucketByKeyHistory(requestParameters: KvApiGetKvByBucketByKeyHistoryRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<KvPage>>;
+    public getKvByBucketByKeyHistory(requestParameters: KvApiGetKvByBucketByKeyHistoryRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<KvPage>>;
+    public getKvByBucketByKeyHistory(requestParameters: KvApiGetKvByBucketByKeyHistoryRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bucket = requestParameters?.bucket;
+        if (bucket === null || bucket === undefined) {
+            throw new Error('Required parameter bucket was null or undefined when calling getKvByBucketByKeyHistory.');
+        }
+        const key = requestParameters?.key;
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling getKvByBucketByKeyHistory.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -211,9 +316,9 @@ export class KvApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/kv/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/kv/${this.configuration.encodeParam({name: "bucket", value: bucket, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/history`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProvisionedResource>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<KvPage>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -227,17 +332,24 @@ export class KvApi extends BaseService {
     }
 
     /**
-     * Provision a key-value store for your org
-     * Launches your org\&#39;s OWN key-value instance and answers with its &#x60;kv://&#x60; connection string. The instance is yours alone: a deployment in your own tenant namespace, so its admin credential is naturally scoped to you and no other tenant shares the process. Off-cluster, where there is no orchestrator to launch one, this fails closed with 503 rather than handing back a shared one.  &#x60;name&#x60; is the org-unique slug every physical name derives from, and must match ^[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?$. &#x60;instance&#x60; optionally BINDS the add-on to one of your app instances: the DSN is injected into that instance\&#39;s addons secret as &lt;KIND&gt;_URL, switching the app off its built-in store and onto this one. Omit it and the connection string is yours to wire.  THE CREDENTIAL COMES BACK ONCE. The connection string and password are in this response and nowhere else — every read beside it omits the password — so a caller that does not keep them has to provision again. Where KMS is configured the password is sealed there and only a reference is persisted; where it is not, it is returned this once and stored nowhere. It is never held in plaintext.  Scoped to the caller\&#39;s validated org (403 without one), which also namespaces the physical resource under a fixed-width hash, so two tenants can never fold onto one backend resource — a residual collision fails closed with 409 rather than silently sharing. A name already taken in your org is 409; an invalid name or instance slug is 400; a backend that refuses the create is 502. Where a later step fails after the backend resource already exists, it is torn back down rather than left orphaned.  Billing is gated BEFORE anything is created: an unfunded org — or, in the fail-closed default, an unreachable meter — gets the fleet-wide 402/503 and nothing is provisioned. The fee is per-kind and set by the deployment.
+     * Creates a KV bucket and returns it.
+     * Creates a KV bucket and returns it. A bucket is keyed state on the same durable plane as the streams: each key holds up to History revisions, entries can expire by TTL, and watchers on the NATS port see every write. 409 when the org already has a bucket of that name.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postKv(requestParameters?: KvApiPostKvRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProvisionResult>;
-    public postKv(requestParameters?: KvApiPostKvRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProvisionResult>>;
-    public postKv(requestParameters?: KvApiPostKvRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProvisionResult>>;
-    public postKv(requestParameters?: KvApiPostKvRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const provisionRequest = requestParameters?.provisionRequest;
+    public postKvByBucket(requestParameters: KvApiPostKvByBucketRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BucketRecord>;
+    public postKvByBucket(requestParameters: KvApiPostKvByBucketRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BucketRecord>>;
+    public postKvByBucket(requestParameters: KvApiPostKvByBucketRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BucketRecord>>;
+    public postKvByBucket(requestParameters: KvApiPostKvByBucketRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bucket = requestParameters?.bucket;
+        if (bucket === null || bucket === undefined) {
+            throw new Error('Required parameter bucket was null or undefined when calling postKvByBucket.');
+        }
+        const bucketWrite = requestParameters?.bucketWrite;
+        if (bucketWrite === null || bucketWrite === undefined) {
+            throw new Error('Required parameter bucketWrite was null or undefined when calling postKvByBucket.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -276,12 +388,89 @@ export class KvApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/kv`;
+        let localVarPath = `/v1/kv/${this.configuration.encodeParam({name: "bucket", value: bucket, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProvisionResult>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<BucketRecord>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: provisionRequest,
+                body: bucketWrite,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Put sets one key to one value and returns the revision the write created.
+     * Put sets one key to one value and returns the revision the write created. Writes are versioned: each put is a new revision and the bucket retains up to its History of them per key.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putKvByBucketByKey(requestParameters: KvApiPutKvByBucketByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<KvAck>;
+    public putKvByBucketByKey(requestParameters: KvApiPutKvByBucketByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<KvAck>>;
+    public putKvByBucketByKey(requestParameters: KvApiPutKvByBucketByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<KvAck>>;
+    public putKvByBucketByKey(requestParameters: KvApiPutKvByBucketByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bucket = requestParameters?.bucket;
+        if (bucket === null || bucket === undefined) {
+            throw new Error('Required parameter bucket was null or undefined when calling putKvByBucketByKey.');
+        }
+        const key = requestParameters?.key;
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling putKvByBucketByKey.');
+        }
+        const kvWrite = requestParameters?.kvWrite;
+        if (kvWrite === null || kvWrite === undefined) {
+            throw new Error('Required parameter kvWrite was null or undefined when calling putKvByBucketByKey.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/kv/${this.configuration.encodeParam({name: "bucket", value: bucket, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<KvAck>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: kvWrite,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

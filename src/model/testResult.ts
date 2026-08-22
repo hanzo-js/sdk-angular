@@ -10,9 +10,21 @@
 
 
 export interface TestResult { 
+    /**
+     * Delivered is whether the subscriber accepted the test POST. It is the whole answer: the send is synchronous and is not retried.
+     */
     delivered?: boolean;
+    /**
+     * DurationMs is how long the single attempt took, in MILLISECONDS.
+     */
     durationMs?: number;
+    /**
+     * Error says what stopped it. Empty when delivered.
+     */
     error?: string;
+    /**
+     * HTTPStatus is what the subscriber answered, or 0 if it never answered.
+     */
     httpStatus?: number;
 }
 

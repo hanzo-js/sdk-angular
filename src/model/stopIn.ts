@@ -10,6 +10,9 @@
 
 
 export interface StopIn { 
+    /**
+     * ID is the sandbox to interrupt, from an earlier lease. Every command running in it stops; the lease itself survives, so the checkout and the half-written files are still there to read. Use EndIn to give the computer back.
+     */
     id?: string;
 }
 

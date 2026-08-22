@@ -11,8 +11,14 @@ import { RpcError } from './rpcError';
 
 
 export interface RpcOut { 
+    /**
+     * Error is the JSON-RPC error object, present instead of Result. Its presence is the ONLY way a failure shows up here: the HTTP status stays 200, because that is what a standard JSON-RPC client parses.
+     */
     error?: RpcError;
     id?: any | null;
+    /**
+     * JSONRPC is always \"2.0\". An upstream that omits it has it filled in, so a client never has to cope with a response that is missing the one field telling it which protocol it is reading.
+     */
     jsonrpc?: string;
     result?: any | null;
 }

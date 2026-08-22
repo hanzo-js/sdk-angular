@@ -10,6 +10,9 @@
 
 
 export interface StepView { 
+    /**
+     * Args are the tool\'s default arguments, merged under whatever the caller passes at run time.
+     */
     args?: { [key: string]: object; };
     /**
      * Automatable is true when the Business AI can run this step (it names a tool).
@@ -31,7 +34,13 @@ export interface StepView {
      * Detail is the prose/juncture — what the Guide asks or explains here.
      */
     detail?: string;
+    /**
+     * Draft, when set, is the prompt the embedded AI answers first; its output is folded into one of Args before the tool runs.
+     */
     draft?: string;
+    /**
+     * DraftInto names the argument the drafted text lands in. Empty means \"brief\".
+     */
     draftInto?: string;
     /**
      * Enabled is the admin on/off lever; absent reads as enabled.
@@ -57,9 +66,12 @@ export interface StepView {
      * State is the step\'s per-org lifecycle state: todo|in_progress|done|skipped.
      */
     state?: string;
+    /**
+     * Title is the one-line quest as a person reads it in the checklist.
+     */
     title?: string;
     /**
-     * Tool is the MCP tool the Business AI runs for \"do it for me\"; Args are its default arguments, Draft an optional AI prompt whose output fills the DraftInto arg (default \"brief\").
+     * Tool is the MCP tool the Business AI runs for \"do it for me\". A step naming none can only be completed by a person.
      */
     tool?: string;
 }

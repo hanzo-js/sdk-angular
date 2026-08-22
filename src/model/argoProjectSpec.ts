@@ -12,9 +12,21 @@ import { ArgoGroupKind } from './argoGroupKind';
 
 
 export interface ArgoProjectSpec { 
+    /**
+     * ClusterResourceWhitelist are the cluster-scoped kinds it may create — [{group:\"*\", kind:\"*\"}] on a synthesized project.
+     */
     clusterResourceWhitelist?: Array<ArgoGroupKind>;
+    /**
+     * Description is the project\'s human label: the IAM project\'s display name, or its description when it has no display name. Absent when IAM carries neither.
+     */
     description?: string;
+    /**
+     * Destinations are the cluster/namespace pairs it may write to — a single {server:\"*\", namespace:\"*\"} on a synthesized project, for the same reason.
+     */
     destinations?: Array<ArgoDestination>;
+    /**
+     * SourceRepos are the git repos applications in this project may pull from. [\"*\"] for every project this plane synthesizes or reflects from IAM: the boundary that actually holds on this platform is the IAM org, resolved before a row is ever projected, so the projected fence is deliberately permissive and is NOT an authorization statement.
+     */
     sourceRepos?: Array<string>;
 }
 

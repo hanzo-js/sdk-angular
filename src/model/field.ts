@@ -10,7 +10,13 @@
 
 
 export interface Field { 
+    /**
+     * Key is the identifier the body substitutes ({{.key}}) and the key a generation\'s data map must carry. snake_case by convention across the built-ins — effective_date, company_name, governing_law. An override whose body references a key no Field declares is refused on save.
+     */
     key?: string;
+    /**
+     * Label is the human prompt for whoever fills the value in — \"Governing law (state)\". It never reaches the rendered document; only Key does.
+     */
     label?: string;
 }
 

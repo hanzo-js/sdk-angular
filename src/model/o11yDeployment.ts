@@ -10,7 +10,13 @@
 
 
 export interface O11yDeployment { 
+    /**
+     * Instance is the replica as the telemetry store labels it — the address the series was recorded against, which is what distinguishes two replicas of one service.
+     */
     instance?: string;
+    /**
+     * Up is that replica\'s last reported state. Every target emits on every cycle, so a replica missing from the list is one the prober is not reporting at all, which is a different fact from down.
+     */
     up?: boolean;
 }
 

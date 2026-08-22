@@ -16,6 +16,9 @@ export interface SessionDetail {
     account?: string;
     actor?: string;
     agent?: string;
+    /**
+     * Children is the session\'s DIRECT children, one level down, each with its own counts. The promoted `children` integer beside it is how many there are; this is who they are. For the whole subtree, read the tree.
+     */
     childSessions?: Array<SessionView>;
     children?: number;
     createdAt?: string;
@@ -30,6 +33,9 @@ export interface SessionDetail {
     project?: string;
     provider?: string;
     published?: boolean;
+    /**
+     * RecentEvents is the 50 most recent turns, OLDEST of those first — a transcript to read down, not a feed. The promoted `events` integer says how many the log holds in total; page the rest from a seq.
+     */
     recentEvents?: Array<EventView>;
     repo?: string;
     rootSessionId?: string;

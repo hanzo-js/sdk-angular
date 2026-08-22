@@ -12,18 +12,36 @@ import { LineItem } from './lineItem';
 
 export interface Extracted { 
     /**
-     * proposed slug (software|cloud|office|…)
+     * Category is the expense bucket the SCANNER guessed, as a slug — a hint only. Vendor rules override it whenever they know better, so this is the model\'s reading and not the account the entry will land on.
      */
     category?: string;
+    /**
+     * Currency is the ISO code the document is denominated in.
+     */
     currency?: string;
     /**
-     * YYYY-MM-DD
+     * IssuedAt is the document\'s OWN date as YYYY-MM-DD — when the bill was issued, which is not when it was uploaded or when it will post.
      */
     issuedAt?: string;
+    /**
+     * LineItems are the individual lines read off the document, where it had any. They need not sum to totalCents: a document may carry lines the scanner could not read, and the total is taken from the total.
+     */
     lineItems?: Array<LineItem>;
+    /**
+     * Merchant is the supplier as printed on the document.
+     */
     merchant?: string;
+    /**
+     * Note is anything else worth carrying from the document that has no field of its own.
+     */
     note?: string;
+    /**
+     * TaxCents is how much of that total is tax, in cents. It is part of totalCents, not additional to it.
+     */
     taxCents?: number;
+    /**
+     * TotalCents is the document total in whole cents, tax INCLUDED.
+     */
     totalCents?: number;
 }
 

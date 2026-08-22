@@ -23,7 +23,7 @@ export interface Enrollment {
      */
     currentStep?: number;
     /**
-     * EnrolledAt and UpdatedAt are unix seconds.
+     * EnrolledAt is unix seconds when the contact joined the walk, and orders the enrollment list (newest first).
      */
     enrolledAt?: number;
     /**
@@ -42,6 +42,9 @@ export interface Enrollment {
      * Status is active, completed or canceled.
      */
     status?: string;
+    /**
+     * UpdatedAt is unix seconds of the last move: the drip engine writes it each time it advances the walk a step, completes it or cancels it. Together with Status it says when the walk last did anything, which is how a stalled enrollment is told from a finished one.
+     */
     updatedAt?: number;
 }
 

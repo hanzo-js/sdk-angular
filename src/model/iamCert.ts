@@ -26,7 +26,6 @@ export interface IamCert {
     id?: string;
     name?: string;
     owner?: string;
-    privateKey?: string;
     provider?: string;
     scope?: string;
     type?: string;

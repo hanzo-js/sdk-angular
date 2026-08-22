@@ -11,7 +11,13 @@ import { RiskDataset } from './riskDataset';
 
 
 export interface RiskDatasetVersions { 
+    /**
+     * Items is every version of it, newest first — including the disposed ones, whose record outlives their rows. Never null.
+     */
     items?: Array<RiskDataset>;
+    /**
+     * Name is the dataset these versions belong to, as the register holds it.
+     */
     name?: string;
 }
 

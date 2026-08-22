@@ -10,13 +10,25 @@
 
 
 export interface CatalogEntry { 
+    /**
+     * Configured is whether THIS DEPLOYMENT holds the OAuth client credentials for the provider. False means Connect would dead-end, so the console can offer it disabled instead of broken. It is deployment-wide and says nothing about whether the caller\'s org has connected the source — that is the connector list\'s `status`.
+     */
     configured?: boolean;
+    /**
+     * Description is one line of shop copy: what connecting this source pulls in. Native connectors carry written prose; a piece-backed one reads \"activepieces connector (<piece>)\".
+     */
     description?: string;
+    /**
+     * DisplayName is the label to show a person. First-party connectors carry a written name (\"GitHub\", \"Google Drive\"); a piece-backed one falls back to the provider capitalized, because the rich activepieces metadata lives behind a cross-service call this read will not make.
+     */
     displayName?: string;
     /**
      * \"native\" | \"piece\"
      */
     kind?: string;
+    /**
+     * Provider is the source\'s id and the address every connector op takes it by (/v1/knowledge/connectors/:provider). One of github, slack, google, notion.
+     */
     provider?: string;
 }
 

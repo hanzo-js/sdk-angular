@@ -10,13 +10,37 @@
 
 
 export interface GithubSearchHit { 
+    /**
+     * CloneURL is the repository\'s https git remote.
+     */
     clone_url?: string;
+    /**
+     * DefaultBranch is the branch a clone checks out.
+     */
     default_branch?: string;
+    /**
+     * Description is the blurb the repository\'s owner wrote. Empty when it has none.
+     */
     description?: string;
+    /**
+     * FullName is the repository\'s \"owner/repo\" on GitHub. Finding it here does NOT make it forkable: githubFork takes a repo the org\'s installation was granted, and a hit from the public index usually is not one.
+     */
     full_name?: string;
+    /**
+     * HTMLURL is the repository\'s page on github.com.
+     */
     html_url?: string;
+    /**
+     * Language is the primary language GitHub detected from the file mix (\"Go\", \"TypeScript\"). Empty when GitHub attributes none.
+     */
     language?: string;
+    /**
+     * Private is GitHub\'s visibility flag, passed through. This op reads the public index — the org\'s token only charges the rate limit to the installation — so it is false for everything a search can reach.
+     */
     'private'?: boolean;
+    /**
+     * Stars is GitHub\'s stargazers_count as the SEARCH INDEX held it when the query ran — a snapshot, not a live count off the repository.
+     */
     stars?: number;
 }
 

@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * NodePool is the ONE pool the cluster is born with — a cluster with no nodes runs nothing, so it is not optional. More pools are added afterwards through POST /v1/visor/clusters/:clusterId/pools.
+ */
 export interface CreateClusterReqNodePool { 
     count?: number;
     name?: string;

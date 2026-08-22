@@ -11,7 +11,7 @@ import { IamOrganization } from './iamOrganization';
 
 
 export interface IamListOrganizationsOutput { 
-    count?: number;
+    cursor?: string;
     organizations?: Array<IamOrganization>;
 }
 

@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * Repo links a git source, so pushes to it rebuild this project. Omit it for a project deployed by uploading an artifact.
+ */
 export interface ProjectsCreateRepo { 
     branch?: string;
     url?: string;

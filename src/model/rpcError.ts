@@ -10,7 +10,13 @@
 
 
 export interface RpcError { 
+    /**
+     * Code is the JSON-RPC error code the chain reported, passed through as it came. -32603 (internal error) is the one value this deployment mints itself, for an upstream that could not be reached at all.
+     */
     code?: number;
+    /**
+     * Message is the chain\'s own explanation, e.g. \"execution reverted\". It is \"upstream unavailable\" when the deployment minted the error rather than the chain — that is the one message this side writes.
+     */
     message?: string;
 }
 

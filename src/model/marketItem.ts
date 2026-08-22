@@ -12,14 +12,23 @@ import { Price } from './price';
 
 export interface MarketItem { 
     activated?: boolean;
+    /**
+     * Category is that same listing\'s grouping. Free text chosen by the publisher, absent when there is no public listing or the publisher left it blank.
+     */
     category?: string;
     description?: string;
     dispatchable?: boolean;
     inputSchema?: any | null;
+    /**
+     * Installed is whether the tool is activated for THIS caller\'s (org, project): the same bit as Activated, under the shop\'s name for it, which install and uninstall are the writes for. It is per caller, so one listing reads installed for one org and not for another.
+     */
     installed?: boolean;
     name?: string;
     price?: Price;
     source?: string;
+    /**
+     * Title is the shop-window name, painted over the registry Name from the CHEAPEST public listing for this tool — several orgs may list the same one, and the row shown is the one a buyer would pay. Absent when no org has listed the tool publicly: that row is a plain capability, not an offer.
+     */
     title?: string;
 }
 

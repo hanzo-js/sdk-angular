@@ -12,9 +12,21 @@ import { ArgoMeta } from './argoMeta';
 
 
 export interface ArgoProject { 
+    /**
+     * APIVersion is the constant \"argoproj.io/v1alpha1\". A project here is an IAM resource wearing that shape; no argoproj.io object is stored behind it.
+     */
     apiVersion?: string;
+    /**
+     * Kind is the constant \"AppProject\".
+     */
     kind?: string;
+    /**
+     * Metadata is the project\'s identity: its name is the key an application\'s spec.project matches, and is the same string an App CR carries in its app.kubernetes.io/part-of label.
+     */
     metadata?: ArgoMeta;
+    /**
+     * Spec is the fence the SPA displays — repos, destinations, admitted kinds.
+     */
     spec?: ArgoProjectSpec;
     status?: object;
 }

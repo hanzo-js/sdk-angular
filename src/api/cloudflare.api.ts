@@ -166,10 +166,6 @@ export interface CloudflareApiGetCloudflareZonesByZoneAnalyticsRequestParams {
     continuous?: string;
 }
 
-export interface CloudflareApiPostCloudflareAiRunByWildcard1RequestParams {
-    wildcard1: string;
-}
-
 export interface CloudflareApiPostCloudflareD1DatabasesRequestParams {
     databaseCreateIn: DatabaseCreateIn;
 }
@@ -1472,64 +1468,6 @@ export class CloudflareApi extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Run a Cloudflare Workers AI model and get its output back
-     * Runs a Workers AI model — the model id is the rest of the path, e.g. &#x60;@cf/meta/llama-3.1-8b-instruct&#x60; — on the org\&#39;s OWN Cloudflare account and relays the model\&#39;s output. The request body is whatever the chosen model takes (a prompt, chat messages, a base64 audio clip) and is forwarded unchanged; the response is the model\&#39;s own, which for an image or audio model is BYTES under Cloudflare\&#39;s content type rather than JSON. Both halves are why this is not a typed op.  It is the ONE PRICED route on this plane, because a run is inference rather than passthrough. The org\&#39;s own token already paid Cloudflare for the compute, so Hanzo debits only the thin BYO routing fee — never the full inference cost — and meters it on the SAME &#x60;ai&#x60; product axis and per-project caps as every other model call, so Workers AI spend sums with LLM spend. The fee has a floor, so every run leaves a usage row even for a modality that reports no tokens, and it emits one gen_ai span with &#x60;gen_ai.system &#x3D; cloudflare&#x60;.  Gated by BALANCE, not by the admin bit that guards the destructive verbs here: a validated org is enough, and a frozen, broke or over-cap org is refused with the fleet-wide 402/503 billing contract BEFORE any byte reaches Cloudflare — no run, and no account discovery either. An empty or oversized body is 400, as is a model id that is not a plain Cloudflare model path; 503 if the org has never connected a Cloudflare token.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postCloudflareAiRunByWildcard1(requestParameters: CloudflareApiPostCloudflareAiRunByWildcard1RequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCloudflareAiRunByWildcard1(requestParameters: CloudflareApiPostCloudflareAiRunByWildcard1RequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCloudflareAiRunByWildcard1(requestParameters: CloudflareApiPostCloudflareAiRunByWildcard1RequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCloudflareAiRunByWildcard1(requestParameters: CloudflareApiPostCloudflareAiRunByWildcard1RequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const wildcard1 = requestParameters?.wildcard1;
-        if (wildcard1 === null || wildcard1 === undefined) {
-            throw new Error('Required parameter wildcard1 was null or undefined when calling postCloudflareAiRunByWildcard1.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/cloudflare/ai/run/${this.configuration.encodeParam({name: "wildcard1", value: wildcard1, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

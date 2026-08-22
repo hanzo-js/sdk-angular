@@ -10,7 +10,13 @@
 
 
 export interface ArgoGroupKind { 
+    /**
+     * Group is the API group a project admits, \"*\" for any. Empty names the core group.
+     */
     group?: string;
+    /**
+     * Kind is the kind it admits, \"*\" for any.
+     */
     kind?: string;
 }
 

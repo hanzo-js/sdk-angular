@@ -10,13 +10,16 @@
 
 
 export interface RiskLineage { 
+    /**
+     * Dataset is the dataset traced.
+     */
     dataset?: string;
     /**
      * Digest is the version\'s fingerprint, repeated here so a lineage answer is self-contained.
      */
     digest?: string;
     /**
-     * From and To are the window actually read — To is the window\'s end pulled back by the maturity horizon, which is usually earlier than the spec\'s.
+     * From is where the window actually read opens, RFC 3339. Same as the spec\'s.
      */
     from?: string;
     /**
@@ -27,9 +30,12 @@ export interface RiskLineage {
      * Oversize is how many subjects the window held that were too large to represent when this version was built. It is part of the fingerprint, so it is part of what \"reproducible\" is measured over.
      */
     oversize?: number;
+    /**
+     * Refusal says which way it failed — the window expired, or the source now holds a different count. Absent when Reproducible is true.
+     */
     refusal?: string;
     /**
-     * Reproducible is true when the source still holds what this version was built from. Refusal says why not, when it is false.
+     * Reproducible is true when the source still holds what this version was built from — measured by asking it again, not recalled. False is ordinary: the source is fed by a rollup that runs behind the events, so \"it holds more now\" is the common case and it means re-running the spec would not produce this version.
      */
     reproducible?: boolean;
     /**
@@ -37,7 +43,7 @@ export interface RiskLineage {
      */
     retention?: string;
     /**
-     * Rows and Subjects are what the source held for that window at materialisation time.
+     * Rows is how many rows the source held for that window at materialisation time. Holds is the same question asked now, and the difference between them is the whole of the reproducibility claim.
      */
     rows?: number;
     /**
@@ -48,8 +54,17 @@ export interface RiskLineage {
      * Source is the plane the rows were derived from.
      */
     source?: string;
+    /**
+     * Subjects is how many distinct subjects those rows belonged to. It is the real sample size — the row count flatters it whenever a subject is active.
+     */
     subjects?: number;
+    /**
+     * To is where it ends: the spec\'s own end pulled BACK by the maturity horizon, so it is usually earlier than the spec says. This is the window a reproduction has to ask for — asking the spec\'s would not return these rows.
+     */
     to?: string;
+    /**
+     * Version is the version traced — the one asked for, or the newest published one when the request named none.
+     */
     version?: number;
 }
 

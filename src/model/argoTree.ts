@@ -11,8 +11,17 @@ import { ArgoNode } from './argoNode';
 
 
 export interface ArgoTree { 
+    /**
+     * Hosts is ArgoCD\'s per-node machine inventory. Always empty: this plane projects applications and serves no cluster-node view.
+     */
     hosts?: Array<object>;
+    /**
+     * Nodes is the FLAT node list, root first: the App CR, then the objects the operator owns, then their ReplicaSets and Pods. The hierarchy is in ParentRefs, not in the ordering.
+     */
     nodes?: Array<ArgoNode>;
+    /**
+     * OrphanedNodes are objects in the namespace belonging to no application. Always empty: this walk reaches an object only THROUGH ownership from the App CR, so it can never hold one that is orphaned.
+     */
     orphanedNodes?: Array<ArgoNode>;
 }
 

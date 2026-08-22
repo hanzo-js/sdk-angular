@@ -701,8 +701,8 @@ export class MarketingApi extends BaseService {
     }
 
     /**
-     * Returns the org\&#39;s calendar, soonest scheduled first, optionally narrowed to one status.
-     * Returns the org\&#39;s calendar, soonest scheduled first, optionally narrowed to one status.
+     * Returns the org\&#39;s calendar, latest scheduled first, optionally narrowed to one status.
+     * Returns the org\&#39;s calendar, latest scheduled first, optionally narrowed to one status.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

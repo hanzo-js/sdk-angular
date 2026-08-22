@@ -10,11 +10,29 @@
 
 
 export interface FleetSpec { 
+    /**
+     * Arch is the CPU architecture, amd64 or arm64, and it is what decides whether a binary built for the fleet will run here. Only the sources that report one carry it (a linked run-target, a BYO worker).
+     */
     arch?: string;
+    /**
+     * CPUs is logical cores on the unit.
+     */
     cpus?: number;
+    /**
+     * GPUModel names the FIRST accelerator (\"NVIDIA GB10\") as the representative of the set; GPUs carries how many. Empty for a cluster, whose cards are counted rather than modelled, and for a unit with none.
+     */
     gpuModel?: string;
+    /**
+     * GPUs is how many accelerators the unit has. For a cluster it is the vendor totals summed across every node, so it counts cards, not machines.
+     */
     gpus?: number;
+    /**
+     * Memory is total system RAM in BYTES — not GB, and not what is free right now (fleetMetrics carries that). Absent when the source reports no RAM figure.
+     */
     memory?: number;
+    /**
+     * OS is the operating system the unit runs: linux, darwin or windows. Empty when the source does not report one — a cluster row does not.
+     */
     os?: string;
 }
 

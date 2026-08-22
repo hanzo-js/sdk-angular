@@ -10,15 +10,45 @@
 
 
 export interface BankTxnRow { 
+    /**
+     * AmountCents is the size of the movement in whole cents, always POSITIVE — direction carries the sign, so a caller must read both to know which way money went.
+     */
     amountCents?: number;
+    /**
+     * Connector names the feed this row arrived on — which bank or processor connection it was synced from. With externalId it is the row\'s identity, so re-syncing the same statement never books a second copy.
+     */
     connector?: string;
+    /**
+     * Currency is the ISO code the bank reported the line in.
+     */
     currency?: string;
+    /**
+     * Description is the statement memo as the bank wrote it.
+     */
     description?: string;
+    /**
+     * Direction is which way the money moved: an inflow into the account or an outflow from it, from the org\'s point of view.
+     */
     direction?: string;
+    /**
+     * ExternalID is the bank\'s OWN id for the line, carried verbatim. It is unique only within its connector.
+     */
     externalId?: string;
+    /**
+     * MatchedVoucher names the ledger voucher this line was reconciled against — the bill it paid, or the settlement it cleared. Absent when nothing matched, which for an inflow is what raises a question.
+     */
     matchedVoucher?: string;
+    /**
+     * Merchant is the counterparty the feed identified, where it did.
+     */
     merchant?: string;
+    /**
+     * PostedAt is the bank\'s posting date for the line, not when we synced it.
+     */
     postedAt?: string;
+    /**
+     * Status is where the line got to: posted (an outflow booked straight to an expense), settled (an outflow that paid down a scanned bill), reconciled (an inflow that cleared a pending settlement), transfer (a move between the org\'s own accounts, recorded but with no effect on the books), or unmatched (an inflow nobody could place, which is waiting on a human answer).
+     */
     status?: string;
 }
 

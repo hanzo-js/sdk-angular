@@ -11,10 +11,18 @@
 
 export interface IamKey { 
     /**
-     * AccessKey (pk-*) is the publishable identifier and lookup index; AccessSecret (sk-*) is the confidential secret.
+     * AccessKey (pk-*) is the publishable identifier and lookup index; AccessSecret (sk-*) is the confidential secret. AccessSecret IS NOT PERSISTED for a key minted at or after the digest change: it carries the secret out to its holder once, in the mint response, and the row keeps only AccessSecretDigest. It stays on the struct because that one-time reveal is the whole point of minting, and it stays in the schema because rows written before the change still hold a plaintext secret that the resolver drains on first use.
      */
     accessKey?: string;
     accessSecret?: string;
+    /**
+     * AccessSecretDigest is how a presented secret finds its key: the resolver digests what the caller sent and looks THAT up. It is what lets the row hold no plaintext and still be found in one indexed read — a salted hash cannot be looked up by value, which is the reason the plaintext was here.
+     */
+    accessSecretDigest?: string;
+    /**
+     * Act is the durable, opt-in grant that lets this key act FOR a user in its own org — the credential behind as(): presenting it authorizes minting a short-lived, user-bound token for a member of the key\'s tenant. Default false, so a server key mints nothing on anyone\'s behalf until the grant is set deliberately — the capability is never inherited by every key. It is confined at mint time to the key\'s OWN Owner, and a reserved-org or SuperAdmin target is refused, so the grant reaches only ordinary members of the one tenant that holds the key.
+     */
+    act?: boolean;
     application?: string;
     createdAt?: string;
     /**

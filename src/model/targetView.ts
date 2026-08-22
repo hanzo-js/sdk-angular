@@ -12,18 +12,57 @@ import { Spec } from './spec';
 
 
 export interface TargetView { 
+    /**
+     * Capacity is a human summary of what the machine has (\"8 vCPU / 32G\", \"1× GB10\"), up to 256 characters. Prose for a card — Spec is the same thing in a form a scheduler can read, and nothing derives one from the other.
+     */
     capacity?: string;
+    /**
+     * CreatedAt is when the machine was first registered, RFC 3339 in UTC. A re-link refreshes the row and leaves this alone, so it dates the machine and not the connection.
+     */
     createdAt?: string;
+    /**
+     * Host is the hostname sessions on this machine report, and it is a JOIN KEY, not a label: a session naming this host counts against the load below even when it names no target id, and a re-link of the same (org, host, owner) refreshes this row instead of creating a second. Empty means the machine is addressable only by ID.
+     */
     host?: string;
+    /**
+     * ID is the machine\'s handle, minted as \"tgt_\" + 32 hex characters. It is what a session records to say it ran here, and what every later patch, claim or delete addresses.
+     */
     id?: string;
+    /**
+     * Kind is what sort of destination this is, from a closed five: laptop | cloud | gpu | cluster | machine. A register that named none is a `machine`.
+     */
     kind?: string;
+    /**
+     * Label is the name a person gave the machine (\"workshop\"), up to 128 characters. Required at register, free text, and the only field here meant for reading rather than matching.
+     */
     label?: string;
+    /**
+     * Metrics is what the machine was DOING at its last heartbeat — loadavg, memory, accelerator utilization. Absent when it has never beaten. It is a SNAPSHOT: the series over time lives in the fleet samples, not here.
+     */
     metrics?: Metrics;
+    /**
+     * MetricsAt is when that heartbeat was recorded, RFC 3339 in UTC, and the SERVER stamps it — a client cannot backdate or forge the staleness clock. Absent means never beaten, which is exactly the case where Status is taken at its word.
+     */
     metricsAt?: string;
+    /**
+     * Running is how many of those are in `running` right now — the number a dispatcher weighs against Capacity. paused sessions are in Sessions and not here.
+     */
     running?: number;
+    /**
+     * Sessions is how many of the org\'s sessions are mapped to this machine, by target id OR by matching Host. All of them, whatever their status.
+     */
     sessions?: number;
+    /**
+     * Spec is what the machine IS — os, arch, cores, RAM, accelerators — the static half, changed only when something reports it again. Absent when nothing has ever been reported, and a scheduler reads absence as \"cannot satisfy a floor\" rather than as \"no limits\".
+     */
     spec?: Spec;
+    /**
+     * Status is the EFFECTIVE liveness — online | offline | draining — not the stored one. offline and draining are operator INTENT and are reported as they stand; `online` is checked against the heartbeat, and a machine that has beaten before but not in the last 90 seconds reports offline whatever its row says. A target that has NEVER beaten keeps its stored status, because a hand-registered destination has no fact to check.
+     */
     status?: string;
+    /**
+     * UpdatedAt is the last write to the row, same format — which for a beating machine is its last heartbeat, since a heartbeat IS a write.
+     */
     updatedAt?: string;
 }
 

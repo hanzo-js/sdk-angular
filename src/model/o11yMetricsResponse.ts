@@ -9,13 +9,16 @@
  */
 import { O11yMetricsResponseUsage } from './o11yMetricsResponseUsage';
 import { O11yMetricsResponseSummary } from './o11yMetricsResponseSummary';
-import { O11yAvailabilityResponseRange } from './o11yAvailabilityResponseRange';
+import { O11yMetricsResponseRange } from './o11yMetricsResponseRange';
 import { O11yMetricsResponseSeries } from './o11yMetricsResponseSeries';
 
 
 export interface O11yMetricsResponse { 
+    /**
+     * Product is the service these numbers are about, echoed back.
+     */
     product?: string;
-    range?: O11yAvailabilityResponseRange;
+    range?: O11yMetricsResponseRange;
     series?: O11yMetricsResponseSeries;
     summary?: O11yMetricsResponseSummary;
     usage?: O11yMetricsResponseUsage;

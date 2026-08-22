@@ -11,9 +11,21 @@ import { Range } from './range';
 
 
 export interface Symbol { 
+    /**
+     * Detail is the server\'s short elaboration, typically the signature. Absent when it offered none.
+     */
     detail?: string;
+    /**
+     * Kind is the LSP SymbolKind number (5 class, 6 method, 12 function, 23 struct, …), passed through rather than translated to a word — these callers already speak LSP, and inventing a second vocabulary is how the two drift.
+     */
     kind?: number;
+    /**
+     * Name is the declared identifier.
+     */
     name?: string;
+    /**
+     * Range is the declaration\'s span in the file.
+     */
     range?: Range;
 }
 

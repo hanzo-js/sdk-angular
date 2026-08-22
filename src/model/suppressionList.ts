@@ -11,6 +11,9 @@ import { Suppression } from './suppression';
 
 
 export interface SuppressionList { 
+    /**
+     * Data is the page: every (channel, address) this org\'s send gate refuses, newest opt-out first. Absence from it is not permission to mail someone — it only means no opt-out was recorded on that channel.
+     */
     data?: Array<Suppression>;
 }
 

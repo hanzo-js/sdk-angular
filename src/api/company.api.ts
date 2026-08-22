@@ -25,6 +25,10 @@ import { DecisionIn } from '../model/decisionIn';
 // @ts-ignore
 import { DeckOut } from '../model/deckOut';
 // @ts-ignore
+import { EIN } from '../model/eIN';
+// @ts-ignore
+import { EinIn } from '../model/einIn';
+// @ts-ignore
 import { EsignCompleteIn } from '../model/esignCompleteIn';
 // @ts-ignore
 import { EsignOut } from '../model/esignOut';
@@ -60,6 +64,10 @@ import { SafeIn } from '../model/safeIn';
 import { SafeOut } from '../model/safeOut';
 // @ts-ignore
 import { StructureIn } from '../model/structureIn';
+// @ts-ignore
+import { Tariff } from '../model/tariff';
+// @ts-ignore
+import { TariffIn } from '../model/tariffIn';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -89,6 +97,10 @@ export interface CompanyApiPostCompanyRequestParams {
 
 export interface CompanyApiPostCompanyAdvanceRequestParams {
     advanceIn: AdvanceIn;
+}
+
+export interface CompanyApiPostCompanyEinRequestParams {
+    einIn: EinIn;
 }
 
 export interface CompanyApiPostCompanyEsignCompleteRequestParams {
@@ -121,6 +133,10 @@ export interface CompanyApiPostCompanyImportDocumentsRequestParams {
 
 export interface CompanyApiPostCompanyKycDecisionRequestParams {
     decisionIn: DecisionIn;
+}
+
+export interface CompanyApiPostCompanyTariffRequestParams {
+    tariffIn: TariffIn;
 }
 
 export interface CompanyApiPutCompanyStructureRequestParams {
@@ -558,6 +574,75 @@ export class CompanyApi extends BaseService {
         return this.httpClient.request<FormationView>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Opens the EIN application and answers what it owes.
+     * Opens the EIN application and answers what it owes.  The answer states whether it can be filed ONLINE, because that is the fact deciding whether the customer waits a sitting or several weeks — and it names each form with what that form is for, so nobody has to already know what an SS-4 is to understand why they are signing one.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postCompanyEin(requestParameters: CompanyApiPostCompanyEinRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EIN>;
+    public postCompanyEin(requestParameters: CompanyApiPostCompanyEinRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EIN>>;
+    public postCompanyEin(requestParameters: CompanyApiPostCompanyEinRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EIN>>;
+    public postCompanyEin(requestParameters: CompanyApiPostCompanyEinRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const einIn = requestParameters?.einIn;
+        if (einIn === null || einIn === undefined) {
+            throw new Error('Required parameter einIn was null or undefined when calling postCompanyEin.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/company/ein`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EIN>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: einIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1334,8 +1419,8 @@ export class CompanyApi extends BaseService {
     }
 
     /**
-     * Charge the one-time formation fee and mark the formation paid
-     * Bills the caller\&#39;s own org the one-time Hanzo Company formation fee — $999 unless the deployment sets another — and answers with the formation record carrying its paid flag and the charge reference. Takes no body: the org is the validated tenant and the amount is the platform\&#39;s, never the caller\&#39;s to assert.  IDEMPOTENT on the formation rather than on the request: an already-paid formation answers 200 with the same record and is not charged again, so a retry or a double-clicked button costs nothing. Available only at the &#x60;payment&#x60; stage (409 anywhere else) and only for an org that has begun a formation (404 otherwise).  A refused charge answers the fleet-wide billing contract, not a formation error — 402 when the org cannot pay, 503 when metering is unavailable — which is exactly why this route is not a typed op.
+     * Charges the caller\&#39;s own org the one-time Hanzo Company formation fee.
+     * Charges the caller\&#39;s own org the one-time Hanzo Company formation fee.  It is $999 unless the deployment sets another, and the answer is the formation record carrying its paid flag and the charge reference. It takes no body: the org is the validated tenant and the amount is the platform\&#39;s, never the caller\&#39;s to assert.  IDEMPOTENT on the formation rather than on the request: an already-paid formation answers 200 with the same record and is not charged again, so a retry or a double-clicked button costs nothing. Available only at the &#x60;payment&#x60; stage (409 anywhere else) and only for an org that has begun a formation (404 otherwise).  A denial answers the fleet-wide billing contract — 402 insufficient_balance, 402 spend_cap_exceeded, 503 balance_unavailable — carried by cloud.Denied, which is the money wire\&#39;s own {\&quot;error\&quot;:{\&quot;code\&quot;,\&quot;message\&quot;}} body rather than a second vocabulary invented for this surface.  The gate is the LAST thing it does, after the stage check and the paid short-circuit, so a caller the machine is about to refuse is never charged. That ordering is why the gate cannot lift into middleware, where it would run first. Both facts are pinned: TestPaymentDenialWire, TestPaymentChargesLast.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -1431,6 +1516,75 @@ export class CompanyApi extends BaseService {
         return this.httpClient.request<FormationView>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Itemises what a formation costs before anyone commits to it.
+     * Itemises what a formation costs before anyone commits to it.  It answers what is due now and what recurs, as separate figures, and marks the state\&#39;s filing fee as money we collect and remit rather than keep. A caller can therefore show a payer the whole bill — which is the point of quoting at all, and was impossible while the fee was one number in an error string.  A jurisdiction whose filing fee this deployment has not been told REFUSES, naming the setting that fixes it. Quoting our half as though it were the total is the one answer that would be worse than no answer.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postCompanyTariff(requestParameters: CompanyApiPostCompanyTariffRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Tariff>;
+    public postCompanyTariff(requestParameters: CompanyApiPostCompanyTariffRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Tariff>>;
+    public postCompanyTariff(requestParameters: CompanyApiPostCompanyTariffRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Tariff>>;
+    public postCompanyTariff(requestParameters: CompanyApiPostCompanyTariffRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const tariffIn = requestParameters?.tariffIn;
+        if (tariffIn === null || tariffIn === undefined) {
+            throw new Error('Required parameter tariffIn was null or undefined when calling postCompanyTariff.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/company/tariff`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Tariff>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: tariffIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

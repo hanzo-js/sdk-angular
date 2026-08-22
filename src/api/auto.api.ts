@@ -17,13 +17,31 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { AutoCreate } from '../model/autoCreate';
+import { Catalog } from '../model/catalog';
 // @ts-ignore
-import { AutoStart } from '../model/autoStart';
+import { CreateFlowReq } from '../model/createFlowReq';
 // @ts-ignore
-import { AutoStatus } from '../model/autoStatus';
+import { CreateVersionIn } from '../model/createVersionIn';
 // @ts-ignore
-import { AutoUpdate } from '../model/autoUpdate';
+import { Flow } from '../model/flow';
+// @ts-ignore
+import { FlowPage } from '../model/flowPage';
+// @ts-ignore
+import { FlowRun } from '../model/flowRun';
+// @ts-ignore
+import { FlowVersion } from '../model/flowVersion';
+// @ts-ignore
+import { PatchFlowIn } from '../model/patchFlowIn';
+// @ts-ignore
+import { PopulatedFlow } from '../model/populatedFlow';
+// @ts-ignore
+import { RunIn } from '../model/runIn';
+// @ts-ignore
+import { RunPage } from '../model/runPage';
+// @ts-ignore
+import { RunResp } from '../model/runResp';
+// @ts-ignore
+import { VersionPage } from '../model/versionPage';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -31,43 +49,88 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface AutoApiDeleteAutoFlowsByFlowRequestParams {
-    /** Flow is the flow\&#39;s id, taken from the path. */
-    flow: string;
+export interface AutoApiDeleteAutoFlowsByIdRequestParams {
+    /** ID is the flow to act on, from the path. */
+    id: string;
 }
 
-export interface AutoApiGetAutoFlowsByFlowRequestParams {
-    /** Flow is the flow\&#39;s id, taken from the path. */
-    flow: string;
+export interface AutoApiGetAutoFlowsRequestParams {
+    /** Limit bounds the page (default 200, maximum 1000). */
+    limit?: number;
+}
+
+export interface AutoApiGetAutoFlowsByIdRequestParams {
+    /** ID is the flow to act on, from the path. */
+    id: string;
+}
+
+export interface AutoApiGetAutoFlowsByIdVersionsRequestParams {
+    /** ID is the flow whose versions to list, from the path. */
+    id: string;
+    /** Limit bounds the page (default 200, maximum 1000). */
+    limit?: number;
 }
 
 export interface AutoApiGetAutoRunsRequestParams {
-    /** Flow narrows the list to one flow\&#39;s runs when present. */
-    flow?: string;
+    /** FlowID narrows the history to one flow. Omit it for the whole org\&#39;s runs. */
+    flowId?: string;
+    /** Limit bounds the page (default 200, maximum 1000). */
+    limit?: number;
 }
 
-export interface AutoApiGetAutoRunsByRunRequestParams {
-    /** Run is the run\&#39;s id, taken from the path. */
-    run: string;
+export interface AutoApiGetAutoRunsByIdRequestParams {
+    /** ID is the run to read, from the path. */
+    id: string;
 }
 
-export interface AutoApiPatchAutoFlowsByFlowRequestParams {
-    /** Flow is the flow\&#39;s id, taken from the path. */
-    flow: string;
-    autoUpdate: AutoUpdate;
+export interface AutoApiPatchAutoFlowsByIdRequestParams {
+    /** ID is the flow to update, from the path. */
+    id: string;
+    patchFlowIn: PatchFlowIn;
+}
+
+export interface AutoApiPostAutoConnectorsByIdRunRequestParams {
+    /** ID is the connector to run, from the path. */
+    id: string;
+    runIn: RunIn;
 }
 
 export interface AutoApiPostAutoFlowsRequestParams {
-    autoCreate: AutoCreate;
+    createFlowReq: CreateFlowReq;
 }
 
-export interface AutoApiPostAutoFlowsByFlowPublishRequestParams {
-    /** Flow is the flow\&#39;s id, taken from the path. */
-    flow: string;
+export interface AutoApiPostAutoFlowsByIdDisableRequestParams {
+    /** ID is the flow to act on, from the path. */
+    id: string;
 }
 
-export interface AutoApiPostAutoRunsRequestParams {
-    autoStart: AutoStart;
+export interface AutoApiPostAutoFlowsByIdEnableRequestParams {
+    /** ID is the flow to act on, from the path. */
+    id: string;
+}
+
+export interface AutoApiPostAutoFlowsByIdOperationsRequestParams {
+    id: string;
+}
+
+export interface AutoApiPostAutoFlowsByIdRunRequestParams {
+    /** ID is the flow to act on, from the path. */
+    id: string;
+}
+
+export interface AutoApiPostAutoFlowsByIdVersionsRequestParams {
+    /** ID is the flow to add a version to, from the path. */
+    id: string;
+    createVersionIn: CreateVersionIn;
+}
+
+export interface AutoApiPostAutoHooksBySourceByEventRequestParams {
+    source: string;
+    event: string;
+}
+
+export interface AutoApiPostAutoRunsByIdResumeRequestParams {
+    id: string;
 }
 
 
@@ -81,19 +144,19 @@ export class AutoApi extends BaseService {
     }
 
     /**
-     * Deletes one of the caller\&#39;s flows.
-     * Deletes one of the caller\&#39;s flows. A foreign id answers 404 and deletes nothing.
+     * Deletes one automation, its versions and its run history.
+     * Deletes one automation, its versions and its run history. It answers no content, and a flow of another org answers not-found.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteAutoFlowsByFlow(requestParameters: AutoApiDeleteAutoFlowsByFlowRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteAutoFlowsByFlow(requestParameters: AutoApiDeleteAutoFlowsByFlowRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteAutoFlowsByFlow(requestParameters: AutoApiDeleteAutoFlowsByFlowRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteAutoFlowsByFlow(requestParameters: AutoApiDeleteAutoFlowsByFlowRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const flow = requestParameters?.flow;
-        if (flow === null || flow === undefined) {
-            throw new Error('Required parameter flow was null or undefined when calling deleteAutoFlowsByFlow.');
+    public deleteAutoFlowsById(requestParameters: AutoApiDeleteAutoFlowsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteAutoFlowsById(requestParameters: AutoApiDeleteAutoFlowsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteAutoFlowsById(requestParameters: AutoApiDeleteAutoFlowsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteAutoFlowsById(requestParameters: AutoApiDeleteAutoFlowsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteAutoFlowsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -102,7 +165,6 @@ export class AutoApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -124,7 +186,7 @@ export class AutoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "flow", value: flow, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -140,15 +202,75 @@ export class AutoApi extends BaseService {
     }
 
     /**
-     * Flows lists the caller\&#39;s flows, newest first.
-     * Flows lists the caller\&#39;s flows, newest first. The list is scoped by the product to the caller\&#39;s org — it can only ever hold the caller\&#39;s own flows.
+     * Connectors returns the connector catalogue.
+     * Connectors returns the connector catalogue. Each entry is an external service a flow step can invoke, carrying its auth descriptor and the input properties of its actions and triggers. The catalogue is the same for every tenant, so the gate is a validated principal rather than a per-org view.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAutoFlows(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAutoFlows(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAutoFlows(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAutoFlows(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAutoConnectors(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Catalog>;
+    public getAutoConnectors(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Catalog>>;
+    public getAutoConnectors(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Catalog>>;
+    public getAutoConnectors(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/connectors`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Catalog>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns the caller org\&#39;s automations, most-recently-updated first.
+     * Returns the caller org\&#39;s automations, most-recently-updated first. The optional &#x60;limit&#x60; query bounds the page.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAutoFlows(requestParameters?: AutoApiGetAutoFlowsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FlowPage>;
+    public getAutoFlows(requestParameters?: AutoApiGetAutoFlowsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FlowPage>>;
+    public getAutoFlows(requestParameters?: AutoApiGetAutoFlowsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FlowPage>>;
+    public getAutoFlows(requestParameters?: AutoApiGetAutoFlowsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -180,180 +302,7 @@ export class AutoApi extends BaseService {
 
         let localVarPath = `/v1/auto/flows`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Flow reads one of the caller\&#39;s flows — the full record, graph included.
-     * Flow reads one of the caller\&#39;s flows — the full record, graph included. A flow outside the caller\&#39;s org answers 404, indistinguishable from one that does not exist.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getAutoFlowsByFlow(requestParameters: AutoApiGetAutoFlowsByFlowRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAutoFlowsByFlow(requestParameters: AutoApiGetAutoFlowsByFlowRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAutoFlowsByFlow(requestParameters: AutoApiGetAutoFlowsByFlowRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAutoFlowsByFlow(requestParameters: AutoApiGetAutoFlowsByFlowRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const flow = requestParameters?.flow;
-        if (flow === null || flow === undefined) {
-            throw new Error('Required parameter flow was null or undefined when calling getAutoFlowsByFlow.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "flow", value: flow, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Pieces lists the product\&#39;s built-in piece catalog: the trigger and action types a flow\&#39;s nodes can use (webhook, schedule, http, set, branch), each with its input descriptors.
-     * Pieces lists the product\&#39;s built-in piece catalog: the trigger and action types a flow\&#39;s nodes can use (webhook, schedule, http, set, branch), each with its input descriptors. The catalog is compiled into the product — adding a piece is a product release, not a platform call.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getAutoPieces(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAutoPieces(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAutoPieces(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAutoPieces(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/auto/pieces`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Runs lists the caller\&#39;s run records, newest first — optionally one flow\&#39;s.
-     * Runs lists the caller\&#39;s run records, newest first — optionally one flow\&#39;s. Each record carries the run\&#39;s status (queued, running, completed, failed), its input, and its output once the run finished.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getAutoRuns(requestParameters?: AutoApiGetAutoRunsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAutoRuns(requestParameters?: AutoApiGetAutoRunsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAutoRuns(requestParameters?: AutoApiGetAutoRunsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAutoRuns(requestParameters?: AutoApiGetAutoRunsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const flow = requestParameters?.flow;
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>flow, 'flow');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/auto/runs`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<FlowPage>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -368,19 +317,19 @@ export class AutoApi extends BaseService {
     }
 
     /**
-     * Run reads one run record: status, input, output (each executed node\&#39;s result keyed by node id once completed), error detail if it failed, and timestamps.
-     * Run reads one run record: status, input, output (each executed node\&#39;s result keyed by node id once completed), error detail if it failed, and timestamps. A run outside the caller\&#39;s org answers 404.
+     * Returns one automation and its latest version.
+     * Returns one automation and its latest version. That is the flow record plus the step tree the builder edits; a flow of another org answers not-found.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAutoRunsByRun(requestParameters: AutoApiGetAutoRunsByRunRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAutoRunsByRun(requestParameters: AutoApiGetAutoRunsByRunRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAutoRunsByRun(requestParameters: AutoApiGetAutoRunsByRunRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAutoRunsByRun(requestParameters: AutoApiGetAutoRunsByRunRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const run = requestParameters?.run;
-        if (run === null || run === undefined) {
-            throw new Error('Required parameter run was null or undefined when calling getAutoRunsByRun.');
+    public getAutoFlowsById(requestParameters: AutoApiGetAutoFlowsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PopulatedFlow>;
+    public getAutoFlowsById(requestParameters: AutoApiGetAutoFlowsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PopulatedFlow>>;
+    public getAutoFlowsById(requestParameters: AutoApiGetAutoFlowsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PopulatedFlow>>;
+    public getAutoFlowsById(requestParameters: AutoApiGetAutoFlowsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getAutoFlowsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -411,9 +360,9 @@ export class AutoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/auto/runs/${this.configuration.encodeParam({name: "run", value: run, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PopulatedFlow>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -427,15 +376,25 @@ export class AutoApi extends BaseService {
     }
 
     /**
-     * Status reports whether the auto service is reachable — its own health endpoint as an honest lens for \&quot;is the automation plane up\&quot;.
-     * Status reports whether the auto service is reachable — its own health endpoint as an honest lens for \&quot;is the automation plane up\&quot;.
+     * Returns one flow\&#39;s versions, newest first.
+     * Returns one flow\&#39;s versions, newest first. The optional &#x60;limit&#x60; query bounds the page.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAutoStatus(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AutoStatus>;
-    public getAutoStatus(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AutoStatus>>;
-    public getAutoStatus(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AutoStatus>>;
-    public getAutoStatus(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAutoFlowsByIdVersions(requestParameters: AutoApiGetAutoFlowsByIdVersionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VersionPage>;
+    public getAutoFlowsByIdVersions(requestParameters: AutoApiGetAutoFlowsByIdVersionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VersionPage>>;
+    public getAutoFlowsByIdVersions(requestParameters: AutoApiGetAutoFlowsByIdVersionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VersionPage>>;
+    public getAutoFlowsByIdVersions(requestParameters: AutoApiGetAutoFlowsByIdVersionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getAutoFlowsByIdVersions.');
+        }
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -465,9 +424,133 @@ export class AutoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/auto/status`;
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/versions`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<AutoStatus>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<VersionPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns the caller org\&#39;s run history, newest first.
+     * Returns the caller org\&#39;s run history, newest first. The optional &#x60;flowId&#x60; query narrows it to one flow and &#x60;limit&#x60; bounds the page.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAutoRuns(requestParameters?: AutoApiGetAutoRunsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RunPage>;
+    public getAutoRuns(requestParameters?: AutoApiGetAutoRunsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RunPage>>;
+    public getAutoRuns(requestParameters?: AutoApiGetAutoRunsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RunPage>>;
+    public getAutoRuns(requestParameters?: AutoApiGetAutoRunsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const flowId = requestParameters?.flowId;
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>flowId, 'flowId');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/runs`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RunPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns one run.
+     * Returns one run. A run that has not reached a terminal status is refreshed from the durable engine first — scoped to the org\&#39;s own namespace — so the caller sees live progress rather than the last status that happened to be persisted.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAutoRunsById(requestParameters: AutoApiGetAutoRunsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FlowRun>;
+    public getAutoRunsById(requestParameters: AutoApiGetAutoRunsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FlowRun>>;
+    public getAutoRunsById(requestParameters: AutoApiGetAutoRunsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FlowRun>>;
+    public getAutoRunsById(requestParameters: AutoApiGetAutoRunsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getAutoRunsById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/runs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<FlowRun>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -481,23 +564,23 @@ export class AutoApi extends BaseService {
     }
 
     /**
-     * Patches one of the caller\&#39;s flows: the name, the graph, or both — only the stated fields move.
-     * Patches one of the caller\&#39;s flows: the name, the graph, or both — only the stated fields move.
+     * Updates one automation\&#39;s metadata in place.
+     * Updates one automation\&#39;s metadata in place. Every field is optional; a field the request omits is left alone. Publishing a version pins which one runs, and is refused unless that version belongs to this flow.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchAutoFlowsByFlow(requestParameters: AutoApiPatchAutoFlowsByFlowRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public patchAutoFlowsByFlow(requestParameters: AutoApiPatchAutoFlowsByFlowRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public patchAutoFlowsByFlow(requestParameters: AutoApiPatchAutoFlowsByFlowRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public patchAutoFlowsByFlow(requestParameters: AutoApiPatchAutoFlowsByFlowRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const flow = requestParameters?.flow;
-        if (flow === null || flow === undefined) {
-            throw new Error('Required parameter flow was null or undefined when calling patchAutoFlowsByFlow.');
+    public patchAutoFlowsById(requestParameters: AutoApiPatchAutoFlowsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Flow>;
+    public patchAutoFlowsById(requestParameters: AutoApiPatchAutoFlowsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Flow>>;
+    public patchAutoFlowsById(requestParameters: AutoApiPatchAutoFlowsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Flow>>;
+    public patchAutoFlowsById(requestParameters: AutoApiPatchAutoFlowsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling patchAutoFlowsById.');
         }
-        const autoUpdate = requestParameters?.autoUpdate;
-        if (autoUpdate === null || autoUpdate === undefined) {
-            throw new Error('Required parameter autoUpdate was null or undefined when calling patchAutoFlowsByFlow.');
+        const patchFlowIn = requestParameters?.patchFlowIn;
+        if (patchFlowIn === null || patchFlowIn === undefined) {
+            throw new Error('Required parameter patchFlowIn was null or undefined when calling patchAutoFlowsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -537,12 +620,12 @@ export class AutoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "flow", value: flow, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('patch', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Flow>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: autoUpdate,
+                body: patchFlowIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -554,19 +637,92 @@ export class AutoApi extends BaseService {
     }
 
     /**
-     * Creates a flow in the caller\&#39;s org.
-     * Creates a flow in the caller\&#39;s org. The org is stamped server-side from the validated principal — there is no field by which a caller could place a flow in another org.
+     * Run executes one connector action in-process and answers the outcome.
+     * Run executes one connector action in-process and answers the outcome. The caller\&#39;s resolved credential travels in &#x60;auth&#x60;, delivered to the action verbatim — the runtime resolves no credential itself. An action that ran and failed (or an action name the connector does not have) answers ok:false with the failure message, not an HTTP error; an unknown connector is 404 and a missing action 422.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postAutoConnectorsByIdRun(requestParameters: AutoApiPostAutoConnectorsByIdRunRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RunResp>;
+    public postAutoConnectorsByIdRun(requestParameters: AutoApiPostAutoConnectorsByIdRunRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RunResp>>;
+    public postAutoConnectorsByIdRun(requestParameters: AutoApiPostAutoConnectorsByIdRunRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RunResp>>;
+    public postAutoConnectorsByIdRun(requestParameters: AutoApiPostAutoConnectorsByIdRunRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postAutoConnectorsByIdRun.');
+        }
+        const runIn = requestParameters?.runIn;
+        if (runIn === null || runIn === undefined) {
+            throw new Error('Required parameter runIn was null or undefined when calling postAutoConnectorsByIdRun.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/run`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RunResp>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: runIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Creates an automation and its initial DRAFT version in one call.
+     * Creates an automation and its initial DRAFT version in one call. The new flow is DISABLED — creating it does not arm its trigger; POST /v1/auto/flows/{id}/enable does that.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PopulatedFlow>;
+    public postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PopulatedFlow>>;
+    public postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PopulatedFlow>>;
     public postAutoFlows(requestParameters: AutoApiPostAutoFlowsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const autoCreate = requestParameters?.autoCreate;
-        if (autoCreate === null || autoCreate === undefined) {
-            throw new Error('Required parameter autoCreate was null or undefined when calling postAutoFlows.');
+        const createFlowReq = requestParameters?.createFlowReq;
+        if (createFlowReq === null || createFlowReq === undefined) {
+            throw new Error('Required parameter createFlowReq was null or undefined when calling postAutoFlows.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -608,10 +764,10 @@ export class AutoApi extends BaseService {
 
         let localVarPath = `/v1/auto/flows`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PopulatedFlow>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: autoCreate,
+                body: createFlowReq,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -623,19 +779,19 @@ export class AutoApi extends BaseService {
     }
 
     /**
-     * Publish snapshots the flow\&#39;s current graph as its next immutable version and arms the flow\&#39;s triggers.
-     * Publish snapshots the flow\&#39;s current graph as its next immutable version and arms the flow\&#39;s triggers. Past versions stay addressable in the product for rollback; runs always execute the graph as it was dispatched.
+     * Disarms a flow\&#39;s trigger and marks it DISABLED.
+     * Disarms a flow\&#39;s trigger and marks it DISABLED. Its schedule and its event subscriptions are dropped, so a disabled flow is never a live target; runs already in flight are unaffected, and it can still be started on demand.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAutoFlowsByFlowPublish(requestParameters: AutoApiPostAutoFlowsByFlowPublishRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postAutoFlowsByFlowPublish(requestParameters: AutoApiPostAutoFlowsByFlowPublishRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postAutoFlowsByFlowPublish(requestParameters: AutoApiPostAutoFlowsByFlowPublishRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postAutoFlowsByFlowPublish(requestParameters: AutoApiPostAutoFlowsByFlowPublishRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const flow = requestParameters?.flow;
-        if (flow === null || flow === undefined) {
-            throw new Error('Required parameter flow was null or undefined when calling postAutoFlowsByFlowPublish.');
+    public postAutoFlowsByIdDisable(requestParameters: AutoApiPostAutoFlowsByIdDisableRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Flow>;
+    public postAutoFlowsByIdDisable(requestParameters: AutoApiPostAutoFlowsByIdDisableRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Flow>>;
+    public postAutoFlowsByIdDisable(requestParameters: AutoApiPostAutoFlowsByIdDisableRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Flow>>;
+    public postAutoFlowsByIdDisable(requestParameters: AutoApiPostAutoFlowsByIdDisableRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postAutoFlowsByIdDisable.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -666,7 +822,124 @@ export class AutoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "flow", value: flow, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/publish`;
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/disable`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Flow>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Arms a flow\&#39;s trigger and marks it ENABLED.
+     * Arms a flow\&#39;s trigger and marks it ENABLED. A POLLING trigger gets a cron schedule on the durable engine; a WEBHOOK trigger gets a subscription in the routing index, so an inbound event starts it; a MANUAL trigger arms nothing and still runs on demand.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postAutoFlowsByIdEnable(requestParameters: AutoApiPostAutoFlowsByIdEnableRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Flow>;
+    public postAutoFlowsByIdEnable(requestParameters: AutoApiPostAutoFlowsByIdEnableRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Flow>>;
+    public postAutoFlowsByIdEnable(requestParameters: AutoApiPostAutoFlowsByIdEnableRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Flow>>;
+    public postAutoFlowsByIdEnable(requestParameters: AutoApiPostAutoFlowsByIdEnableRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postAutoFlowsByIdEnable.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/enable`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Flow>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Edit a flow — rename it, retarget its trigger, or add, move and delete steps
+     * Applies ONE flow operation and answers the thing it changed. The operation is named by &#x60;type&#x60;, with its arguments under &#x60;request&#x60;: &#x60;CHANGE_NAME&#x60;, &#x60;UPDATE_TRIGGER&#x60;, &#x60;ADD_ACTION&#x60;, &#x60;UPDATE_ACTION&#x60;, &#x60;MOVE_ACTION&#x60;, &#x60;DELETE_ACTION&#x60; edit the flow\&#39;s LATEST version and answer with that version, and &#x60;CHANGE_STATUS&#x60; instead enables or disables the flow and answers with the FLOW. Two response shapes on one address is the rule a reader would otherwise get wrong, and it is why this route is not a typed op.  Edits land on the latest version only — the published version a run executes is untouched until it is republished — and the whole resulting step tree is re-validated against the step-count and size caps after every operation, so a long sequence of &#x60;ADD_ACTION&#x60; calls cannot grow a flow past a bound one step at a time (422 when it would). Org-scoped and fails closed: a validated principal is required (403 without one), the flow and its version are read under the caller\&#39;s OWN org so another tenant\&#39;s id is a 404, and an operation whose &#x60;request&#x60; does not decode is a 400.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postAutoFlowsByIdOperations(requestParameters: AutoApiPostAutoFlowsByIdOperationsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postAutoFlowsByIdOperations(requestParameters: AutoApiPostAutoFlowsByIdOperationsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postAutoFlowsByIdOperations(requestParameters: AutoApiPostAutoFlowsByIdOperationsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postAutoFlowsByIdOperations(requestParameters: AutoApiPostAutoFlowsByIdOperationsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postAutoFlowsByIdOperations.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/operations`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -682,19 +955,82 @@ export class AutoApi extends BaseService {
     }
 
     /**
-     * Start begins one asynchronous run of a flow: the product dispatches the graph to its durable execution engine (the hanzo tasks plane) and answers immediately with the run record in status running.
-     * Start begins one asynchronous run of a flow: the product dispatches the graph to its durable execution engine (the hanzo tasks plane) and answers immediately with the run record in status running. Poll the run until it reaches completed — its output then holds each node\&#39;s result keyed by node id — or failed, with the error. A flow whose engine is unreachable answers the product\&#39;s 503: dispatch is real or it is refused, never queued into the void.
+     * Starts one durable run of a flow now.
+     * Starts one durable run of a flow now. It runs the flow\&#39;s published version if one is pinned, else its latest, and answers the run record it created. The run is bounded by the org\&#39;s per-minute run-start budget and its in-flight concurrency ceiling; over either, or with the engine not ready, no run is started and no run id is burned.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAutoRuns(requestParameters: AutoApiPostAutoRunsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postAutoRuns(requestParameters: AutoApiPostAutoRunsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postAutoRuns(requestParameters: AutoApiPostAutoRunsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postAutoRuns(requestParameters: AutoApiPostAutoRunsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const autoStart = requestParameters?.autoStart;
-        if (autoStart === null || autoStart === undefined) {
-            throw new Error('Required parameter autoStart was null or undefined when calling postAutoRuns.');
+    public postAutoFlowsByIdRun(requestParameters: AutoApiPostAutoFlowsByIdRunRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FlowRun>;
+    public postAutoFlowsByIdRun(requestParameters: AutoApiPostAutoFlowsByIdRunRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FlowRun>>;
+    public postAutoFlowsByIdRun(requestParameters: AutoApiPostAutoFlowsByIdRunRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FlowRun>>;
+    public postAutoFlowsByIdRun(requestParameters: AutoApiPostAutoFlowsByIdRunRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postAutoFlowsByIdRun.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/run`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<FlowRun>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Adds a new DRAFT version to a flow.
+     * Adds a new DRAFT version to a flow. The version is created invalid unless it carries a trigger, and it does not become the running version until it is published (PATCH the flow\&#39;s publishedVersionId) or becomes the latest.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postAutoFlowsByIdVersions(requestParameters: AutoApiPostAutoFlowsByIdVersionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FlowVersion>;
+    public postAutoFlowsByIdVersions(requestParameters: AutoApiPostAutoFlowsByIdVersionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FlowVersion>>;
+    public postAutoFlowsByIdVersions(requestParameters: AutoApiPostAutoFlowsByIdVersionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FlowVersion>>;
+    public postAutoFlowsByIdVersions(requestParameters: AutoApiPostAutoFlowsByIdVersionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postAutoFlowsByIdVersions.');
+        }
+        const createVersionIn = requestParameters?.createVersionIn;
+        if (createVersionIn === null || createVersionIn === undefined) {
+            throw new Error('Required parameter createVersionIn was null or undefined when calling postAutoFlowsByIdVersions.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -734,12 +1070,132 @@ export class AutoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/auto/runs`;
+        let localVarPath = `/v1/auto/flows/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/versions`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<FlowVersion>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: createVersionIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Fire an event that starts every enabled flow subscribed to it
+     * Delivers one event to the org\&#39;s automation triggers and answers &#x60;{matched:n}&#x60; — how many enabled flows had a webhook trigger on this &#x60;(source, event)&#x60; key and were started by it. A zero match is a success, not an error: nothing was subscribed.  The path is the trigger key and the JSON object body is the event payload, threaded into each started run as &#x60;{{trigger.*}}&#x60; with all of its keys intact — which is why this is not a typed op, since a declared input struct would silently DISCARD every payload key it had no field for. Re-delivery is a no-op: an &#x60;X-Idempotency-Key&#x60; header dedupes, and with none the body is content-hashed instead, so a hammer of identical posts collapses to ONE run rather than minting a fresh one per post. An in-platform producer may propagate &#x60;X-Causation-Depth&#x60; so a firing that a flow caused is bounded against a loop; an absent or invalid header reads as depth 0, an external origin.  Authenticated and org-scoped, unlike a provider\&#39;s public webhook URL: a validated principal is required (403 without one) and the org is that principal\&#39;s, never the body\&#39;s, so a producer can only fire into its own tenant\&#39;s flows. Both path segments are required (400) and a payload over the size limit is a 413.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postAutoHooksBySourceByEvent(requestParameters: AutoApiPostAutoHooksBySourceByEventRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postAutoHooksBySourceByEvent(requestParameters: AutoApiPostAutoHooksBySourceByEventRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postAutoHooksBySourceByEvent(requestParameters: AutoApiPostAutoHooksBySourceByEventRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postAutoHooksBySourceByEvent(requestParameters: AutoApiPostAutoHooksBySourceByEventRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const source = requestParameters?.source;
+        if (source === null || source === undefined) {
+            throw new Error('Required parameter source was null or undefined when calling postAutoHooksBySourceByEvent.');
+        }
+        const event = requestParameters?.event;
+        if (event === null || event === undefined) {
+            throw new Error('Required parameter event was null or undefined when calling postAutoHooksBySourceByEvent.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/hooks/${this.configuration.encodeParam({name: "source", value: source, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "event", value: event, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: autoStart,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Release a run waiting at an approval step, with the approval payload
+     * Delivers the durable &#x60;resume&#x60; signal to a run parked on a &#x60;wait_for_approval&#x60; waitpoint and answers &#x60;{resumed:true}&#x60; once the engine has taken it.  The body is an ARBITRARY JSON value — object, array, string, number — delivered VERBATIM into the workflow as that waitpoint\&#39;s output, so it is what the steps after the approval read as their input. An empty body resumes with no payload. That open shape is why this route is not a typed op: an operation\&#39;s input can carry the payload or the run address, never both.  Org-scoped and fails closed: a validated principal is required (403 without one), the run is read under the caller\&#39;s OWN org so another tenant\&#39;s run id is a 404, a body that is not JSON is a 400, and a payload over the size limit is a 413 — it becomes durable engine state, so it is bounded here rather than after it lands. The resume is audited as &#x60;automations.run.resume&#x60;.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postAutoRunsByIdResume(requestParameters: AutoApiPostAutoRunsByIdResumeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postAutoRunsByIdResume(requestParameters: AutoApiPostAutoRunsByIdResumeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postAutoRunsByIdResume(requestParameters: AutoApiPostAutoRunsByIdResumeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postAutoRunsByIdResume(requestParameters: AutoApiPostAutoRunsByIdResumeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling postAutoRunsByIdResume.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auto/runs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/resume`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

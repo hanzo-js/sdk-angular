@@ -16,6 +16,34 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+// @ts-ignore
+import { IndexDocuments } from '../model/indexDocuments';
+// @ts-ignore
+import { IndexEnqueued } from '../model/indexEnqueued';
+// @ts-ignore
+import { IndexFilter } from '../model/indexFilter';
+// @ts-ignore
+import { IndexHealth } from '../model/indexHealth';
+// @ts-ignore
+import { IndexHits } from '../model/indexHits';
+// @ts-ignore
+import { IndexList } from '../model/indexList';
+// @ts-ignore
+import { IndexNew } from '../model/indexNew';
+// @ts-ignore
+import { IndexQuery } from '../model/indexQuery';
+// @ts-ignore
+import { IndexSettings } from '../model/indexSettings';
+// @ts-ignore
+import { IndexStats } from '../model/indexStats';
+// @ts-ignore
+import { IndexTask } from '../model/indexTask';
+// @ts-ignore
+import { IndexVersion } from '../model/indexVersion';
+// @ts-ignore
+import { IndexView } from '../model/indexView';
+// @ts-ignore
+import { PostIndexIndexesByUidDocumentsDeleteBatchRequest } from '../model/postIndexIndexesByUidDocumentsDeleteBatchRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -38,6 +66,8 @@ export interface IndexApiGetIndexIndexesByUidRequestParams {
 
 export interface IndexApiGetIndexIndexesByUidDocumentsRequestParams {
     uid: string;
+    limit?: string;
+    offset?: string;
 }
 
 export interface IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams {
@@ -50,27 +80,36 @@ export interface IndexApiGetIndexIndexesByUidSettingsRequestParams {
 }
 
 export interface IndexApiGetIndexTasksByUidRequestParams {
-    uid: string;
+    uid: number;
 }
 
 export interface IndexApiPatchIndexIndexesByUidSettingsRequestParams {
     uid: string;
+    indexFilter: IndexFilter;
+}
+
+export interface IndexApiPostIndexIndexesRequestParams {
+    indexNew: IndexNew;
 }
 
 export interface IndexApiPostIndexIndexesByUidDocumentsRequestParams {
     uid: string;
+    requestBody?: Array<any> | null;
 }
 
 export interface IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams {
     uid: string;
+    arraystringArraynumber?: Array<string> | Array<number> | null;
 }
 
 export interface IndexApiPostIndexIndexesByUidSearchRequestParams {
     uid: string;
+    indexQuery: IndexQuery;
 }
 
 export interface IndexApiPutIndexIndexesByUidDocumentsRequestParams {
     uid: string;
+    requestBody?: Array<any> | null;
 }
 
 
@@ -84,16 +123,16 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Delete an index and everything in it
-     * Drops one index in the caller\&#39;s org together with all of its documents. This is the only way to retire an index; without it a mistaken uid would be permanent. It is idempotent — dropping an index that is not there still succeeds. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Deletes an index and everything in it.
+     * Deletes an index and everything in it.  Drops the index and every document in it from the caller\&#39;s own org, and answers the dialect\&#39;s EnqueuedTask. This is the only way to retire an index; without it a mistaken uid is permanent. Deleting an index that is not there succeeds, so a cleanup pass is safe to re-run.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the documents are already gone when this answers.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexEnqueued>;
+    public deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexEnqueued>>;
+    public deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexEnqueued>>;
+    public deleteIndexIndexesByUid(requestParameters: IndexApiDeleteIndexIndexesByUidRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling deleteIndexIndexesByUid.');
@@ -105,6 +144,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -128,7 +168,7 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexEnqueued>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -142,16 +182,16 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Delete one document by its primary key
-     * Removes one document from an index. It is IDEMPOTENT: deleting a key that is not there succeeds rather than 404, so a retry after a lost response is safe. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Deletes one document by its primary key.
+     * Deletes one document by its primary key.  Removes the document from the caller\&#39;s own org and answers the dialect\&#39;s EnqueuedTask. Deleting a key that is not there succeeds, so a client reconciling its own corpus can delete without checking first.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the document is already gone when this answers.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexEnqueued>;
+    public deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexEnqueued>>;
+    public deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexEnqueued>>;
+    public deleteIndexIndexesByUidDocumentsById(requestParameters: IndexApiDeleteIndexIndexesByUidDocumentsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling deleteIndexIndexesByUidDocumentsById.');
@@ -167,6 +207,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -190,7 +231,7 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/documents/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexEnqueued>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -204,15 +245,15 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Report whether the search plane can serve
-     * Answers Meilisearch\&#39;s &#x60;{\&quot;status\&quot;:\&quot;available\&quot;}&#x60; when the index store is readable. It FAILS CLOSED — an unreadable store answers 503 and &#x60;unavailable&#x60; — so a replica whose volume has gone bad stops taking traffic instead of answering every search with nothing found. It touches no tenant data and needs no credential.
+     * Reports whether the search plane can serve.
+     * Reports whether the search plane can serve.  Answers the dialect\&#39;s &#x60;{\&quot;status\&quot;:\&quot;available\&quot;}&#x60; when the index store is readable. It FAILS CLOSED — an unreadable store answers 503 with &#x60;{\&quot;status\&quot;:\&quot;unavailable\&quot;}&#x60; rather than an empty result set, because a Meilisearch client probes this before it will use a server at all and a cheerful 200 over a broken volume turns \&quot;search is down\&quot; into \&quot;nothing matched\&quot;. It requires no principal and reads no tenant data.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexHealth>;
+    public getIndexHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexHealth>>;
+    public getIndexHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexHealth>>;
+    public getIndexHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -220,6 +261,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -243,7 +285,7 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/health`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexHealth>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -257,15 +299,15 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * List the indexes your org holds
-     * Answers every index in the caller\&#39;s org with its primary key and timestamps. It is the only way to enumerate what an org holds — without it an index whose uid a caller has forgotten is unreachable. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.
+     * Lists the indexes your org holds.
+     * Lists the indexes your org holds.  Answers every index in the caller\&#39;s own org with its primary key and timestamps. Without it an index whose uid a caller has forgotten is unreachable — there is no other way to enumerate what an org holds. The page is the whole set: an org\&#39;s index count is small by construction, so &#x60;limit&#x60; and &#x60;total&#x60; both report it.  The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and two orgs may both hold an index named \&quot;messages\&quot; without either seeing the other. Without a validated principal the answer is 403 carrying the dialect\&#39;s &#x60;invalid_api_key&#x60; body.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexIndexes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexIndexes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexIndexes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexIndexes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexIndexes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexList>;
+    public getIndexIndexes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexList>>;
+    public getIndexIndexes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexList>>;
+    public getIndexIndexes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -273,6 +315,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -296,7 +339,7 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexList>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -310,16 +353,16 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Read one index\&#39;s definition
-     * Answers a single index\&#39;s uid, primary key and timestamps. An index the caller\&#39;s org does not hold is 404 &#x60;index_not_found&#x60; — which is the same answer another org\&#39;s index gives, since the org is a bound predicate on the read. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.
+     * Reads one index\&#39;s definition.
+     * Reads one index\&#39;s definition.  Answers the index\&#39;s uid, primary key and timestamps. An index this org does not hold answers 404 carrying the dialect\&#39;s &#x60;index_not_found&#x60; — the code a Meilisearch client reads as permission to create it, which is why this is a refusal rather than an empty object.  The uid is scoped to the caller\&#39;s own org, so another tenant\&#39;s index is indistinguishable from one that never existed: this surface is not an existence oracle.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexView>;
+    public getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexView>>;
+    public getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexView>>;
+    public getIndexIndexesByUid(requestParameters: IndexApiGetIndexIndexesByUidRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling getIndexIndexesByUid.');
@@ -331,6 +374,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -354,7 +398,7 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexView>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -368,20 +412,28 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Page through the documents in an index
-     * Answers the documents in one index with a total count. &#x60;limit&#x60; defaults to 20 and is capped at 1000, &#x60;offset&#x60; pages, and the response echoes both back so a pager knows what it actually got. An index the caller\&#39;s org does not hold is 404 &#x60;index_not_found&#x60;. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.
+     * Pages through the documents in an index.
+     * Pages through the documents in an index.  Answers the org\&#39;s stored documents in insertion order, whole, with the page\&#39;s bounds and the index\&#39;s total. It is the enumeration surface — search ranks by relevance and cannot walk a corpus — so a caller reconciling what it has written reads it here.  An index this org does not hold answers 404 carrying the dialect\&#39;s &#x60;index_not_found&#x60;.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexDocuments>;
+    public getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexDocuments>>;
+    public getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexDocuments>>;
+    public getIndexIndexesByUidDocuments(requestParameters: IndexApiGetIndexIndexesByUidDocumentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling getIndexIndexesByUidDocuments.');
         }
+        const limit = requestParameters?.limit;
+        const offset = requestParameters?.offset;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>offset, 'offset');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -389,6 +441,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -412,9 +465,10 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/documents`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexDocuments>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -426,16 +480,16 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Read one document by its primary key
-     * Answers the stored document whose primary key matches, exactly as it was written. A missing document is 404 &#x60;document_not_found&#x60; and a missing index is 404 &#x60;index_not_found&#x60; — two different codes, because a client that branches on them treats the cases differently. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.
+     * Reads one document by its primary key.
+     * Reads one document by its primary key.  Answers the stored document exactly as it was written — this surface keeps documents whole rather than projecting them, so what comes back is what went in. A primary key this index does not hold answers 404 carrying the dialect\&#39;s &#x60;document_not_found&#x60;; an index this org does not hold answers &#x60;index_not_found&#x60;, and the two are different facts a client acts on differently.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIndexIndexesByUidDocumentsById(requestParameters: IndexApiGetIndexIndexesByUidDocumentsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling getIndexIndexesByUidDocumentsById.');
@@ -451,6 +505,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -488,16 +543,16 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Read an index\&#39;s filterable attributes
-     * Answers the attributes an index allows filtering on. This dialect implements the filterable-attributes setting and no other, so that is the whole of what comes back. An index the caller\&#39;s org does not hold is 404 &#x60;index_not_found&#x60;. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.
+     * Reads an index\&#39;s filterable attributes.
+     * Reads an index\&#39;s filterable attributes.  Answers the settings subset this surface implements: the attributes a search &#x60;filter&#x60; may constrain. An index this org does not hold answers 404 carrying the dialect\&#39;s &#x60;index_not_found&#x60;.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexSettings>;
+    public getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexSettings>>;
+    public getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexSettings>>;
+    public getIndexIndexesByUidSettings(requestParameters: IndexApiGetIndexIndexesByUidSettingsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling getIndexIndexesByUidSettings.');
@@ -509,6 +564,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -532,7 +588,7 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/settings`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexSettings>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -546,15 +602,15 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Count the documents in each of your indexes
-     * Answers a document count per index for the caller\&#39;s org, plus their sum. &#x60;isIndexing&#x60; is always false, which is the honest answer here rather than a stub: writes are applied before their response, so there is never a backlog in progress to report. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.
+     * Counts the documents in each of your indexes.
+     * Counts the documents in each of your indexes.  Reports every index the caller\&#39;s own org holds with its document count, plus the org\&#39;s total. &#x60;isIndexing&#x60; is always false because writes here are applied before their response — there is never a background pass to wait on.  The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, so this counts the caller\&#39;s own documents and no other tenant\&#39;s. Without a validated principal the answer is 403 carrying the dialect\&#39;s &#x60;invalid_api_key&#x60; body.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexStats(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexStats(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexStats(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexStats(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexStats(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexStats>;
+    public getIndexStats(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexStats>>;
+    public getIndexStats(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexStats>>;
+    public getIndexStats(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -562,6 +618,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -585,7 +642,7 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/stats`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexStats>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -599,16 +656,16 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Check a write task, which has already finished
-     * Answers &#x60;succeeded&#x60; for the task id given. It ALWAYS answers succeeded, and that is honest rather than a stub: writes on this surface are applied before their response returns, so by the time any task id exists to ask about, its work is done. It exists so a Meilisearch client\&#39;s waitForTask resolves at once instead of polling forever for a queue that was never there. It requires a validated principal but reads no tenant data.
+     * Checks a write task, which has already finished.
+     * Checks a write task, which has already finished.  Always reports &#x60;succeeded&#x60;. Writes here are applied to SQLite before their EnqueuedTask is returned, so a client polling waitForTask resolves on its first call rather than waiting for a queue that was never there. The three timestamps are the same instant for the same reason.  It requires a validated principal but reads no tenant data: the task id it echoes was minted by this process and names nothing about any org.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexTask>;
+    public getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexTask>>;
+    public getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexTask>>;
+    public getIndexTasksByUid(requestParameters: IndexApiGetIndexTasksByUidRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling getIndexTasksByUid.');
@@ -620,6 +677,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -641,9 +699,9 @@ export class IndexApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/index/tasks/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/index/tasks/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexTask>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -657,15 +715,15 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Identify the search implementation answering
-     * Answers the version shape a Meilisearch client expects. It names THIS implementation rather than a Meilisearch release — the commit field reads &#x60;hanzo-cloud&#x60; — so a client that logs it records which server actually answered instead of implying a Meilisearch build. Needs no credential.
+     * Identifies the search implementation answering.
+     * Identifies the search implementation answering.  Reports the dialect\&#39;s version shape with &#x60;commitSha&#x60; naming this implementation rather than a Meilisearch build, so a client that logs the version records which server answered instead of implying a release of software this is not. It requires no principal and reads no tenant data.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIndexVersion(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIndexVersion(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIndexVersion(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIndexVersion(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIndexVersion(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexVersion>;
+    public getIndexVersion(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexVersion>>;
+    public getIndexVersion(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexVersion>>;
+    public getIndexVersion(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -673,6 +731,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -696,7 +755,7 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/version`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexVersion>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -710,19 +769,23 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Set which attributes an index can be filtered on
-     * Replaces an index\&#39;s filterable attributes with the list in &#x60;filterableAttributes&#x60;; omitting the field leaves them as they are. The index is CREATED ON DEMAND rather than 404\&#39;d, because a client that configures an index it has just asked for should not have to create it first — this is the one read-shaped path on the surface that writes. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Sets which attributes an index can be filtered on.
+     * Sets which attributes an index can be filtered on.  Replaces the whole filterable set. An attribute not listed here cannot be used in a search &#x60;filter&#x60;, so this is what makes a per-user or per-tag narrowing possible at all.  It CREATES the index when it is missing rather than answering 404, because a Meilisearch client configures settings on an index it has just asked for and a refusal there leaves the client with no index at all.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the setting is already applied when this answers.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexEnqueued>;
+    public patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexEnqueued>>;
+    public patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexEnqueued>>;
+    public patchIndexIndexesByUidSettings(requestParameters: IndexApiPatchIndexIndexesByUidSettingsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling patchIndexIndexesByUidSettings.');
+        }
+        const indexFilter = requestParameters?.indexFilter;
+        if (indexFilter === null || indexFilter === undefined) {
+            throw new Error('Required parameter indexFilter was null or undefined when calling patchIndexIndexesByUidSettings.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -731,6 +794,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -740,6 +804,15 @@ export class IndexApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -754,9 +827,10 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/settings`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('patch', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexEnqueued>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: indexFilter,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -768,15 +842,20 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Create an index
-     * Creates an index named by &#x60;uid&#x60; in the caller\&#39;s org. &#x60;primaryKey&#x60; names the document field that identifies a document and defaults to &#x60;id&#x60;. Creating an index that already exists is not an error — it settles on the existing one, primary key included — so a client that creates before every write is safe to run repeatedly. A missing or over-long uid is 400 &#x60;invalid_index_uid&#x60;. A new index starts with &#x60;user&#x60; filterable, which is what lets a multi-user app narrow searches to one end user without configuring anything. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Creates an index.
+     * Creates an index.  Registers a named index in the caller\&#39;s own org and answers the dialect\&#39;s EnqueuedTask. It is idempotent: creating an index that already exists returns the same receipt and changes nothing, which is what lets a client create on startup without checking first.  &#x60;primaryKey&#x60; is optional — the first write establishes one when it is omitted. An index is a ROW here rather than a table, so an unusual uid is stored verbatim instead of being sanitised into a schema name.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers. A client that polls waitForTask resolves immediately.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIndexIndexes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIndexIndexes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIndexIndexes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIndexIndexes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIndexIndexes(requestParameters: IndexApiPostIndexIndexesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexEnqueued>;
+    public postIndexIndexes(requestParameters: IndexApiPostIndexIndexesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexEnqueued>>;
+    public postIndexIndexes(requestParameters: IndexApiPostIndexIndexesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexEnqueued>>;
+    public postIndexIndexes(requestParameters: IndexApiPostIndexIndexesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const indexNew = requestParameters?.indexNew;
+        if (indexNew === null || indexNew === undefined) {
+            throw new Error('Required parameter indexNew was null or undefined when calling postIndexIndexes.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -784,6 +863,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -793,6 +873,15 @@ export class IndexApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -807,9 +896,10 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexEnqueued>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: indexNew,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -822,19 +912,20 @@ export class IndexApi extends BaseService {
 
     /**
      * Add or replace documents in an index
-     * Upserts documents into one index, keyed by the index\&#39;s primary key: a document whose key is already present is REPLACED, one that is not is added, and it becomes searchable immediately. Send an array, or a single object — a hand-rolled caller sending one document is accepted rather than 400\&#39;d. The index is created on demand, so a first write needs no create call.  This and the PUT on the same path are the SAME operation: both are a whole document upsert, which is what a Meilisearch client\&#39;s addDocuments and updateDocuments both reduce to here. A body that is neither an array nor an object is 400. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Writes documents into the caller\&#39;s own index, keyed by the index\&#39;s primary key: a document whose key is already present is REPLACED whole. The body is the dialect\&#39;s own — an array of documents, or a single document — and each is stored verbatim, so a read gives back exactly what was written.  The index is CREATED when it is missing rather than refused, because a Meilisearch client writes before it configures.  The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying the dialect\&#39;s &#x60;invalid_api_key&#x60; body.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the documents are searchable when this answers, and a client that polls waitForTask resolves immediately.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexEnqueued>;
+    public postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexEnqueued>>;
+    public postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexEnqueued>>;
+    public postIndexIndexesByUidDocuments(requestParameters: IndexApiPostIndexIndexesByUidDocumentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling postIndexIndexesByUidDocuments.');
         }
+        const requestBody = requestParameters?.requestBody;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -842,6 +933,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -851,6 +943,15 @@ export class IndexApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -865,9 +966,10 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/documents`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexEnqueued>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: requestBody,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -880,19 +982,20 @@ export class IndexApi extends BaseService {
 
     /**
      * Delete many documents by primary key in one call
-     * Removes every document named by an array of primary keys. Keys may be sent as strings or numbers — a number keeps its exact decimal form, so an integer key round-trips as &#x60;42&#x60; and never as scientific notation. Keys that are absent from the index are skipped rather than failing the batch, so this is idempotent. A body that is not an array is 400. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * Removes every named document from the caller\&#39;s own index. The body is the dialect\&#39;s own: a bare array of primary keys, which may be strings or numbers. A key that is not there is not an error, so a client reconciling its own corpus can send one list rather than checking each key first.  The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header. Without a validated principal the answer is 403 carrying the dialect\&#39;s &#x60;invalid_api_key&#x60; body.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the documents are already gone when this answers.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexEnqueued>;
+    public postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexEnqueued>>;
+    public postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexEnqueued>>;
+    public postIndexIndexesByUidDocumentsDeleteBatch(requestParameters: IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling postIndexIndexesByUidDocumentsDeleteBatch.');
         }
+        const arraystringArraynumber = requestParameters?.arraystringArraynumber;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -900,6 +1003,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -909,6 +1013,15 @@ export class IndexApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -923,9 +1036,10 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/documents/delete-batch`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexEnqueued>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: arraystringArraynumber,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -937,19 +1051,23 @@ export class IndexApi extends BaseService {
     }
 
     /**
-     * Search an index, forgiving typos
-     * Answers the documents in one index matching &#x60;q&#x60;, ranked by how many of the query\&#39;s terms they match, with prefix matching so a partial word still finds its document. &#x60;limit&#x60; defaults to 20 and is capped at 1000, &#x60;offset&#x60; pages; a negative value falls back to the default rather than erroring.  &#x60;filter&#x60; takes a Meilisearch filter expression, or an array of them, and the &#x60;user &#x3D; \&quot;…\&quot;&#x60; and &#x60;user IN […]&#x60; forms are honoured — that is how an app with many end users narrows results to one of them WITHIN the org. &#x60;estimatedTotalHits&#x60; is exact for the page returned, not an estimate, because every hit is materialised. An index the caller\&#39;s org does not hold is 404 &#x60;index_not_found&#x60;. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.
+     * Searches an index, forgiving typos.
+     * Searches an index, forgiving typos.  Ranks the org\&#39;s documents in one index against &#x60;q&#x60; and answers the matching documents whole, most relevant first. A prefix matches, so a partial word finds the documents containing it, and &#x60;filter&#x60; narrows the result to documents whose filterable attributes match — which is how a caller scopes results to one end user within its own org.  &#x60;estimatedTotalHits&#x60; is the dialect\&#39;s name for the count; every hit is materialised here, so for this page it is exact. An index this org does not hold answers 404 carrying the dialect\&#39;s &#x60;index_not_found&#x60;.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexHits>;
+    public postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexHits>>;
+    public postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexHits>>;
+    public postIndexIndexesByUidSearch(requestParameters: IndexApiPostIndexIndexesByUidSearchRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling postIndexIndexesByUidSearch.');
+        }
+        const indexQuery = requestParameters?.indexQuery;
+        if (indexQuery === null || indexQuery === undefined) {
+            throw new Error('Required parameter indexQuery was null or undefined when calling postIndexIndexesByUidSearch.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -958,6 +1076,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -967,6 +1086,15 @@ export class IndexApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -981,9 +1109,10 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/search`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexHits>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: indexQuery,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -996,19 +1125,20 @@ export class IndexApi extends BaseService {
 
     /**
      * Add or update documents in an index
-     * Upserts documents into one index, keyed by the index\&#39;s primary key: a document whose key is already present is REPLACED, one that is not is added, and it becomes searchable immediately. Send an array, or a single object — a hand-rolled caller sending one document is accepted rather than 400\&#39;d. The index is created on demand, so a first write needs no create call.  This and the POST on the same path are the SAME operation, served by one handler. Both exist because the Meilisearch dialect has both verbs; there is no partial-update semantics on this one — a document is replaced whole either way. The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header, and every query filters on it, so two orgs may both hold an index named \&quot;messages\&quot; and neither can see the other\&#39;s documents. Without a validated principal the answer is 403 carrying Meilisearch\&#39;s &#x60;invalid_api_key&#x60; body. Errors use Meilisearch\&#39;s {message, code, type, link} shape rather than cloud\&#39;s, because that &#x60;code&#x60; is a wire contract a Meilisearch client branches on.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers, and the task it names is already complete. A client that polls waitForTask resolves immediately rather than waiting, and a client that does not poll has still had its write committed.
+     * The dialect\&#39;s update spelling of the write above, and the same act: an upsert keyed by the index\&#39;s primary key. The JS client\&#39;s addDocuments and updateDocuments both reduce to this for whole documents, so both spellings are served and both behave identically.  The tenant is the org minted from the VALIDATED bearer\&#39;s owner claim, never a client-supplied header. Without a validated principal the answer is 403 carrying the dialect\&#39;s &#x60;invalid_api_key&#x60; body.  The 202 and its &#x60;enqueued&#x60; task are DIALECT COMPATIBILITY, not a promise of later work: the write is already applied when this answers.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IndexEnqueued>;
+    public putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IndexEnqueued>>;
+    public putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IndexEnqueued>>;
+    public putIndexIndexesByUidDocuments(requestParameters: IndexApiPutIndexIndexesByUidDocumentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const uid = requestParameters?.uid;
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling putIndexIndexesByUidDocuments.');
         }
+        const requestBody = requestParameters?.requestBody;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1016,6 +1146,7 @@ export class IndexApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1025,6 +1156,15 @@ export class IndexApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1039,9 +1179,10 @@ export class IndexApi extends BaseService {
 
         let localVarPath = `/v1/index/indexes/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/documents`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<IndexEnqueued>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: requestBody,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

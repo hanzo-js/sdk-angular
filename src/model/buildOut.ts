@@ -11,8 +11,17 @@ import { AuthoredPlugin } from './authoredPlugin';
 
 
 export interface BuildOut { 
+    /**
+     * Bytes is the size of the bundled CommonJS the runtime will execute.
+     */
     bytes?: number;
+    /**
+     * Generated is whether a model wrote the source from a spec, rather than the caller posting the source itself.
+     */
     generated?: boolean;
+    /**
+     * Plugin is the plugin as stored, with its derived id and build time.
+     */
     plugin?: AuthoredPlugin;
 }
 

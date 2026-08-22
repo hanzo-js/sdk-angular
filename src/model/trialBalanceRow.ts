@@ -10,20 +10,41 @@
 
 
 export interface TrialBalanceRow { 
+    /**
+     * Account is the chart-of-accounts NUMBER this line reports on (\"1000\", \"4000\") — the stable posting key, not a display label.
+     */
     account?: string;
+    /**
+     * ClosingCredit is that closing balance in cents when it is a credit balance.
+     */
     closingCredit?: number;
+    /**
+     * ClosingDebit is the balance at the end of the window, in cents, when it is a debit balance. This is the column the report\'s totals are summed from.
+     */
     closingDebit?: number;
     /**
-     * period movement
+     * Credit is the same window movement in cents when it was net credit.
      */
     credit?: number;
     /**
-     * period movement
+     * Debit is the account\'s MOVEMENT within the window — closing minus opening, not the closing balance — in cents, when that movement was net debit. Zero when the account moved net credit.
      */
     debit?: number;
+    /**
+     * Name is that account\'s human name from the fixed chart.
+     */
     name?: string;
+    /**
+     * OpeningCredit is the same opening balance in cents when it fell on the credit side. Zero when the balance was a debit one.
+     */
     openingCredit?: number;
+    /**
+     * OpeningDebit is the account\'s balance before the window began, in whole cents, when that balance was on the debit side. Zero when the balance was a credit one — the pair is exclusive, never two halves of one number.
+     */
     openingDebit?: number;
+    /**
+     * Type is the account\'s fundamental class — asset, liability, income, expense or equity — which is also its normal balance side. It is carried for presentation and does NOT decide which column an amount lands in: placement follows the sign of the real net, so a contra balance shows up as one.
+     */
     type?: string;
 }
 

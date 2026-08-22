@@ -19,7 +19,7 @@ export interface InsightsStatus {
      */
     ok?: boolean;
     /**
-     * Surface is the path prefix this status covers: /v1/insights.
+     * Surface is the path prefix this status covers: /v1/event/insights.
      */
     surface?: string;
 }

@@ -10,6 +10,9 @@
 import { O11yPoint } from './o11yPoint';
 
 
+/**
+ * Series is the RED trend: request rate, error rate and two latency quantiles, bucketed at range.stepSec and oldest bucket first. Latencies are in MILLISECONDS.
+ */
 export interface O11yMetricsResponseSeries { 
     errors?: Array<O11yPoint>;
     latencyP50Ms?: Array<O11yPoint>;

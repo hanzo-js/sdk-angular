@@ -10,10 +10,25 @@
 
 
 export interface ProjectsUploadGrant { 
+    /**
+     * ExpiresAt is when the grant stops being accepted, as Unix seconds. It is short-lived by design and is handed out ONCE, on the response that queues the deployment — a later read of that deployment does not carry it, so a grant cannot be fetched again after the build it was minted for.
+     */
     expiresAt?: number;
+    /**
+     * Fields are form values every POST must carry VERBATIM, alongside `key` and `file`. The signature covers them, so altering any one of them — including widening the key to reach outside the prefix — invalidates the grant rather than extending it.
+     */
     fields?: { [key: string]: string; };
+    /**
+     * MaxBytes bounds ONE object, not the upload as a whole.
+     */
     maxBytes?: number;
+    /**
+     * Prefix is the only place this grant can write: the deployment\'s own key prefix. It authorizes WRITES ONLY, which is why completing a deployment reconciles the prefix against a manifest instead of letting CI delete.
+     */
     prefix?: string;
+    /**
+     * URL is the address to POST each object to. It is signed for the PUBLIC endpoint, because the signature covers the host and CI posts from outside the cluster.
+     */
     url?: string;
 }
 

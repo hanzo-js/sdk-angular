@@ -12,6 +12,10 @@
 export interface IamWebauthnCredential { 
     aaguid?: string;
     attachment?: string;
+    /**
+     * AttestationFormat is the statement format the authenticator attested in (\"packed\", \"apple\", \"none\", …), which is a DIFFERENT value from the attestation type above. The library reads it back when resolving the FIDO AppID extension, so a row that dropped it would round-trip a credential the verifier no longer recognises as the one it stored.
+     */
+    attestationFormat?: string;
     attestationType?: string;
     backupEligible?: boolean;
     backupState?: boolean;

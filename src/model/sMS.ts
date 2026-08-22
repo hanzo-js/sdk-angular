@@ -10,14 +10,29 @@
 
 
 export interface SMS { 
+    /**
+     * From is the sending number in E.164, and must be one this org holds.
+     */
     from?: string;
+    /**
+     * ID is the carrier\'s handle for the message.
+     */
     id?: string;
+    /**
+     * Org is the tenant the message was sent for or received by.
+     */
     org?: string;
     /**
-     * queued | sent | delivered | failed
+     * Status is where the message is: \"queued\", \"sent\", \"delivered\" or \"failed\". \"sent\" means the carrier took it; \"delivered\" means the handset got it, and not every carrier or destination reports that.
      */
     status?: string;
+    /**
+     * Text is the message body. Empty is legal when the message carried only media.
+     */
     text?: string;
+    /**
+     * To is the receiving number in E.164.
+     */
     to?: string;
 }
 

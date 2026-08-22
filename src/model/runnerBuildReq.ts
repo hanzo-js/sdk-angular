@@ -48,10 +48,6 @@ export interface RunnerBuildReq {
      */
     image?: string;
     /**
-     * OrgID attributes the build to an org. On the IAM path it defaults to the caller\'s own validated org, and a foreign one is refused unless the caller is a platform SuperAdmin.
-     */
-    organizationId?: string;
-    /**
      * OS is the target operating system for the artifact lane.
      */
     os?: string;
@@ -59,10 +55,6 @@ export interface RunnerBuildReq {
      * Ref is the git ref to build when no SHA is given.
      */
     ref?: string;
-    /**
-     * Release requests native release semantics for cloud\'s self-publish: compute the next version, build+push ghcr.io/hanzoai/cloud, smoke it, then tag (the receipt) and notify universe. It owns its output image (release.go), and it takes SuperAdmin.
-     */
-    release?: boolean;
     /**
      * Repo is the repository clone URL to build. Required on the image lane.
      */

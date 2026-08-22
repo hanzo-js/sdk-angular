@@ -19,7 +19,7 @@ export interface PromptMeta {
      */
     lastUpdatedAt?: string;
     /**
-     * Name is the prompt\'s org-unique handle and the URL segment it is fetched by: GET /v1/prompts/<name>.
+     * Name is the prompt\'s org-unique handle and the URL segment it is fetched by: GET /v1/prompt/<name>.
      */
     name?: string;
     /**

@@ -10,13 +10,25 @@
 
 
 export interface GithubForkOut { 
+    /**
+     * CloneURL is the fork\'s https git remote. GitHub populates a new fork in the background, so a clone issued the moment this answers can still find it empty.
+     */
     clone_url?: string;
+    /**
+     * DefaultBranch is the branch the fork checks out, inherited from upstream.
+     */
     default_branch?: string;
     /**
      * Existing reports that the fork was already there. GitHub answers 202 either way, so without this a caller cannot tell \"made you one\" from \"you had one\".
      */
     existing?: boolean;
+    /**
+     * FullName is the fork\'s \"owner/repo\". The owner is the account it landed in — the request\'s org, or the installation\'s own account when none was named.
+     */
     full_name?: string;
+    /**
+     * HTMLURL is the fork\'s page on github.com.
+     */
     html_url?: string;
 }
 

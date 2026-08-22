@@ -10,9 +10,21 @@
 
 
 export interface StateGraph { 
+    /**
+     * Initial is the state a fresh document starts in — \"draft\". A stored document with no status at all is read as this too.
+     */
     initial?: string;
+    /**
+     * Live is the ONE state that is publicly readable — \"published\". The site pulls only documents in it, so reaching Live IS site-publish; every other state is invisible to a reader.
+     */
     live?: string;
+    /**
+     * States is every lifecycle state in canonical order: draft, in_review, approved, queued, published, archived. The console lays its board columns out in exactly this order, so the order is part of the answer.
+     */
     states?: Array<string>;
+    /**
+     * Transitions maps each state to the states it may move to. A target absent from a state\'s list is REFUSED, at the endpoint and again at the storage boundary — this is the whole rule, not a hint for the UI. A state never lists itself; a move that changes nothing is always legal.
+     */
     transitions?: { [key: string]: Array<string>; };
 }
 

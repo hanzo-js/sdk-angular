@@ -10,21 +10,57 @@
 
 
 export interface GpuJob { 
+    /**
+     * Attempt is which try this is, counting from 1. Above 1 means the job was retried after a failed or abandoned run.
+     */
     attempt?: number;
+    /**
+     * CloseTime is when the job reached a terminal state, RFC 3339. Empty means it is still live — queued, running or stalled.
+     */
     closeTime?: string;
+    /**
+     * FailureCause is the engine\'s reason the job failed. Empty unless it did.
+     */
     failureCause?: string;
+    /**
+     * GPU is the node this job is aimed AT — the lane \"gpu:<node>\" it was submitted on. Empty means the shared any-GPU lane: it was not aimed anywhere and the first free worker takes it.
+     */
     gpu?: string;
+    /**
+     * ID is the job\'s id, and the id the cancel route takes. The dispatcher sets it equal to the render\'s prompt id, so it is the same value the studio knows the job by.
+     */
     id?: string;
+    /**
+     * Label is the cheap human name for the render — the output filename prefix lifted out of the submitted graph. Empty when the graph carried none. The graph itself is never in this list; the tasks describe endpoint serves it.
+     */
     label?: string;
+    /**
+     * LastHeartbeat is the claiming worker\'s most recent beat on this job, RFC 3339 — the evidence a long render is still alive rather than wedged.
+     */
     lastHeartbeat?: string;
+    /**
+     * LeaseExpiry is when the worker\'s claim lapses, RFC 3339. Past it with the job still STARTED, the claimant is presumed dead and Status reads \"stalled\".
+     */
     leaseExpiry?: string;
+    /**
+     * RunID identifies this execution of the job. It equals ID for a job the dispatcher submitted, which is why a cancel that omits it still works.
+     */
     runId?: string;
+    /**
+     * StartTime is when a worker began executing the job, RFC 3339. Empty while it is still queued.
+     */
     startTime?: string;
     /**
-     * queued|running|completed|failed|canceled
+     * Status is the job\'s lifecycle state: queued, running, completed, failed or canceled — plus \"stalled\", which is this surface\'s own reading of a job that is STARTED whose worker died: its lease has elapsed and no reaper has taken it back yet. Without it such a job reads \"running\" forever. An engine state this surface does not recognize passes through lower-cased rather than being coerced into one of these.
      */
     status?: string;
+    /**
+     * Type is the work being done (\"studio.render\") — what the claiming worker has to be able to execute.
+     */
     type?: string;
+    /**
+     * Worker is the node that actually CLAIMED the job, which is not always the one it was aimed at: a shared-lane job has no GPU but does have a Worker once picked up. Empty while the job is still waiting.
+     */
     worker?: string;
 }
 

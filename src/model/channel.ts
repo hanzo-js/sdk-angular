@@ -10,14 +10,20 @@
 
 
 export interface Channel { 
+    /**
+     * Disabled is true for a channel the org switched off at the social edge. It is still listed — this is what the org has CONNECTED, not what it can post to — but a publish never targets it, neither by name nor as part of the \"every channel\" default.
+     */
     disabled?: boolean;
     /**
-     * the social integration id to target in a post
+     * ID is the social integration id a post targets. It is the exact value to put in a content item\'s `channels` list to reach this one connected account.
      */
     id?: string;
+    /**
+     * Name is the account label as the org connected it — the handle a human recognises. It is never an address: a publish resolves channels by ID or by Provider and never by this.
+     */
     name?: string;
     /**
-     * \"x\" | \"instagram\" | \"tiktok\" | ...
+     * Provider is the network behind the integration: \"x\", \"instagram\", \"tiktok\" and the rest of what the org connected. Naming a provider in a publish targets EVERY connected account of it, so it is the coarse handle where ID is the precise one.
      */
     provider?: string;
 }

@@ -12,9 +12,21 @@ import { ArgoClusterInfo } from './argoClusterInfo';
 
 
 export interface ArgoCluster { 
+    /**
+     * ConnectionState is whether the destination is reachable.
+     */
     connectionState?: ArgoConnectionState;
+    /**
+     * Info is the connection state again plus the count of applications targeting this destination.
+     */
     info?: ArgoClusterInfo;
+    /**
+     * Name is what the Destination column shows: \"in-cluster\" for this cluster, otherwise whatever spec.destination.name declares, falling back to the server URL when it declares none.
+     */
     name?: string;
+    /**
+     * Server is the destination\'s API URL, and the key the list is deduplicated by. https://kubernetes.default.svc is this cluster.
+     */
     server?: string;
 }
 

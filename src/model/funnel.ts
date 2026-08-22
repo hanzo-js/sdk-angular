@@ -11,16 +11,32 @@
 
 export interface Funnel { 
     /**
-     * ConvertedOrgs is how many distinct referred orgs have produced positive commission at least once — a referral that actually spent.
+     * Available separates \"this org has no traffic\" from \"we could not ask\". False means the warehouse was unreachable or the org has emitted nothing at all, and every count below is then a placeholder zero rather than a measurement — a caller must read this before reading any of them.
      */
-    convertedOrgs?: number;
+    available?: boolean;
     /**
-     * RatePct is convertedOrgs over referredOrgs as a PERCENTAGE, 0–100, and the one non-integer figure on this board. It is 0 when nothing has been referred yet, not undefined.
+     * Orders counts completed orders in the window — purchases, not carts started.
      */
-    ratePct?: number;
+    orders?: number;
     /**
-     * ReferredOrgs is how many attribution edges exist fleet-wide — one per referred org, first-touch, so it is also the count of distinct referred orgs.
+     * Pageviews counts page events in the window, one per view rather than per person, so a single visitor reading ten pages counts ten.
      */
-    referredOrgs?: number;
+    pageviews?: number;
+    /**
+     * Revenue is the sum of the amounts those orders reported, in whatever currency the beacon stamped on them (major units, e.g. 49.5 for $49.50) — NOT cents, and not converted to a single currency. Contrast revenueCents on the profile, which is the money of record.
+     */
+    revenue?: number;
+    /**
+     * Signups counts completed signups in the window, the step where an anonymous visitor becomes somebody with an account.
+     */
+    signups?: number;
+    /**
+     * Visitors is the number of DISTINCT people seen in the window, counted by the beacon\'s distinct id — so it is unique visitors, not sessions and not views.
+     */
+    visitors?: number;
+    /**
+     * WindowDays is the length of the trailing window every count covers, so a reader knows whether 40 signups is a month or a day.
+     */
+    windowDays?: number;
 }
 

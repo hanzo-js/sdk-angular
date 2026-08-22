@@ -35,9 +35,12 @@ export interface CodingStartIn {
      */
     prompt?: string;
     /**
-     * ReplyChannel / ReplyThread are WHERE THE RUN NARRATES ITSELF, when the door that started it has somewhere for it to talk. Empty means nobody is listening and the run simply does not narrate — which is the app door\'s case, because /v1/coding hands back a session id and the session stream is a better progress feed than any message could be.  It is an ADDRESS and not a token: the engine says \"put this text there\", and the process that owns the workspace\'s bot credential is the one that actually posts. So a run reports into a Slack thread without the engine ever holding the token that could post anywhere else in that workspace.
+     * ReplyChannel / ReplyThread are WHERE THE RUN NARRATES ITSELF, when the door that started it has somewhere for it to talk. Empty means nobody is listening and the run simply does not narrate — which is the app door\'s case, because /v1/agents/coding hands back a session id and the session stream is a better progress feed than any message could be.  It is an ADDRESS and not a token: the engine says \"put this text there\", and the process that owns the workspace\'s bot credential is the one that actually posts. So a run reports into a Slack thread without the engine ever holding the token that could post anywhere else in that workspace.
      */
     replyChannel?: string;
+    /**
+     * ReplyThread narrows that address to one THREAD inside the channel: on Slack it is the parent message\'s ts, the same value a reply carries as thread_ts. Empty puts the run\'s status line at the top level of the channel instead.  The channel is what decides whether a run narrates at all, so this on its own addresses nothing — a thread with no ReplyChannel is a run nobody hears.
+     */
     replyThread?: string;
     /**
      * Repo is what to work on, as `owner/name` in the caller\'s own org. The engine resolves the clone URL and the push credential from the org itself, so this says WHICH repository and never how to reach it.

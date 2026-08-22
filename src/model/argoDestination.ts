@@ -14,7 +14,13 @@ export interface ArgoDestination {
      * ArgoCD allows a destination by cluster name; omitted for the in-cluster projection.
      */
     name?: string;
+    /**
+     * Namespace is where in that cluster the workload lands. \"*\" on a project\'s destination fence means any namespace.
+     */
     namespace?: string;
+    /**
+     * Server is the cluster API URL the application reconciles into. Everything this plane projects lands in the cluster it runs in, so it is https://kubernetes.default.svc — except on a project\'s destination fence, where \"*\" means any cluster.
+     */
     server?: string;
 }
 

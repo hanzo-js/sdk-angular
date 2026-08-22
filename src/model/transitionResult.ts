@@ -12,11 +12,29 @@ import { StorefrontResult } from './storefrontResult';
 
 
 export interface TransitionResult { 
+    /**
+     * Distribution is the channel fan-out this move triggered. Present ONLY on the move to published, the single edge that distributes — so its absence means no fan-out was attempted, never that one failed quietly. A fan-out that DID fail is present carrying its own honest status, because distribution never rolls the status change back.
+     */
     distribution?: PublishResult;
+    /**
+     * DocType is the content type that moved — Campaign, SocialPost or Asset — echoed from the path.
+     */
     doctype?: string;
+    /**
+     * From is the state the item held when it was read. A document carrying no status yet reads as \"draft\".
+     */
     from?: string;
+    /**
+     * Name is the document that moved, echoed from the path.
+     */
     name?: string;
+    /**
+     * Storefront is the catalog side effect, present only when a published Asset was product imagery — it carries a design and a kind of ecom, product or lifestyle. Absent for everything else, so absence reads as \"not catalog imagery\" rather than \"the catalog failed\".
+     */
     storefront?: StorefrontResult;
+    /**
+     * To is the state it holds now. From == To on an idempotent re-transition, which is legal and is where a caller that lost a publish race lands.
+     */
     to?: string;
 }
 

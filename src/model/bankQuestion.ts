@@ -10,10 +10,25 @@
 
 
 export interface BankQuestion { 
+    /**
+     * Connector names the feed the unplaceable line arrived on. With externalId it identifies both the question and the bank line it is about, so re-syncing the same deposit never asks twice.
+     */
     connector?: string;
+    /**
+     * CreatedAt is when the question was raised.
+     */
     createdAt?: string;
+    /**
+     * ExternalID is the bank\'s own id for the line in question.
+     */
     externalId?: string;
+    /**
+     * Prompt is the question put to the founder in plain language — what this money was, since the books cannot place it on their own.
+     */
     prompt?: string;
+    /**
+     * Status is whether the question is still open or has been answered.
+     */
     status?: string;
 }
 

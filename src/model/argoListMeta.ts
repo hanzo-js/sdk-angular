@@ -10,6 +10,9 @@
 
 
 export interface ArgoListMeta { 
+    /**
+     * ResourceVersion is the k8s list version a watch would resume from. Always empty: every list on this plane is COMPUTED per request rather than read from one etcd revision, so there is no point to resume from. The live view is the SSE stream, not a resumed watch.
+     */
     resourceVersion?: string;
 }
 
