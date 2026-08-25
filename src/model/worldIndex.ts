@@ -20,7 +20,7 @@ export interface WorldIndex {
      */
     summary?: string;
     /**
-     * Wires is every protocol door onto World, REST first. It is deliberately NOT a list of REST operations: GET /v1/openapi.json is the one enumeration of those, and a second copy here would be a second thing to keep true.
+     * Wires is every protocol entry point onto World, REST first. It is deliberately NOT a list of REST operations: GET /v1/openapi.json is the one enumeration of those, and a second copy here would be a second thing to keep true.
      */
     wires?: Array<WorldWire>;
 }

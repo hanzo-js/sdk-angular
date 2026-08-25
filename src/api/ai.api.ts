@@ -26,7 +26,7 @@ import { BaseService } from '../api.base.service';
 
 
 export interface AiApiAiMCPToolsRequestParams {
-    /** Names asks for this process\&#39;s tool NAMES and not only how many there are. Off by default: a list of names is a page, and the question this op exists to answer (\&quot;is the door up and does it have anything behind it\&quot;) is answered by the count. */
+    /** Names asks for this process\&#39;s tool NAMES and not only how many there are. Off by default: a list of names is a page, and the question this op exists to answer (\&quot;is the MCP server up and does it have anything behind it\&quot;) is answered by the count. */
     names?: boolean;
 }
 
@@ -592,8 +592,8 @@ export class AiApi extends BaseService {
     }
 
     /**
-     * Tools reports what THIS PROCESS\&#39;s MCP door carries: how many tools its own registry projects, optionally their names, and which subsystems this process composed.
-     * Tools reports what THIS PROCESS\&#39;s MCP door carries: how many tools its own registry projects, optionally their names, and which subsystems this process composed. It is the answer to \&quot;is this door up and does it have anything behind it\&quot; — a question a status code cannot answer, since an empty door and a full one are both 200. What the FLEET\&#39;s door carries is the fleet door\&#39;s own answer: POST /v1/mcp, tools/list, which asks every subsystem and names the ones that did not reply.
+     * Tools reports what THIS PROCESS\&#39;s MCP server carries: how many tools its own registry projects, optionally their names, and which subsystems this process composed.
+     * Tools reports what THIS PROCESS\&#39;s MCP server carries: how many tools its own registry projects, optionally their names, and which subsystems this process composed. It is the answer to \&quot;is this MCP server up and does it have anything behind it\&quot; — a question a status code cannot answer, since an empty server and a full one are both 200. What the FLEET\&#39;s server carries is the fleet server\&#39;s own answer: POST /v1/mcp, tools/list, which asks every subsystem and names the ones that did not reply.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

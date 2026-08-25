@@ -65,8 +65,9 @@ export interface CommerceApiDeleteCommerceProductByProductidRequestParams {
     productid: string;
 }
 
-export interface CommerceApiDeleteCommerceRatesEntriesBySlugRequestParams {
-    slug: string;
+export interface CommerceApiDeleteCommerceRatesEntriesByProductByMeterRequestParams {
+    product: string;
+    meter: string;
 }
 
 export interface CommerceApiDeleteCommerceReturnByReturnidRequestParams {
@@ -491,8 +492,9 @@ export interface CommerceApiPutCommerceProductByProductidRequestParams {
     productid: string;
 }
 
-export interface CommerceApiPutCommerceRatesEntriesBySlugRequestParams {
-    slug: string;
+export interface CommerceApiPutCommerceRatesEntriesByProductByMeterRequestParams {
+    product: string;
+    meter: string;
 }
 
 export interface CommerceApiPutCommerceReturnByReturnidRequestParams {
@@ -981,13 +983,17 @@ export class CommerceApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteCommerceRatesEntriesBySlug(requestParameters: CommerceApiDeleteCommerceRatesEntriesBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteCommerceRatesEntriesBySlug(requestParameters: CommerceApiDeleteCommerceRatesEntriesBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteCommerceRatesEntriesBySlug(requestParameters: CommerceApiDeleteCommerceRatesEntriesBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteCommerceRatesEntriesBySlug(requestParameters: CommerceApiDeleteCommerceRatesEntriesBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const slug = requestParameters?.slug;
-        if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling deleteCommerceRatesEntriesBySlug.');
+    public deleteCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiDeleteCommerceRatesEntriesByProductByMeterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiDeleteCommerceRatesEntriesByProductByMeterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiDeleteCommerceRatesEntriesByProductByMeterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiDeleteCommerceRatesEntriesByProductByMeterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const product = requestParameters?.product;
+        if (product === null || product === undefined) {
+            throw new Error('Required parameter product was null or undefined when calling deleteCommerceRatesEntriesByProductByMeter.');
+        }
+        const meter = requestParameters?.meter;
+        if (meter === null || meter === undefined) {
+            throw new Error('Required parameter meter was null or undefined when calling deleteCommerceRatesEntriesByProductByMeter.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1017,7 +1023,7 @@ export class CommerceApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/commerce/rates/entries/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/commerce/rates/entries/${this.configuration.encodeParam({name: "product", value: product, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "meter", value: meter, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -6138,7 +6144,7 @@ export class CommerceApi extends BaseService {
 
     /**
      * Refresh the model catalog by reading the upstream provider
-     * Pulls the upstream model list and lands it through the same upsert the push door uses, so the rule that a sync owns cost and an administrator owns price holds no matter which door a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\&#39;s service token qualifies.
+     * Pulls the upstream model list and lands it through the same upsert the push endpoint uses, so the rule that a sync owns cost and an administrator owns price holds no matter which endpoint a row came through. It takes no body — the upstream is READ rather than told. If that upstream cannot be read the call answers 502 and writes NOTHING: a sync that cannot see its source must never conclude the source is empty, because that conclusion would withdraw every model on sale. The gate is a PLATFORM principal so the scheduled job\&#39;s service token qualifies.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -7069,7 +7075,7 @@ export class CommerceApi extends BaseService {
 
     /**
      * Load the published price document, reconciling rather than replacing
-     * Takes an array of rates and seeds the authority from it. This is the seed, driven from admin rather than compiled in, because 506 published prices in an embed made a price change wait for a build. It RECONCILES: a row that matches is left alone, a row that has drifted is corrected, and a row an operator edited is skipped — so importing the same document twice is a no-op and importing a corrected one moves exactly the rows that changed. Answers what it received, created, corrected and left unchanged, so an import that changes nothing reads as nothing to do rather than as a failure. An empty array is refused 400. SuperAdmin only.
+     * Takes an array of rates and seeds the authority from it — the same reconcile the boot catalog runs, driven from admin instead. It RECONCILES: a row that matches is left alone, a row that has drifted is corrected, and a row an operator edited is skipped — so importing the same document twice is a no-op and importing a corrected one moves exactly the rows that changed. Answers what it received, created, corrected and left unchanged, so an import that changes nothing reads as nothing to do rather than as a failure. An empty array is refused 400. SuperAdmin only.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -9940,13 +9946,17 @@ export class CommerceApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putCommerceRatesEntriesBySlug(requestParameters: CommerceApiPutCommerceRatesEntriesBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public putCommerceRatesEntriesBySlug(requestParameters: CommerceApiPutCommerceRatesEntriesBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public putCommerceRatesEntriesBySlug(requestParameters: CommerceApiPutCommerceRatesEntriesBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public putCommerceRatesEntriesBySlug(requestParameters: CommerceApiPutCommerceRatesEntriesBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const slug = requestParameters?.slug;
-        if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling putCommerceRatesEntriesBySlug.');
+    public putCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiPutCommerceRatesEntriesByProductByMeterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public putCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiPutCommerceRatesEntriesByProductByMeterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public putCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiPutCommerceRatesEntriesByProductByMeterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public putCommerceRatesEntriesByProductByMeter(requestParameters: CommerceApiPutCommerceRatesEntriesByProductByMeterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const product = requestParameters?.product;
+        if (product === null || product === undefined) {
+            throw new Error('Required parameter product was null or undefined when calling putCommerceRatesEntriesByProductByMeter.');
+        }
+        const meter = requestParameters?.meter;
+        if (meter === null || meter === undefined) {
+            throw new Error('Required parameter meter was null or undefined when calling putCommerceRatesEntriesByProductByMeter.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -9976,7 +9986,7 @@ export class CommerceApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/commerce/rates/entries/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/commerce/rates/entries/${this.configuration.encodeParam({name: "product", value: product, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "meter", value: meter, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
             {
@@ -10824,7 +10834,7 @@ export class CommerceApi extends BaseService {
 
     /**
      * Take a card payment and credit the org\&#39;s balance
-     * Takes a payment: charges a single-use card token and credits the caller\&#39;s org balance, exactly once.  This is the operation behind \&quot;collect money from a customer\&quot;. It runs the SAME core the console\&#39;s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\&#39;s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (&#x60;test&#x60;), and carries the processor\&#39;s own reference (&#x60;processorRef&#x60;) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. &#x60;charge&#x60; is the money move, &#x60;take&#x60; is the screened door onto it, and the only registrable one is the second.
+     * Takes a payment: charges a single-use card token and credits the caller\&#39;s org balance, exactly once.  This is the operation behind \&quot;collect money from a customer\&quot;. It runs the SAME core the console\&#39;s card top-up runs (commerce billing.TakePayment), so the server-side amount bounds, the idempotency guard and the ledger credit are shared rather than reimplemented — a second charge path would eventually double-charge somebody.  The ORG is the caller\&#39;s, taken from the validated principal and never from the input, so a payment can only ever credit the account of whoever made the call.  A payment is RISK-SCREENED before the card is charged, so this can be refused without any money moving: 403 means the screen did not authorise it, and 503 means the screen could not reach a decision — that one is worth retrying, and no charge was attempted either way.  Send an idempotencyKey. An agent retries by construction, and the key is what turns a retry into a replay of the first receipt instead of a second charge.  The answer states whether it settled in SANDBOX or live mode (&#x60;test&#x60;), and carries the processor\&#39;s own reference (&#x60;processorRef&#x60;) so the charge can be reconciled against the processor rather than taken on trust.  A named builder, not a closure, so zipdoc can lift this prose into the registry.  It BUILDS the handler rather than being it, because the screen has to sit inside the value every projection of this op dispatches to — see exposePayments. &#x60;charge&#x60; is the money move, &#x60;take&#x60; is the screened entry point onto it, and the only registrable one is the second.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

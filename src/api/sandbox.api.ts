@@ -965,7 +965,7 @@ export class SandboxApi extends BaseService {
 
     /**
      * Mints a short-lived grant to open the screen of a desktop sandbox.
-     * Mints a short-lived grant to open the screen of a desktop sandbox. Same properties as the terminal ticket, for the other door.
+     * Mints a short-lived grant to open the screen of a desktop sandbox. Same properties as the terminal ticket, for the other endpoint.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

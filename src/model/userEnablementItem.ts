@@ -11,21 +11,27 @@
 
 export interface UserEnablementItem { 
     /**
-     * beta && not yet opted in
+     * CanOptIn is whether POST /v1/pricing/enablement/optin would do anything here: the item is in beta and this org is not on its list yet. False for a caller with no validated org, who has no org to enrol.
      */
     canOptIn?: boolean;
     /**
-     * visible to the caller\'s org
+     * Effective is whether the caller\'s org may use the item right now, which is the field to branch on: true for any ga item, for a beta this org holds, and never for an off one.
      */
     effective?: boolean;
+    /**
+     * ID is the item within that namespace — a model id, a provider name, or a feature key.
+     */
     id?: string;
+    /**
+     * Kind is the namespace the id lives in: \"model\", \"provider\" or \"feature\".
+     */
     kind?: string;
     /**
-     * caller\'s org on the beta list
+     * OptedIn is whether the caller\'s org is on this item\'s beta grant list. It can be true on an \"off\" item — the list survives the kill switch and is simply ignored while it is thrown — so it does not imply Effective.
      */
     optedIn?: boolean;
     /**
-     * off|beta|ga
+     * State is the item\'s GLOBAL availability — \"off\", \"beta\" or \"ga\" — which is the operator\'s setting and not this caller\'s answer. Effective is that.
      */
     state?: string;
 }

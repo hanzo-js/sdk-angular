@@ -35,7 +35,7 @@ export interface CodingStartIn {
      */
     prompt?: string;
     /**
-     * ReplyChannel / ReplyThread are WHERE THE RUN NARRATES ITSELF, when the door that started it has somewhere for it to talk. Empty means nobody is listening and the run simply does not narrate — which is the app door\'s case, because /v1/agents/coding hands back a session id and the session stream is a better progress feed than any message could be.  It is an ADDRESS and not a token: the engine says \"put this text there\", and the process that owns the workspace\'s bot credential is the one that actually posts. So a run reports into a Slack thread without the engine ever holding the token that could post anywhere else in that workspace.
+     * ReplyChannel / ReplyThread are WHERE THE RUN NARRATES ITSELF, when the surface that started it has somewhere for it to talk. Empty means nobody is listening and the run simply does not narrate — which is the app surface\'s case, because /v1/agents/coding hands back a session id and the session stream is a better progress feed than any message could be.  It is an ADDRESS and not a token: the engine says \"put this text there\", and the process that owns the workspace\'s bot credential is the one that actually posts. So a run reports into a Slack thread without the engine ever holding the token that could post anywhere else in that workspace.
      */
     replyChannel?: string;
     /**

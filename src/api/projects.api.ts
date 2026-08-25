@@ -51,6 +51,8 @@ import { ProjectsSite } from '../model/projectsSite';
 // @ts-ignore
 import { ProjectsSiteDeploy } from '../model/projectsSiteDeploy';
 // @ts-ignore
+import { ProjectsStar } from '../model/projectsStar';
+// @ts-ignore
 import { ProjectsUpdate } from '../model/projectsUpdate';
 // @ts-ignore
 import { TagConfig } from '../model/tagConfig';
@@ -71,6 +73,11 @@ export interface ProjectsApiDeleteProjectsBySlugDomainsByHostRequestParams {
     slug: string;
     /** Host is the custom hostname, from the path. It is cleaned to its canonical form (lowercased, trailing dot dropped) before anything is looked up. */
     host: string;
+}
+
+export interface ProjectsApiDeleteProjectsBySlugStarRequestParams {
+    /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
+    slug: string;
 }
 
 export interface ProjectsApiGetProjectsBySlugRequestParams {
@@ -185,6 +192,11 @@ export interface ProjectsApiPostProjectsSitesRequestParams {
 
 export interface ProjectsApiPostProjectsSitesDeployRequestParams {
     projectsDeploySite: ProjectsDeploySite;
+}
+
+export interface ProjectsApiPutProjectsBySlugStarRequestParams {
+    /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
+    slug: string;
 }
 
 
@@ -305,6 +317,65 @@ export class ProjectsApi extends BaseService {
         let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains/${this.configuration.encodeParam({name: "host", value: host, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Removes the caller\&#39;s own bookmark from a project, and answers whether it is starred afterwards.
+     * Removes the caller\&#39;s own bookmark from a project, and answers whether it is starred afterwards.  It removes only YOUR star — the same one star wrote — so a project other people have starred stays on their lists. Unstarring one you had not starred is not an error; it leaves it unstarred.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsStar>;
+    public deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsStar>>;
+    public deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsStar>>;
+    public deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const slug = requestParameters?.slug;
+        if (slug === null || slug === undefined) {
+            throw new Error('Required parameter slug was null or undefined when calling deleteProjectsBySlugStar.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/star`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProjectsStar>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1786,7 +1857,7 @@ export class ProjectsApi extends BaseService {
 
     /**
      * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.
-     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns &#x60;brief&#x60; (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. &#x60;slug&#x60; and &#x60;name&#x60; are optional: the model\&#39;s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework &#x60;static&#x60;) for the resolved slug and records a deployment — so this is a second door onto one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\&#39;s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\&#39;s org.
+     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns &#x60;brief&#x60; (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. &#x60;slug&#x60; and &#x60;name&#x60; are optional: the model\&#39;s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework &#x60;static&#x60;) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\&#39;s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\&#39;s org.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -1912,6 +1983,65 @@ export class ProjectsApi extends BaseService {
             {
                 context: localVarHttpContext,
                 body: projectsDeploySite,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Bookmarks a project for the person calling, and answers whether it is starred afterwards.
+     * Bookmarks a project for the person calling, and answers whether it is starred afterwards.  The star is YOURS: it is keyed by you as well as by the project, so two people see two answers for the same one and starring it says nothing about anybody else\&#39;s list. Starring a project you have already starred leaves it starred.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsStar>;
+    public putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsStar>>;
+    public putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsStar>>;
+    public putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const slug = requestParameters?.slug;
+        if (slug === null || slug === undefined) {
+            throw new Error('Required parameter slug was null or undefined when calling putProjectsBySlugStar.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/star`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProjectsStar>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
