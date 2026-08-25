@@ -10,7 +10,13 @@
 
 
 export interface D1Query { 
+    /**
+     * Params are the statement\'s bound values, in the order its `?` placeholders appear — a string, a number, a boolean or null, whatever the column takes. Absent means the statement carries no placeholders; bind values here rather than interpolating them into the statement.
+     */
     params?: Array<any>;
+    /**
+     * SQL is the statement to run. Blank (or absent) is refused before anything reaches D1.
+     */
     sql?: string;
 }
 

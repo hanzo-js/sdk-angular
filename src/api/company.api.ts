@@ -463,7 +463,7 @@ export class CompanyApi extends BaseService {
 
     /**
      * Advance runs the ONE guarded transition of the formation machine.
-     * Advance runs the ONE guarded transition of the formation machine. It is the only door between stages: the actions populate data, this decides ordering.  An edge the machine does not define answers 409; an edge whose guard is not yet satisfied answers 422 naming what is missing. Reaching the terminal &#x60;company&#x60; stage also records the incorporation on the canonical cap table, and that must succeed before the transition is persisted.
+     * Advance runs the ONE guarded transition of the formation machine. It is the only endpoint between stages: the actions populate data, this decides ordering.  An edge the machine does not define answers 409; an edge whose guard is not yet satisfied answers 422 naming what is missing. Reaching the terminal &#x60;company&#x60; stage also records the incorporation on the canonical cap table, and that must succeed before the transition is persisted.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -531,8 +531,8 @@ export class CompanyApi extends BaseService {
     }
 
     /**
-     * Renders the formation documents for the chosen structure and jurisdiction, ingests each into the org\&#39;s data room, and submits the state filing through the filing seam.
-     * Renders the formation documents for the chosen structure and jurisdiction, ingests each into the org\&#39;s data room, and submits the state filing through the filing seam.  With no filing partner wired the filing is recorded honestly as \&quot;manual\&quot; — no filing id is fabricated. Available only at the documents stage.
+     * Renders the formation documents for the chosen structure and jurisdiction, ingests each into the org\&#39;s data room, and submits the state filing through the filing client.
+     * Renders the formation documents for the chosen structure and jurisdiction, ingests each into the org\&#39;s data room, and submits the state filing through the filing client.  With no filing partner wired the filing is recorded honestly as \&quot;manual\&quot; — no filing id is fabricated. Available only at the documents stage.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -1366,7 +1366,7 @@ export class CompanyApi extends BaseService {
 
     /**
      * RefreshKYC reconciles each pending founder\&#39;s KYC with the WIRED provider — the PULL path to a provider-reported terminal status.
-     * RefreshKYC reconciles each pending founder\&#39;s KYC with the WIRED provider — the PULL path to a provider-reported terminal status. For the manual provider the check stays pending; for a real provider it reflects the settled decision, ATTRIBUTED to the provider.  It NEVER trusts a client-asserted status — the status comes from the provider seam — so a client cannot force a pass here, and an already-passing founder (e.g. a reviewer confirmation) is left untouched.
+     * RefreshKYC reconciles each pending founder\&#39;s KYC with the WIRED provider — the PULL path to a provider-reported terminal status. For the manual provider the check stays pending; for a real provider it reflects the settled decision, ATTRIBUTED to the provider.  It NEVER trusts a client-asserted status — the status comes from the PROVIDER — so a client cannot force a pass here, and an already-passing founder (e.g. a reviewer confirmation) is left untouched.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

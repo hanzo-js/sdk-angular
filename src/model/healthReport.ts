@@ -22,7 +22,7 @@ export interface HealthReport {
      */
     lenses?: HealthLenses;
     /**
-     * Lost is the count of facts the sink irrecoverably dropped since boot (warehouse.go). It is reported on the DEGRADED report too, and deliberately: a warehouse that is unreachable is exactly when facts start failing their deliveries, so suppressing the number here would hide it precisely when it moves. ANY NON-ZERO VALUE IS AN ALARM — it counts data the door already answered 200 for.
+     * Lost is the count of facts the sink irrecoverably dropped since boot (warehouse.go). It is reported on the DEGRADED report too, and deliberately: a warehouse that is unreachable is exactly when facts start failing their deliveries, so suppressing the number here would hide it precisely when it moves. ANY NON-ZERO VALUE IS AN ALARM — it counts data the endpoint already answered 200 for.
      */
     lost?: Loss;
     /**

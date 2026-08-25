@@ -64,7 +64,7 @@ export interface RunnerBuildReq {
      */
     sha?: string;
     /**
-     * Tag is the publish path segment, so both front doors write ONE index at ONE URL. It defaults to the pinned ref, and must be named explicitly for a branch.
+     * Tag is the publish path segment, so both entry points write ONE index at ONE URL. It defaults to the pinned ref, and must be named explicitly for a branch.
      */
     tag?: string;
 }

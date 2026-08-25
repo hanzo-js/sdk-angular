@@ -15,7 +15,7 @@ export interface ProviderInfo {
      */
     displayName?: string;
     /**
-     * Name is the provider id, and it is the value that goes back in the URL to start a login: GET /v1/team/account/auth/{provider}. This deployment surfaces exactly one, \"openid\" — the hanzo.id door.
+     * Name is the provider id, and it is the value that goes back in the URL to start a login: GET /v1/team/account/auth/{provider}. This deployment surfaces exactly one, \"openid\" — the hanzo.id provider.
      */
     name?: string;
 }

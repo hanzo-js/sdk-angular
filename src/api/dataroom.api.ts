@@ -33,6 +33,8 @@ import { DataroomLinkStats } from '../model/dataroomLinkStats';
 // @ts-ignore
 import { DataroomLinks } from '../model/dataroomLinks';
 // @ts-ignore
+import { DataroomLiveness } from '../model/dataroomLiveness';
+// @ts-ignore
 import { DataroomMembership } from '../model/dataroomMembership';
 // @ts-ignore
 import { DataroomRoomDetailOne } from '../model/dataroomRoomDetailOne';
@@ -524,7 +526,7 @@ export class DataroomApi extends BaseService {
 
     /**
      * Download a document\&#39;s bytes as its owner
-     * Streams the stored file back under its recorded content type, falling back to application/octet-stream when none was recorded.  Requires a validated principal; 403 without one, and the document is resolved in the caller\&#39;s own tenant store, so another org\&#39;s id is a 404. This is the OWNER\&#39;s path and applies no link gate at all — the per-link password, email and download controls live on the viewer surface, not here. Bytes that cannot be fetched from object storage are 502, never a truncated or empty file.
+     * Streams the stored file back under the type read from its BYTES — a raster image or a PDF renders in place, and anything else is served as application/octet-stream with an attachment disposition, so a stored file never executes as markup in this origin. Every response carries nosniff, which keeps the declared type binding.  Requires a validated principal; 403 without one, and the document is resolved in the caller\&#39;s own tenant store, so another org\&#39;s id is a 404. This is the OWNER\&#39;s path and applies no link gate at all — the per-link password, email and download controls live on the viewer surface, not here. Bytes that cannot be fetched from object storage are 502, never a truncated or empty file.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -581,15 +583,15 @@ export class DataroomApi extends BaseService {
     }
 
     /**
-     * Liveness of the dataroom subsystem
-     * Answers {service, status} unconditionally — no principal, no tenant. It is registered BEFORE the bundle, the link index and the object-storage seam are wired, so it keeps answering when any of those fail and the subsystem degrades to health-only. That is the point, and the limit: a 200 here says the process is alive, never that a data room can be read or written.
+     * Health reports that the data room subsystem is up.
+     * Health reports that the data room subsystem is up.  It answers before the bundle loads, holds no state and touches no store, so it stays true in exactly the situation an operator is probing for. It says nothing about whether a room can be OPENED — that is what the room operations answer — because a liveness probe that fails on a dependency takes a working process out of rotation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDataroomHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getDataroomHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getDataroomHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getDataroomHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getDataroomHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DataroomLiveness>;
+    public getDataroomHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DataroomLiveness>>;
+    public getDataroomHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DataroomLiveness>>;
+    public getDataroomHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -597,6 +599,7 @@ export class DataroomApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -620,7 +623,7 @@ export class DataroomApi extends BaseService {
 
         let localVarPath = `/v1/dataroom/health`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<DataroomLiveness>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -802,7 +805,7 @@ export class DataroomApi extends BaseService {
 
     /**
      * Read a public trust-centre item\&#39;s bytes
-     * Streams the file behind an item a trust centre publishes openly — a policy, a filled questionnaire, a knowledge-base attachment — under its recorded content type.  No principal and no link: these are the things an org states about itself, so they are served to anyone who asks. The narrowing is in the lookup rather than in a check: the item must be public, must not be retired, and must belong to a centre its owner has published, so an item released only on request is NOT FOUND here rather than refused — the same answer an id that never existed gets, which is what stops this reporting what the released-on-request tier holds.  Bytes that cannot be fetched from object storage are 502, never a truncated file.
+     * Streams the file behind an item a trust centre publishes openly — a policy, a filled questionnaire, a knowledge-base attachment — under the type read from its bytes: a picture or a PDF renders in place, anything else downloads inert.  No principal and no link: these are the things an org states about itself, so they are served to anyone who asks. The narrowing is in the lookup rather than in a check: the item must be public, must not be retired, and must belong to a centre its owner has published, so an item released only on request is NOT FOUND here rather than refused — the same answer an id that never existed gets, which is what stops this reporting what the released-on-request tier holds.  Bytes that cannot be fetched from object storage are 502, never a truncated file.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -922,7 +925,7 @@ export class DataroomApi extends BaseService {
 
     /**
      * Read a document\&#39;s bytes as an authorised link visitor
-     * Streams a document\&#39;s bytes under its recorded content type to a visitor holding an open viewing session.  No principal: &#x60;?viewId&#x3D;&#x60; from the authenticate step is the authorisation and must belong to this link, or the call is 403 — holding the link id alone gets no bytes. The document must be reachable THROUGH this link (a member of the room the link opens, or the single document the link names), so a visitor cannot walk to an unrelated document by guessing an id; anything else is a 404, as is an unknown or archived link. Bytes that cannot be fetched from object storage are 502.  &#x60;?download&#x3D;1&#x60; additionally requires the link\&#39;s &#x60;allowDownload&#x60; and is 403 when the owner did not permit it. Read that flag precisely: it gates the DOWNLOAD intent, not access to the bytes — without the parameter an authorised visitor is served the file for in-place viewing whether or not downloads are allowed.
+     * Streams a document\&#39;s bytes to a visitor holding an open viewing session, under the type read from those bytes: a picture or a PDF renders in place, anything else downloads inert.  No principal: &#x60;?viewId&#x3D;&#x60; from the authenticate step is the authorisation and must belong to this link, or the call is 403 — holding the link id alone gets no bytes. The document must be reachable THROUGH this link (a member of the room the link opens, or the single document the link names), so a visitor cannot walk to an unrelated document by guessing an id; anything else is a 404, as is an unknown or archived link. Bytes that cannot be fetched from object storage are 502.  &#x60;?download&#x3D;1&#x60; additionally requires the link\&#39;s &#x60;allowDownload&#x60; and is 403 when the owner did not permit it. Read that flag precisely: it gates the DOWNLOAD intent, not access to the bytes — without the parameter an authorised visitor is served the file for in-place viewing whether or not downloads are allowed.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -1199,7 +1202,7 @@ export class DataroomApi extends BaseService {
 
     /**
      * Upload a document\&#39;s bytes and record it
-     * Takes the file ITSELF as the raw request body — not a JSON envelope, not multipart — stores it on the object-storage seam, and records the metadata row, answering with the new document. &#x60;?name&#x3D;&#x60; names it (default \&quot;document\&quot;), the request\&#39;s Content-Type becomes the recorded mime type, and &#x60;?numPages&#x3D;&#x60; is optional.  Requires a validated principal; 403 without one. An empty body is 400 and anything over 64 MiB is 413 — a data room holds decks and PDFs, not a media library.  The storage key is 128 random bits under the tenant\&#39;s own key prefix, minted before the bytes are written: if the system\&#39;s randomness is unavailable the upload fails 500 rather than fall back to a predictable key that could overwrite another document\&#39;s bytes. A storage write that fails is 502 and no metadata row is recorded, so a document never exists without its file.
+     * Takes the file ITSELF as the raw request body — not a JSON envelope, not multipart — stores it on the object-storage client, and records the metadata row, answering with the new document. &#x60;?name&#x3D;&#x60; names it (default \&quot;document\&quot;), the request\&#39;s Content-Type is recorded as the document\&#39;s mime type, and &#x60;?numPages&#x3D;&#x60; is optional. That recorded type is metadata the owner sees; what the file is later SERVED as is read from the bytes.  Requires a validated principal; 403 without one. An empty body is 400 and anything over 64 MiB is 413 — a data room holds decks and PDFs, not a media library.  The storage key is 128 random bits under the tenant\&#39;s own key prefix, minted before the bytes are written: if the system\&#39;s randomness is unavailable the upload fails 500 rather than fall back to a predictable key that could overwrite another document\&#39;s bytes. A storage write that fails is 502 and no metadata row is recorded, so a document never exists without its file.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -1390,7 +1393,7 @@ export class DataroomApi extends BaseService {
 
     /**
      * Records a request to read what an independent auditor signed, and answers with its id.
-     * Records a request to read what an independent auditor signed, and answers with its id.  The org that owns the centre decides. Nothing is released here and no link is minted: this writes the ask down, which is the whole promise the form makes. The write is the answer — a request that could not be stored is an error, never a receipt, so a form can never appear to have been sent and be gone.  &#x60;email&#x60; is required and is the ONLY address the eventual grant will admit, so an address the asker cannot read is an ask that cannot be answered. Where the centre states an NDA, &#x60;accept&#x60; must be true and the text in force is recorded verbatim against the request.  Asking twice for the same thing from the same address is the SAME ask: the second answers with the first\&#39;s id rather than opening a second row, which is also what keeps an anonymous door from filling a tenant\&#39;s store.
+     * Records a request to read what an independent auditor signed, and answers with its id.  The org that owns the centre decides. Nothing is released here and no link is minted: this writes the ask down, which is the whole promise the form makes. The write is the answer — a request that could not be stored is an error, never a receipt, so a form can never appear to have been sent and be gone.  &#x60;email&#x60; is required and is the ONLY address the eventual grant will admit, so an address the asker cannot read is an ask that cannot be answered. Where the centre states an NDA, &#x60;accept&#x60; must be true and the text in force is recorded verbatim against the request.  Asking twice for the same thing from the same address is the SAME ask: the second answers with the first\&#39;s id rather than opening a second row, which is also what keeps an anonymous endpoint from filling a tenant\&#39;s store.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -1725,7 +1728,7 @@ export class DataroomApi extends BaseService {
 
     /**
      * SetCenter opens, publishes or withdraws the caller org\&#39;s trust centre and answers with the centre as it now stands.
-     * SetCenter opens, publishes or withdraws the caller org\&#39;s trust centre and answers with the centre as it now stands.  Publishing requires a name and an address, and the address must be free: another org already answering there is a conflict, never a takeover. Withdrawing closes the public door only — items, grants and the access record are untouched, so an org can go quiet and come back without losing anything.  Only an admin of the org may call it. The org is the caller\&#39;s own, so there is no field naming one and no way to point this at another tenant.
+     * SetCenter opens, publishes or withdraws the caller org\&#39;s trust centre and answers with the centre as it now stands.  Publishing requires a name and an address, and the address must be free: another org already answering there is a conflict, never a takeover. Withdrawing closes the public endpoint only — items, grants and the access record are untouched, so an org can go quiet and come back without losing anything.  Only an admin of the org may call it. The org is the caller\&#39;s own, so there is no field naming one and no way to point this at another tenant.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

@@ -15,7 +15,7 @@ export interface RiskLabelVocabulary {
      */
     dispositions?: Array<string>;
     /**
-     * Kinds, Dispositions and Sources are the closed vocabularies. A value outside them is refused at the door.
+     * Kinds, Dispositions and Sources are the closed vocabularies. A value outside them is refused at the endpoint.
      */
     kinds?: Array<string>;
     /**

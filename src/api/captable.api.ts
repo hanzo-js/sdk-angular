@@ -21,13 +21,25 @@ import { CaptableCompany } from '../model/captableCompany';
 // @ts-ignore
 import { CaptableCompanyUpdate } from '../model/captableCompanyUpdate';
 // @ts-ignore
+import { CaptableConvertibleIn } from '../model/captableConvertibleIn';
+// @ts-ignore
+import { CaptableCreated } from '../model/captableCreated';
+// @ts-ignore
 import { CaptableDeleted } from '../model/captableDeleted';
 // @ts-ignore
+import { CaptableEquityPlanIn } from '../model/captableEquityPlanIn';
+// @ts-ignore
 import { CaptableEquityPlans } from '../model/captableEquityPlans';
+// @ts-ignore
+import { CaptableInvested } from '../model/captableInvested';
+// @ts-ignore
+import { CaptableInvestmentIn } from '../model/captableInvestmentIn';
 // @ts-ignore
 import { CaptableInvestments } from '../model/captableInvestments';
 // @ts-ignore
 import { CaptableNotes } from '../model/captableNotes';
+// @ts-ignore
+import { CaptableOptionIn } from '../model/captableOptionIn';
 // @ts-ignore
 import { CaptableOptions } from '../model/captableOptions';
 // @ts-ignore
@@ -35,11 +47,23 @@ import { CaptableRoundCloseRequest } from '../model/captableRoundCloseRequest';
 // @ts-ignore
 import { CaptableRoundDetail } from '../model/captableRoundDetail';
 // @ts-ignore
+import { CaptableRoundIn } from '../model/captableRoundIn';
+// @ts-ignore
 import { CaptableRounds } from '../model/captableRounds';
+// @ts-ignore
+import { CaptableSafeIn } from '../model/captableSafeIn';
 // @ts-ignore
 import { CaptableSafes } from '../model/captableSafes';
 // @ts-ignore
 import { CaptableShareClass } from '../model/captableShareClass';
+// @ts-ignore
+import { CaptableShareClassAmend } from '../model/captableShareClassAmend';
+// @ts-ignore
+import { CaptableShareClassIn } from '../model/captableShareClassIn';
+// @ts-ignore
+import { CaptableShareIn } from '../model/captableShareIn';
+// @ts-ignore
+import { CaptableShareTransfer } from '../model/captableShareTransfer';
 // @ts-ignore
 import { CaptableShares } from '../model/captableShares';
 // @ts-ignore
@@ -48,6 +72,8 @@ import { CaptableStakeholder } from '../model/captableStakeholder';
 import { CaptableStakeholderPatch } from '../model/captableStakeholderPatch';
 // @ts-ignore
 import { CaptableSummary } from '../model/captableSummary';
+// @ts-ignore
+import { CaptableTransferred } from '../model/captableTransferred';
 // @ts-ignore
 import { CaptableUpdated } from '../model/captableUpdated';
 
@@ -88,13 +114,35 @@ export interface CaptableApiGetCaptableRoundsByIdRequestParams {
 }
 
 export interface CaptableApiPatchCaptableClassesByIdRequestParams {
+    /** ID addresses the resource. The URL is the addressing authority — a path segment binds after the body and after the query — so the address decides which row is written whatever a body claims. */
     id: string;
+    captableShareClassAmend: CaptableShareClassAmend;
 }
 
 export interface CaptableApiPatchCaptableStakeholdersByIdRequestParams {
     /** ID is the stakeholder to update. It is the path segment: the URL is the addressing authority, and the org it is resolved in comes from the caller\&#39;s principal, so an id from another tenant is simply not found. */
     id: string;
     captableStakeholderPatch: CaptableStakeholderPatch;
+}
+
+export interface CaptableApiPostCaptableClassesRequestParams {
+    captableShareClassIn: CaptableShareClassIn;
+}
+
+export interface CaptableApiPostCaptableConvertiblesRequestParams {
+    captableConvertibleIn: CaptableConvertibleIn;
+}
+
+export interface CaptableApiPostCaptableOptionsRequestParams {
+    captableOptionIn: CaptableOptionIn;
+}
+
+export interface CaptableApiPostCaptablePlansRequestParams {
+    captableEquityPlanIn: CaptableEquityPlanIn;
+}
+
+export interface CaptableApiPostCaptableRoundsRequestParams {
+    captableRoundIn: CaptableRoundIn;
 }
 
 export interface CaptableApiPostCaptableRoundsByIdCloseRequestParams {
@@ -104,7 +152,21 @@ export interface CaptableApiPostCaptableRoundsByIdCloseRequestParams {
 }
 
 export interface CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams {
+    /** ID is the round to invest in. The URL is the addressing authority — a path segment binds after the body and after the query — so the address decides which round is written whatever a body claims. */
     id: string;
+    captableInvestmentIn: CaptableInvestmentIn;
+}
+
+export interface CaptableApiPostCaptableSafesRequestParams {
+    captableSafeIn: CaptableSafeIn;
+}
+
+export interface CaptableApiPostCaptableSharesRequestParams {
+    captableShareIn: CaptableShareIn;
+}
+
+export interface CaptableApiPostCaptableSharesTransferRequestParams {
+    captableShareTransfer: CaptableShareTransfer;
 }
 
 export interface CaptableApiPutCaptableCompanyRequestParams {
@@ -1070,19 +1132,23 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Amend a share class
-     * Rewrites one share class — the amendment path for a class whose authorized count, price, seniority or preference terms have changed.  It REPLACES the class rather than merging into it: every field is taken from this body, so an omitted field resets to the create-time default instead of keeping its current value. Send the full class. The index and the derived prefix are unchanged by an amendment. An id that is not this company\&#39;s is not found.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Replaces one share class\&#39;s terms.
+     * Replaces one share class\&#39;s terms.  It is a full REPLACE and not a merge, despite the PATCH: every field is written as sent, so a field omitted is written empty rather than left alone. Send the whole class. The method is PATCH because the resource is addressed by id, not because the body is partial — and getting that backwards silently blanks terms every later issuance prices against.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableUpdated>;
+    public patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableUpdated>>;
+    public patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableUpdated>>;
+    public patchCaptableClassesById(requestParameters: CaptableApiPatchCaptableClassesByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling patchCaptableClassesById.');
+        }
+        const captableShareClassAmend = requestParameters?.captableShareClassAmend;
+        if (captableShareClassAmend === null || captableShareClassAmend === undefined) {
+            throw new Error('Required parameter captableShareClassAmend was null or undefined when calling patchCaptableClassesById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1091,6 +1157,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1100,6 +1167,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1114,9 +1190,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/classes/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('patch', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableUpdated>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableShareClassAmend,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1201,15 +1278,20 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Define a share class
-     * Creates a class of stock — its authorized share count, votes per share, par and issue price, seniority, conversion rights and liquidation/participation multiples — which is what shares, priced rounds and equity plans are then issued against.  Two fields are the company\&#39;s to assign, not the caller\&#39;s: the class index auto-increments per company, and the certificate prefix is DERIVED from the class type (CS for COMMON, PS for anything else), so a prefix in the body is ignored.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Defines a new class of shares.
+     * Defines a new class of shares.  Every field but convertsToShareClassId is required — a class is the instrument every later issuance prices against, so a partially-specified one would silently mis-value every share issued into it. &#x60;seniority&#x60; orders liquidation preference with LOWER first.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptableClasses(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptableClasses(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptableClasses(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptableClasses(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptableClasses(requestParameters: CaptableApiPostCaptableClassesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableCreated>;
+    public postCaptableClasses(requestParameters: CaptableApiPostCaptableClassesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableCreated>>;
+    public postCaptableClasses(requestParameters: CaptableApiPostCaptableClassesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableCreated>>;
+    public postCaptableClasses(requestParameters: CaptableApiPostCaptableClassesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const captableShareClassIn = requestParameters?.captableShareClassIn;
+        if (captableShareClassIn === null || captableShareClassIn === undefined) {
+            throw new Error('Required parameter captableShareClassIn was null or undefined when calling postCaptableClasses.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1217,6 +1299,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1226,6 +1309,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1240,9 +1332,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/classes`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableCreated>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableShareClassIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1254,15 +1347,20 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Record a convertible note
-     * Records a convertible note held by a stakeholder: the principal, the conversion cap, discount and interest rate, MFN, and the issue and board-approval dates.  The stakeholder must already exist in this company, and the note\&#39;s public id must be unused there — a reused id is a conflict rather than an overwrite. Like a SAFE, this records the instrument only; conversion is not performed here.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Records a convertible note.
+     * Records a convertible note.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptableConvertibles(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptableConvertibles(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptableConvertibles(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptableConvertibles(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptableConvertibles(requestParameters: CaptableApiPostCaptableConvertiblesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableCreated>;
+    public postCaptableConvertibles(requestParameters: CaptableApiPostCaptableConvertiblesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableCreated>>;
+    public postCaptableConvertibles(requestParameters: CaptableApiPostCaptableConvertiblesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableCreated>>;
+    public postCaptableConvertibles(requestParameters: CaptableApiPostCaptableConvertiblesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const captableConvertibleIn = requestParameters?.captableConvertibleIn;
+        if (captableConvertibleIn === null || captableConvertibleIn === undefined) {
+            throw new Error('Required parameter captableConvertibleIn was null or undefined when calling postCaptableConvertibles.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1270,6 +1368,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1279,6 +1378,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1293,9 +1401,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/convertibles`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableCreated>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableConvertibleIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1307,15 +1416,20 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Grant options from an equity plan
-     * Records an option grant to a stakeholder under an equity plan — quantity, exercise price, ISO/NSO type, cliff and vesting years, and the issue, expiration, vesting-start, board-approval and Rule 144 dates.  The stakeholder and the equity plan must both already exist in this company, and the grant id must be unused there — a reused grant id is a conflict, so a grant can never be overwritten by a later one carrying the same number.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Grants options to a stakeholder from an equity plan.
+     * Grants options to a stakeholder from an equity plan.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptableOptions(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptableOptions(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptableOptions(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptableOptions(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptableOptions(requestParameters: CaptableApiPostCaptableOptionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableCreated>;
+    public postCaptableOptions(requestParameters: CaptableApiPostCaptableOptionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableCreated>>;
+    public postCaptableOptions(requestParameters: CaptableApiPostCaptableOptionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableCreated>>;
+    public postCaptableOptions(requestParameters: CaptableApiPostCaptableOptionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const captableOptionIn = requestParameters?.captableOptionIn;
+        if (captableOptionIn === null || captableOptionIn === undefined) {
+            throw new Error('Required parameter captableOptionIn was null or undefined when calling postCaptableOptions.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1323,6 +1437,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1332,6 +1447,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1346,9 +1470,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/options`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableCreated>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableOptionIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1360,15 +1485,20 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Open an equity incentive plan
-     * Reserves a pool of shares out of a share class for option grants, with the board approval and effective dates and what happens to cancelled options.  The share class must already exist in this company — a plan cannot reserve out of nothing. Note the field name the bundle reads for the cancellation behaviour is &#x60;defaultCancellatonBehavior&#x60;; that spelling is the wire, and a correctly spelled key is simply not seen.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Opens an equity plan that options are granted from.
+     * Opens an equity plan that options are granted from.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptablePlans(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptablePlans(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptablePlans(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptablePlans(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptablePlans(requestParameters: CaptableApiPostCaptablePlansRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableCreated>;
+    public postCaptablePlans(requestParameters: CaptableApiPostCaptablePlansRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableCreated>>;
+    public postCaptablePlans(requestParameters: CaptableApiPostCaptablePlansRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableCreated>>;
+    public postCaptablePlans(requestParameters: CaptableApiPostCaptablePlansRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const captableEquityPlanIn = requestParameters?.captableEquityPlanIn;
+        if (captableEquityPlanIn === null || captableEquityPlanIn === undefined) {
+            throw new Error('Required parameter captableEquityPlanIn was null or undefined when calling postCaptablePlans.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1376,6 +1506,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1385,6 +1516,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1399,9 +1539,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/plans`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableCreated>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableEquityPlanIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1413,15 +1554,20 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Open a funding round
-     * Opens a round with its name, type and target amount. It starts OPEN with nothing raised; investments are then added to it, and closing it is its own call.  A PRICED round is the constrained case: it requires a share class that exists in this company and a price per share above zero, because that price is what converts each investment into issued shares. Its pre-money valuation is optional. A non-priced round carries none of the three.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Opens a priced round that investments can be added to.
+     * Opens a priced round that investments can be added to.  The round opens OPEN; investing into a closed one is refused.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptableRounds(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptableRounds(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptableRounds(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptableRounds(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptableRounds(requestParameters: CaptableApiPostCaptableRoundsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableCreated>;
+    public postCaptableRounds(requestParameters: CaptableApiPostCaptableRoundsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableCreated>>;
+    public postCaptableRounds(requestParameters: CaptableApiPostCaptableRoundsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableCreated>>;
+    public postCaptableRounds(requestParameters: CaptableApiPostCaptableRoundsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const captableRoundIn = requestParameters?.captableRoundIn;
+        if (captableRoundIn === null || captableRoundIn === undefined) {
+            throw new Error('Required parameter captableRoundIn was null or undefined when calling postCaptableRounds.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1429,6 +1575,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1438,6 +1585,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1452,9 +1608,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/rounds`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableCreated>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableRoundIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1539,19 +1696,23 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Record an investment into a round
-     * Records what a stakeholder put into a round and adds it to the round\&#39;s raised total.  On a PRICED round this ISSUES SHARES as well as recording the money: the amount is divided by the round\&#39;s price per share, rounded DOWN to whole shares, and a new certificate for them is issued to the investor in the round\&#39;s share class — so an amount too small to buy one whole share is refused rather than recorded as a zero-share investment. On a non-priced round the money is recorded and no shares are issued.  The round must exist in this company and still be OPEN — a closed round refuses further investment — and the investor must already be a stakeholder here. The date defaults to today when omitted.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Records one investor\&#39;s money into an open round.
+     * Records one investor\&#39;s money into an open round.  The round must be OPEN; investing into a closed one is refused. Where the round carries a price per share, the investment also issues the shares it buys and the answer names them.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableInvested>;
+    public postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableInvested>>;
+    public postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableInvested>>;
+    public postCaptableRoundsByIdInvestments(requestParameters: CaptableApiPostCaptableRoundsByIdInvestmentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling postCaptableRoundsByIdInvestments.');
+        }
+        const captableInvestmentIn = requestParameters?.captableInvestmentIn;
+        if (captableInvestmentIn === null || captableInvestmentIn === undefined) {
+            throw new Error('Required parameter captableInvestmentIn was null or undefined when calling postCaptableRoundsByIdInvestments.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1560,6 +1721,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1569,6 +1731,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1583,9 +1754,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/rounds/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/investments`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableInvested>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableInvestmentIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1597,15 +1769,20 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Record a SAFE
-     * Records a Simple Agreement for Future Equity held by a stakeholder: the capital in, the valuation cap and discount, MFN and pro-rata rights, pre- or post-money type, and the issue and board-approval dates.  The stakeholder must already exist in this company, and the SAFE\&#39;s public id must be unused there — a reused id is a conflict rather than an overwrite. This records the instrument; it does not convert it, so nothing is issued against a share class until a round does that.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Records a SAFE — a simple agreement for future equity.
+     * Records a SAFE — a simple agreement for future equity.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptableSafes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptableSafes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptableSafes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptableSafes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptableSafes(requestParameters: CaptableApiPostCaptableSafesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableCreated>;
+    public postCaptableSafes(requestParameters: CaptableApiPostCaptableSafesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableCreated>>;
+    public postCaptableSafes(requestParameters: CaptableApiPostCaptableSafesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableCreated>>;
+    public postCaptableSafes(requestParameters: CaptableApiPostCaptableSafesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const captableSafeIn = requestParameters?.captableSafeIn;
+        if (captableSafeIn === null || captableSafeIn === undefined) {
+            throw new Error('Required parameter captableSafeIn was null or undefined when calling postCaptableSafes.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1613,6 +1790,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1622,6 +1800,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1636,9 +1823,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/safes`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableCreated>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableSafeIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1650,15 +1838,20 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Issue a share certificate
-     * Issues shares of a class to a stakeholder as a certificate: quantity, price and capital contributed, the vesting cliff and term, the legends on the certificate, and the issue, Rule 144, vesting-start and board-approval dates.  Both the stakeholder and the share class must already exist in this company, and the certificate id must be unused there — a reused id is a conflict, never a silent overwrite of an existing certificate.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Issues a share certificate to a stakeholder.
+     * Issues a share certificate to a stakeholder.  The certificate id must be UNIQUE within the company — a duplicate is refused 409, not silently merged — and both the stakeholder and the share class must belong to this company, so an id from another tenant is a 400 rather than a cross-company issuance.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptableShares(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptableShares(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptableShares(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptableShares(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptableShares(requestParameters: CaptableApiPostCaptableSharesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableCreated>;
+    public postCaptableShares(requestParameters: CaptableApiPostCaptableSharesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableCreated>>;
+    public postCaptableShares(requestParameters: CaptableApiPostCaptableSharesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableCreated>>;
+    public postCaptableShares(requestParameters: CaptableApiPostCaptableSharesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const captableShareIn = requestParameters?.captableShareIn;
+        if (captableShareIn === null || captableShareIn === undefined) {
+            throw new Error('Required parameter captableShareIn was null or undefined when calling postCaptableShares.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1666,6 +1859,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1675,6 +1869,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1689,9 +1892,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/shares`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableCreated>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableShareIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -1703,15 +1907,20 @@ export class CaptableApi extends BaseService {
     }
 
     /**
-     * Transfer shares to another stakeholder
-     * Moves shares from one certificate to another stakeholder, in one atomic step.  OMITTING &#x60;quantity&#x60; transfers the WHOLE certificate, which simply reassigns it and answers newShareId null — that is the difference between a full and a partial transfer, and it is why quantity is absent rather than zero. A partial transfer shrinks the source certificate and issues a NEW one to the recipient, so it requires a &#x60;certificateId&#x60; for that new certificate and refuses a reused one. The quantity must be between 1 and what the source certificate actually holds; the recipient must be a stakeholder of this same company.  Writes the caller\&#39;s OWN cap table: the org resolved from the validated principal selects the tenant\&#39;s store and scopes every row, so there is no field by which a caller can write into another company\&#39;s table; a request with no validated org is refused. The whole write runs in one transaction, so a refusal leaves nothing behind. Validation is the cap-table bundle\&#39;s and so is its refusal: a bad body comes back as {success:false, message, errors:[…]} with the failing fields listed, and numeric fields accept a number OR a numeric string. Bodies are capped at 1 MiB.
+     * Moves shares from one stakeholder to another.
+     * Moves shares from one stakeholder to another.  Omit &#x60;quantity&#x60; to transfer the whole certificate, which REASSIGNS it and mints no new share. Send a quantity below the amount held to SPLIT it — the source certificate keeps the remainder, and a split additionally requires &#x60;certificateId&#x60; for the new certificate, which must be unique in the company. A quantity outside 1..held is refused, so a transfer can never over-issue.  Both outcomes answer 200: a transfer records a movement between holders and mints no security of its own, which is why this is not a 201 the way an investment is.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postCaptableSharesTransfer(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postCaptableSharesTransfer(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postCaptableSharesTransfer(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postCaptableSharesTransfer(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postCaptableSharesTransfer(requestParameters: CaptableApiPostCaptableSharesTransferRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CaptableTransferred>;
+    public postCaptableSharesTransfer(requestParameters: CaptableApiPostCaptableSharesTransferRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CaptableTransferred>>;
+    public postCaptableSharesTransfer(requestParameters: CaptableApiPostCaptableSharesTransferRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CaptableTransferred>>;
+    public postCaptableSharesTransfer(requestParameters: CaptableApiPostCaptableSharesTransferRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const captableShareTransfer = requestParameters?.captableShareTransfer;
+        if (captableShareTransfer === null || captableShareTransfer === undefined) {
+            throw new Error('Required parameter captableShareTransfer was null or undefined when calling postCaptableSharesTransfer.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1719,6 +1928,7 @@ export class CaptableApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1728,6 +1938,15 @@ export class CaptableApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -1742,9 +1961,10 @@ export class CaptableApi extends BaseService {
 
         let localVarPath = `/v1/captable/shares/transfer`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptableTransferred>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: captableShareTransfer,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

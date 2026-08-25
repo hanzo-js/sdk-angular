@@ -29,6 +29,8 @@ import { BillingAccount } from '../model/billingAccount';
 // @ts-ignore
 import { CapVerdict } from '../model/capVerdict';
 // @ts-ignore
+import { Charged } from '../model/charged';
+// @ts-ignore
 import { Collected } from '../model/collected';
 // @ts-ignore
 import { CreditBalance } from '../model/creditBalance';
@@ -40,6 +42,8 @@ import { CryptoAsset } from '../model/cryptoAsset';
 import { CryptoDeposit } from '../model/cryptoDeposit';
 // @ts-ignore
 import { CryptoOptions } from '../model/cryptoOptions';
+// @ts-ignore
+import { Detachment } from '../model/detachment';
 // @ts-ignore
 import { FinanceLedgerEntry } from '../model/financeLedgerEntry';
 // @ts-ignore
@@ -59,6 +63,8 @@ import { Payout } from '../model/payout';
 // @ts-ignore
 import { RaiseIn } from '../model/raiseIn';
 // @ts-ignore
+import { Recharge } from '../model/recharge';
+// @ts-ignore
 import { Rollup } from '../model/rollup';
 // @ts-ignore
 import { Subscription } from '../model/subscription';
@@ -68,6 +74,8 @@ import { SubscriptionRef } from '../model/subscriptionRef';
 import { Subscriptions } from '../model/subscriptions';
 // @ts-ignore
 import { Tier } from '../model/tier';
+// @ts-ignore
+import { TopupIn } from '../model/topupIn';
 // @ts-ignore
 import { Transactions } from '../model/transactions';
 // @ts-ignore
@@ -90,14 +98,17 @@ export interface BillingApiCollectInvoiceRequestParams {
 }
 
 export interface BillingApiDeleteBillingAlertsByIdRequestParams {
+    /** ID is the cap to remove, from the path. */
     id: string;
 }
 
 export interface BillingApiDeleteBillingMethodsByIdRequestParams {
+    /** ID is the saved method to detach, from the path. */
     id: string;
 }
 
 export interface BillingApiDeleteBillingPortalMethodsByIdRequestParams {
+    /** ID is the saved method to detach, from the path. */
     id: string;
 }
 
@@ -165,6 +176,16 @@ export interface BillingApiPostBillingCryptoDepositRequestParams {
 
 export interface BillingApiPostBillingModeRequestParams {
     modeIn: ModeIn;
+}
+
+export interface BillingApiPostBillingTopupRequestParams {
+    topupIn: TopupIn;
+    xIdempotencyKey?: string;
+}
+
+export interface BillingApiPostBillingTopupTokenRequestParams {
+    topupIn: TopupIn;
+    xIdempotencyKey?: string;
 }
 
 export interface BillingApiRaiseInvoiceRequestParams {
@@ -324,8 +345,8 @@ export class BillingApi extends BaseService {
     }
 
     /**
-     * Remove one spend cap
-     * Deletes a budget the caller\&#39;s org owns and answers 204.  Removing a cap REMOVES A CEILING, so it takes the same bar as setting one: a validated org admin, the platform SuperAdmin, or the trusted in-process service token. A member who could delete the org\&#39;s cap would have unbounded spend.  A cap this org does not own is NOT FOUND rather than refused — the same answer whether the id is unknown or belongs to another customer — so an id cannot be probed for existence by trying to delete it.
+     * Removes one of the caller\&#39;s spend caps and answers 204.
+     * Removes one of the caller\&#39;s spend caps and answers 204.  Removing a cap RAISES what the org may spend, so it takes the same authority setting one does. The caps that remain still bind: this drops one, never the whole policy.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -382,16 +403,16 @@ export class BillingApi extends BaseService {
     }
 
     /**
-     * Remove one saved card or account
-     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\&#39;s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
+     * Removes one card or account the caller has saved.
+     * Removes one card or account the caller has saved.  It detaches only the CALLER\&#39;S own — the wallet this request bills from, resolved server-side — so an id belonging to another customer of the same org is not something this operation can reach. A platform or service caller detaches on the subject\&#39;s behalf, and that authority is decided HERE, where the credential is, and travels as a value: authority decided twice is authority that eventually disagrees with itself.  The card is vaulted at the processor, so what goes is our token for it.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Detachment>;
+    public deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Detachment>>;
+    public deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Detachment>>;
+    public deleteBillingMethodsById(requestParameters: BillingApiDeleteBillingMethodsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteBillingMethodsById.');
@@ -403,6 +424,7 @@ export class BillingApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -426,7 +448,7 @@ export class BillingApi extends BaseService {
 
         let localVarPath = `/v1/billing/methods/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Detachment>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -440,16 +462,16 @@ export class BillingApi extends BaseService {
     }
 
     /**
-     * Remove one saved card or account
-     * Detaches the method at the processor and drops the row.  A method the caller does not own is NOT FOUND rather than refused — the same answer whether the id names nothing or names somebody else\&#39;s card — so an id cannot be probed for existence.  A platform operator or the trusted in-process service token may act on any subject inside the org; everyone else may only remove their own.
+     * DetachPortalMethod is DetachMethod at the address a hosted checkout addresses it by.
+     * DetachPortalMethod is DetachMethod at the address a hosted checkout addresses it by. One set of rows, two spellings: a card detached at either is gone from both, because there is one store behind them.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Detachment>;
+    public deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Detachment>>;
+    public deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Detachment>>;
+    public deleteBillingPortalMethodsById(requestParameters: BillingApiDeleteBillingPortalMethodsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteBillingPortalMethodsById.');
@@ -461,6 +483,7 @@ export class BillingApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -484,7 +507,7 @@ export class BillingApi extends BaseService {
 
         let localVarPath = `/v1/billing/portal/methods/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Detachment>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -2397,15 +2420,15 @@ export class BillingApi extends BaseService {
     }
 
     /**
-     * Recharge every org that has fallen below its threshold
-     * Sweeps every organization and, for those with auto-recharge on whose available balance has dropped below their own threshold, charges the default card and credits the balance.  It charges cards across EVERY tenant, so it is platform authority only — never an org owner, who could otherwise sweep-charge saved cards estate-wide. Its caller is a schedule, not a person.  &#x60;orgs&#x60; is the population considered, not the row count: that difference is how a reader tells \&#39;nobody was below threshold\&#39; from \&#39;the sweep never ran\&#39;. One org\&#39;s failure is reported in its own row and does not stop the rest.
+     * Sweeps every org\&#39;s auto-recharge and answers what it did.
+     * Sweeps every org\&#39;s auto-recharge and answers what it did.  PLATFORM AUTHORITY ONLY. It charges saved cards across every tenant, so an org owner reaching it could sweep-charge the estate; a caller without it is refused before anything is charged.  The answer explains a sweep that charged nobody as readily as one that charged: it names how many orgs were considered and how many needed charging, with a row each.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postBillingRechargeRunAll(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postBillingRechargeRunAll(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postBillingRechargeRunAll(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postBillingRechargeRunAll(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postBillingRechargeRunAll(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Recharge>;
+    public postBillingRechargeRunAll(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Recharge>>;
+    public postBillingRechargeRunAll(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Recharge>>;
+    public postBillingRechargeRunAll(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -2413,6 +2436,7 @@ export class BillingApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -2436,7 +2460,7 @@ export class BillingApi extends BaseService {
 
         let localVarPath = `/v1/billing/recharge/run-all`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Recharge>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -2503,22 +2527,32 @@ export class BillingApi extends BaseService {
     }
 
     /**
-     * Add funds with a card already on file
-     * Charges a saved card and credits the caller\&#39;s prepaid wallet.  The method must belong to the caller: one that does not is NOT FOUND rather than refused, so an id cannot be probed for existence. A saved row whose card is no longer chargeable is 422 — add the card again — which is a different thing to do than a decline (402) or a bad amount (400).  Retries behave exactly as they do for a token top-up: same key, same replay, same exactly-once at the processor.
+     * Charges a card the caller already saved and credits the balance.
+     * Charges a card the caller already saved and credits the balance. Same receipt and the same retry safety as the token endpoint; the only difference is which card, so a caller topping up from a saved method never re-enters one.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postBillingTopup(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postBillingTopup(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postBillingTopup(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postBillingTopup(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postBillingTopup(requestParameters: BillingApiPostBillingTopupRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Charged>;
+    public postBillingTopup(requestParameters: BillingApiPostBillingTopupRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Charged>>;
+    public postBillingTopup(requestParameters: BillingApiPostBillingTopupRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Charged>>;
+    public postBillingTopup(requestParameters: BillingApiPostBillingTopupRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const topupIn = requestParameters?.topupIn;
+        if (topupIn === null || topupIn === undefined) {
+            throw new Error('Required parameter topupIn was null or undefined when calling postBillingTopup.');
+        }
+        const xIdempotencyKey = requestParameters?.xIdempotencyKey;
 
         let localVarHeaders = this.defaultHeaders;
+        if (xIdempotencyKey !== undefined && xIdempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('X-Idempotency-Key', String(xIdempotencyKey));
+        }
 
         // authentication (bearer) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -2528,6 +2562,15 @@ export class BillingApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -2542,9 +2585,10 @@ export class BillingApi extends BaseService {
 
         let localVarPath = `/v1/billing/topup`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Charged>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: topupIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -2556,22 +2600,32 @@ export class BillingApi extends BaseService {
     }
 
     /**
-     * Add funds with a single-use card token
-     * Charges a card token from the browser\&#39;s payment SDK and credits the caller\&#39;s prepaid wallet — the cold-customer path, where nothing has to be saved first.  The wallet credited is the CALLER\&#39;S OWN, resolved from their signed identity. It is never a value in the request: a client-set selector is how a customer once topped up one account while their usage drew from another.  &#x60;X-Idempotency-Key&#x60; makes a retry safe. With one, a repeat replays the first result; without one, the same amount from the same subject inside a short window does too. The key reaches the processor as well as our own guard, so the charge is exactly-once at the gateway even if our guard store is down.  The amount is bounded server-side. A decline is 402 and nothing is credited.
+     * Charges a single-use card token and credits the caller\&#39;s balance.
+     * Charges a single-use card token and credits the caller\&#39;s balance.  The token comes from the payment form and is vaulted as part of the charge, so no card number reaches this service and none is stored here. The receipt names the ledger entry, the new balance, and the PROCESSOR\&#39;s own reference — which is the only field that proves money moved at the gateway rather than only in our ledger.  Retry-safe on X-Idempotency-Key: the same key settles one charge and returns the first receipt.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postBillingTopupToken(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postBillingTopupToken(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postBillingTopupToken(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postBillingTopupToken(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postBillingTopupToken(requestParameters: BillingApiPostBillingTopupTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Charged>;
+    public postBillingTopupToken(requestParameters: BillingApiPostBillingTopupTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Charged>>;
+    public postBillingTopupToken(requestParameters: BillingApiPostBillingTopupTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Charged>>;
+    public postBillingTopupToken(requestParameters: BillingApiPostBillingTopupTokenRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const topupIn = requestParameters?.topupIn;
+        if (topupIn === null || topupIn === undefined) {
+            throw new Error('Required parameter topupIn was null or undefined when calling postBillingTopupToken.');
+        }
+        const xIdempotencyKey = requestParameters?.xIdempotencyKey;
 
         let localVarHeaders = this.defaultHeaders;
+        if (xIdempotencyKey !== undefined && xIdempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('X-Idempotency-Key', String(xIdempotencyKey));
+        }
 
         // authentication (bearer) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -2581,6 +2635,15 @@ export class BillingApi extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -2595,9 +2658,10 @@ export class BillingApi extends BaseService {
 
         let localVarPath = `/v1/billing/topup/token`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Charged>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: topupIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

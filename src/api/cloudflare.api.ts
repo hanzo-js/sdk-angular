@@ -172,7 +172,7 @@ export interface CloudflareApiPostCloudflareD1DatabasesRequestParams {
 
 export interface CloudflareApiPostCloudflareD1DatabasesByDatabaseQueryRequestParams {
     database: string;
-    d1Query?: D1Query;
+    d1Query: D1Query;
 }
 
 export interface CloudflareApiPostCloudflareKvNamespacesRequestParams {
@@ -222,8 +222,9 @@ export interface CloudflareApiPutCloudflareKvNamespacesByNamespaceValuesByKeyReq
 }
 
 export interface CloudflareApiPutCloudflareWorkersScriptsByScriptRequestParams {
+    /** Script means two things on this route, and the document says so in both places it appears: the PATH segment names the Worker to publish, and the BODY field carries that Worker\&#39;s ES-module source — the code itself, never a name or a URL. A blank or absent source is refused; there is no empty Worker. */
     script: string;
-    workerScriptPut?: WorkerScriptPut;
+    workerScriptPut: WorkerScriptPut;
 }
 
 
@@ -1548,8 +1549,8 @@ export class CloudflareApi extends BaseService {
     }
 
     /**
-     * Run a SQL statement against a D1 database
-     * Executes a statement on one D1 database on the org\&#39;s OWN Cloudflare account and relays D1\&#39;s result set. &#x60;sql&#x60; is required and &#x60;params&#x60; carries the bound values in placeholder order — use them rather than interpolating values into the statement.  The body is checked for a non-empty &#x60;sql&#x60; and then forwarded VERBATIM, so every field D1 accepts reaches D1 even though only two are named here; the declared schema is open for that reason. That verbatim forward is why this is not a typed op — decoding and re-encoding the body would drop &#x60;params&#x60;, where the query\&#39;s bound values live. Requires ORG ADMIN (403 otherwise); a malformed body or missing &#x60;sql&#x60; is 400; 503 if the org has never connected a Cloudflare token.
+     * Runs one SQL statement against a D1 database.
+     * Runs one SQL statement against a D1 database. It executes on the org\&#39;s OWN Cloudflare account and relays D1\&#39;s result set. The body is checked for a non-empty &#x60;sql&#x60; and then forwarded VERBATIM, so every field D1 accepts reaches D1 even though only two are named here.  Requires ORG ADMIN — a statement may INSERT, UPDATE or DROP, so a query takes the write gate rather than the read one — and a caller who is only an org member is refused 403. A missing &#x60;sql&#x60; is 400; 503 if the org has never connected a Cloudflare token.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -1563,6 +1564,9 @@ export class CloudflareApi extends BaseService {
             throw new Error('Required parameter database was null or undefined when calling postCloudflareD1DatabasesByDatabaseQuery.');
         }
         const d1Query = requestParameters?.d1Query;
+        if (d1Query === null || d1Query === undefined) {
+            throw new Error('Required parameter d1Query was null or undefined when calling postCloudflareD1DatabasesByDatabaseQuery.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -2249,8 +2253,8 @@ export class CloudflareApi extends BaseService {
     }
 
     /**
-     * Upload or replace a module Worker script
-     * Publishes a module Worker to the org\&#39;s OWN Cloudflare account under the name in the path, replacing whatever was there, and relays Cloudflare\&#39;s result. &#x60;script&#x60; carries the module SOURCE; the optional compatibility date, compatibility flags and bindings are packed into the multipart upload Cloudflare expects.  The path names the script and the body field named &#x60;script&#x60; is its source — two different things that share a name, which is exactly why this cannot be a typed op: a binder that gives the URL the last word would overwrite the source with the script\&#39;s name. Requires ORG ADMIN (403 otherwise); an unparseable body or empty source is 400; 503 if the org has never connected a Cloudflare token.
+     * Uploads or replaces a module Worker script.
+     * Uploads or replaces a module Worker script. It publishes to the org\&#39;s OWN Cloudflare account under the name in the path, replacing whatever was there, and relays Cloudflare\&#39;s result. The compatibility date, compatibility flags and bindings are packed into the multipart upload Cloudflare expects, beside the module source.  Requires ORG ADMIN — a Worker is arbitrary code on the org\&#39;s own account and domains — so a caller who is only an org member is refused 403. An empty source is 400, as is a &#x60;mainModule&#x60; that is not a plain file name; 503 if the org has never connected a Cloudflare token.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -2264,6 +2268,9 @@ export class CloudflareApi extends BaseService {
             throw new Error('Required parameter script was null or undefined when calling putCloudflareWorkersScriptsByScript.');
         }
         const workerScriptPut = requestParameters?.workerScriptPut;
+        if (workerScriptPut === null || workerScriptPut === undefined) {
+            throw new Error('Required parameter workerScriptPut was null or undefined when calling putCloudflareWorkersScriptsByScript.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 

@@ -68,6 +68,17 @@ export interface GraphApiGraphResolveRequestParams {
     graphResolveIn: GraphResolveIn;
 }
 
+export interface GraphApiGraphSearchRequestParams {
+    /** Q is what to look for: words, matched as prefixes, all of them required. Punctuation is text here rather than syntax, so an entity key searches as itself. */
+    q?: string;
+    /** Relation narrows to one relation. Absent matches every relation. */
+    relation?: string;
+    /** AsOf bounds the search to what was knowable at an instant, RFC 3339. Absent searches everything this plane holds. */
+    asOf?: string;
+    /** Limit caps how many assertions come back. Absent, zero, or anything above the walk ceiling is the ceiling. */
+    limit?: number;
+}
+
 export interface GraphApiPostGraphGraphqlRequestParams {
     graphQLIn?: GraphQLIn;
 }
@@ -359,6 +370,76 @@ export class GraphApi extends BaseService {
     }
 
     /**
+     * Find assertions by their text rather than by an entity key
+     * Finds assertions by their text where read finds them by their keys.  It is the READ with one more term, not a second way to leave the store: same order, same ceiling, same tenancy, and searching composes with narrowing by relation and by instant because all of them are terms of one filter.  It resolves nothing. What matches is what was asserted, including claims that were later corrected — which is the honest answer to \&quot;where is this mentioned\&quot; and the reason the caller then asks resolve about what it found.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public graphSearch(requestParameters?: GraphApiGraphSearchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GraphReadOut>;
+    public graphSearch(requestParameters?: GraphApiGraphSearchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GraphReadOut>>;
+    public graphSearch(requestParameters?: GraphApiGraphSearchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GraphReadOut>>;
+    public graphSearch(requestParameters?: GraphApiGraphSearchRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const q = requestParameters?.q;
+        const relation = requestParameters?.relation;
+        const asOf = requestParameters?.asOf;
+        const limit = requestParameters?.limit;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>q, 'q');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>relation, 'relation');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>asOf, 'as_of');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>limit, 'limit');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/graph/search`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<GraphReadOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * The relations in use, and the rule that resolves a conflict
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -413,7 +494,7 @@ export class GraphApi extends BaseService {
 
     /**
      * Ask the graph in one request, traversing.
-     * Runs a GraphQL query against this organization\&#39;s assertions.  It is the one door here a caller can TRAVERSE: the REST ops each answer a single question, so composing them — the entities this one points at, and what each of those resolves to — costs a request per hop with the intermediate keys held by the caller. Here that is one query and the nesting is the answer\&#39;s shape.  It adds no way to ask anything new. Every field runs the SAME operation the matching REST route runs, so the tenancy, the as-of bound, the traversal bounds and the conflict rule are the ones already in force; the schema is served by introspection.  A query that cannot run answers 200 with an &#x60;errors&#x60; list, which is the wire every GraphQL client parses.
+     * Runs a GraphQL query against this organization\&#39;s assertions.  It is the one endpoint here a caller can TRAVERSE: the REST ops each answer a single question, so composing them — the entities this one points at, and what each of those resolves to — costs a request per hop with the intermediate keys held by the caller. Here that is one query and the nesting is the answer\&#39;s shape.  It adds no way to ask anything new. Every field runs the SAME operation the matching REST route runs, so the tenancy, the as-of bound, the traversal bounds and the conflict rule are the ones already in force; the schema is served by introspection.  A query that cannot run answers 200 with an &#x60;errors&#x60; list, which is the wire every GraphQL client parses.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

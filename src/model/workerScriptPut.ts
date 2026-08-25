@@ -11,9 +11,21 @@
 
 export interface WorkerScriptPut { 
     bindings?: any | null;
+    /**
+     * CompatibilityDate pins which Workers runtime behaviour the script runs under, as a plain calendar date (\"2024-01-01\"). Absent leaves the account\'s own default in force.
+     */
     compatibilityDate?: string;
+    /**
+     * CompatibilityFlags turn individual runtime behaviours on or off around that date (\"nodejs_compat\"), in Cloudflare\'s own flag vocabulary. Absent means the date alone decides.
+     */
     compatibilityFlags?: Array<string>;
+    /**
+     * MainModule is the module file the runtime starts at. Absent means \"worker.js\".
+     */
     mainModule?: string;
+    /**
+     * Script means two things on this route, and the document says so in both places it appears: the PATH segment names the Worker to publish, and the BODY field carries that Worker\'s ES-module source — the code itself, never a name or a URL. A blank or absent source is refused; there is no empty Worker.
+     */
     script?: string;
 }
 

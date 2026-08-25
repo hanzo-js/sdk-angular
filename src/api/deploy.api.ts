@@ -33,7 +33,13 @@ import { ArgoTree } from '../model/argoTree';
 // @ts-ignore
 import { ConsoleSettings } from '../model/consoleSettings';
 // @ts-ignore
+import { DeployHealth } from '../model/deployHealth';
+// @ts-ignore
 import { GitOpsPlane } from '../model/gitOpsPlane';
+// @ts-ignore
+import { ReconcileReport } from '../model/reconcileReport';
+// @ts-ignore
+import { SessionEnded } from '../model/sessionEnded';
 // @ts-ignore
 import { SessionUser } from '../model/sessionUser';
 // @ts-ignore
@@ -72,10 +78,12 @@ export interface DeployApiGetDeployStreamApplicationsByNameResourceTreeRequestPa
 }
 
 export interface DeployApiPostDeployApplicationsByNameRollbackRequestParams {
+    /** Name is the application to read, from the path. It must be a DNS-1123 label (lowercase alphanumerics and hyphens, starting and ending alphanumeric) — every operator App CR\&#39;s metadata.name satisfies that, and anything else is a 400 rather than a lookup. */
     name: string;
 }
 
 export interface DeployApiPostDeployApplicationsByNameSyncRequestParams {
+    /** Name is the application to read, from the path. It must be a DNS-1123 label (lowercase alphanumerics and hyphens, starting and ending alphanumeric) — every operator App CR\&#39;s metadata.name satisfies that, and anything else is a 400 rather than a lookup. */
     name: string;
 }
 
@@ -545,15 +553,15 @@ export class DeployApi extends BaseService {
     }
 
     /**
-     * Whether this control plane can actually reach the cluster it deploys to
-     * Reports the plane\&#39;s real reachability: 200 only when the Kubernetes API server answers AND the App CRD is served, 503 with the same body shape otherwise, so a caller reads the same &#x60;k8s&#x60; and &#x60;crd&#x60; booleans either way rather than parsing an error envelope. It is a genuine dependency probe, not a process liveness ping — a running plane with no cluster behind it reports degraded.  This is the ONE unauthenticated route that reports state, because liveness must be probe-able without a JWT. It therefore discloses booleans only: the underlying failure — the API server address, an RBAC refusal — is logged server-side and never put on the wire.
+     * Health reports whether this deployment can observe the delivery plane.
+     * Health reports whether this deployment can observe the delivery plane.  200 only when the Kubernetes API answers AND the App custom resource is served; 503 with the same shape otherwise, naming which half failed. It reports BOOLEANS and never the underlying error, because the route is unauthenticated — liveness must be probe-able without a token — and a raw client error can disclose the apiserver address or an RBAC detail. That detail is logged server-side instead.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDeployHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getDeployHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getDeployHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getDeployHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getDeployHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DeployHealth>;
+    public getDeployHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DeployHealth>>;
+    public getDeployHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DeployHealth>>;
+    public getDeployHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -561,6 +569,7 @@ export class DeployApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -584,7 +593,7 @@ export class DeployApi extends BaseService {
 
         let localVarPath = `/v1/deploy/health`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<DeployHealth>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -978,16 +987,16 @@ export class DeployApi extends BaseService {
     }
 
     /**
-     * The console\&#39;s rollback control — today it requests a reconcile, nothing more
-     * Performs exactly what the sync action performs: it stamps the sync-requested timestamp onto the application\&#39;s App CR and answers the application re-projected. It does NOT select, pin or revert to a prior image tag, and that is the one thing to know before wiring anything to it — the name is the console\&#39;s, the behaviour is the sync. Pinning a previous release rides the release seam, which this address does not call yet.  SuperAdmin-only and fail-closed, reading no request body, with an unknown application name a 404 and no cluster client a 503 — the same gate and the same failures as the sync it shares a handler with.
+     * Serves the console\&#39;s rollback control, and today it requests a reconcile and nothing more.
+     * Serves the console\&#39;s rollback control, and today it requests a reconcile and nothing more.  The opening verb is not style. zipdoc drops a leading CamelCase symbol only when a plain verb follows it and never before a copula (internal/zipdoc/ extract.go:811-824, \&quot;CompleteDeployment IS the CI completion hook\&quot; would otherwise become \&quot;Is the CI completion hook\&quot;) — so \&quot;RollbackDeployApplication is …\&quot; would publish a Go symbol no caller can see into the summary an SDK docstring, an MCP tool list and a CLI help line all show.  It performs exactly what the sync action performs — the same stamp on the same App CR, the same application re-projected — and it does NOT select, pin or revert to a prior image tag. That is the one thing to know before wiring anything to it: the name is the console\&#39;s, the behaviour is the sync. Pinning a previous release rides the release client, which this address does not call yet.  Same gate, same refusals and the same absent request body as the sync it shares a core with.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postDeployApplicationsByNameRollback(requestParameters: DeployApiPostDeployApplicationsByNameRollbackRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postDeployApplicationsByNameRollback(requestParameters: DeployApiPostDeployApplicationsByNameRollbackRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postDeployApplicationsByNameRollback(requestParameters: DeployApiPostDeployApplicationsByNameRollbackRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postDeployApplicationsByNameRollback(requestParameters: DeployApiPostDeployApplicationsByNameRollbackRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postDeployApplicationsByNameRollback(requestParameters: DeployApiPostDeployApplicationsByNameRollbackRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ArgoApp>;
+    public postDeployApplicationsByNameRollback(requestParameters: DeployApiPostDeployApplicationsByNameRollbackRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ArgoApp>>;
+    public postDeployApplicationsByNameRollback(requestParameters: DeployApiPostDeployApplicationsByNameRollbackRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ArgoApp>>;
+    public postDeployApplicationsByNameRollback(requestParameters: DeployApiPostDeployApplicationsByNameRollbackRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
             throw new Error('Required parameter name was null or undefined when calling postDeployApplicationsByNameRollback.');
@@ -999,6 +1008,7 @@ export class DeployApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1022,7 +1032,7 @@ export class DeployApi extends BaseService {
 
         let localVarPath = `/v1/deploy/applications/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/rollback`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ArgoApp>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1036,16 +1046,16 @@ export class DeployApi extends BaseService {
     }
 
     /**
-     * Ask the operator to reconcile one application now
-     * Requests an immediate reconcile of one application by stamping a sync-requested timestamp onto its App CR, which the operator\&#39;s watch observes, and answers the application re-projected. It ASKS, it does not apply: the operator performs the reconcile on its own clock, so a 200 means the request landed, not that the rollout finished — the returned row\&#39;s running version still lags until it does. The CR is the desired source today, so this is a nudge; when git becomes the source the same address becomes apply-from-git.  SuperAdmin-only and fail-closed — a non-SuperAdmin is refused before any cluster object is read or patched, and the write surface stays admin-only while the tenant surface is read-only reflection. It reads no request body. An unknown application name is a 404; no cluster client configured is a 503.
+     * Asks the operator to reconcile ONE application now.
+     * Asks the operator to reconcile ONE application now.  It stamps a sync-requested timestamp onto the application\&#39;s App CR, which the operator\&#39;s watch observes, and answers the application re-projected. It ASKS, it does not apply: the operator reconciles on its own clock, so a 200 means the request landed, not that the rollout finished — the returned row\&#39;s running version still lags until it does.  SuperAdmin-only and fail-closed, and the gate is INSIDE the op rather than in middleware wrapped around the route. That is a correctness requirement, not a preference: this op is also reached by POST /mcp and by the by-name call plane, neither of which runs route middleware, so a gate that only the REST projection runs would publish an unguarded alias of a fleet-mutating write. It reads no request body — the URL names the application and nothing else does. An unknown name is a 404 (never a 403, which would confirm the application exists), a name that is not a DNS-1123 label is a 400, and no cluster client is a 503.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postDeployApplicationsByNameSync(requestParameters: DeployApiPostDeployApplicationsByNameSyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postDeployApplicationsByNameSync(requestParameters: DeployApiPostDeployApplicationsByNameSyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postDeployApplicationsByNameSync(requestParameters: DeployApiPostDeployApplicationsByNameSyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postDeployApplicationsByNameSync(requestParameters: DeployApiPostDeployApplicationsByNameSyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postDeployApplicationsByNameSync(requestParameters: DeployApiPostDeployApplicationsByNameSyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ArgoApp>;
+    public postDeployApplicationsByNameSync(requestParameters: DeployApiPostDeployApplicationsByNameSyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ArgoApp>>;
+    public postDeployApplicationsByNameSync(requestParameters: DeployApiPostDeployApplicationsByNameSyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ArgoApp>>;
+    public postDeployApplicationsByNameSync(requestParameters: DeployApiPostDeployApplicationsByNameSyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
             throw new Error('Required parameter name was null or undefined when calling postDeployApplicationsByNameSync.');
@@ -1057,6 +1067,7 @@ export class DeployApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1080,7 +1091,7 @@ export class DeployApi extends BaseService {
 
         let localVarPath = `/v1/deploy/applications/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/sync`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ArgoApp>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1094,15 +1105,15 @@ export class DeployApi extends BaseService {
     }
 
     /**
-     * End the console session on this host
-     * Clears this console\&#39;s session cookie and answers the signed-out state with the sign-in URL to start again. IAM\&#39;s own session is untouched — this ends the console session only, so signing back in may not prompt for credentials.  It is a POST because it changes state. As a GET it was reachable by a cross-site top-level navigation, which a SameSite&#x3D;Lax cookie still rides, so any page could sign a SuperAdmin out; a POST is not carried cross-site by that cookie.
+     * Ends the console session on this host.
+     * Ends the console session on this host.  It clears this console\&#39;s session cookie and answers the signed-out state with the sign-in URL to start again. IAM\&#39;s own session is untouched — this ends the console session only, so signing back in may not prompt for credentials.  It is a POST because it CHANGES STATE. As a GET it was reachable by a cross-site top-level navigation, which a SameSite&#x3D;Lax cookie still rides, so any page could sign a SuperAdmin out; a POST is not carried cross-site by that cookie. It reads no request body and takes no argument: the session it ends is the one the request already carries.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postDeployLogout(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postDeployLogout(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postDeployLogout(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postDeployLogout(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postDeployLogout(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionEnded>;
+    public postDeployLogout(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionEnded>>;
+    public postDeployLogout(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionEnded>>;
+    public postDeployLogout(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1110,6 +1121,7 @@ export class DeployApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1133,7 +1145,7 @@ export class DeployApi extends BaseService {
 
         let localVarPath = `/v1/deploy/logout`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SessionEnded>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1147,15 +1159,15 @@ export class DeployApi extends BaseService {
     }
 
     /**
-     * Render the configured git source and apply it to the cluster, once
-     * Runs one full GitOps sync through the embedded engine — render the configured repo, ref and path, then three-way server-side apply with scoped prune — and answers the revision it applied, the source it came from, the declared/synced/pruned/failed counts and a per-resource result. This is the WRITE half of the plane: it mutates live cluster objects and, with prune enabled, deletes objects the source no longer declares.  SuperAdmin-only and fail-closed — a non-SuperAdmin is refused before any cluster object is read or touched. The git source is read AS THE CALLER, so the source plane scopes the answer itself rather than trusting this one to have scoped it. It reads no request body; the source is configuration, not a parameter. A deployment with the engine switched off, or with no usable cluster config, answers 503; a failure to start, render or sync is a 502.
+     * Renders the configured git source and applies it to the cluster, once.
+     * Renders the configured git source and applies it to the cluster, once.  It runs one full GitOps sync through the embedded engine — render the configured repo, ref and path, then three-way server-side apply with scoped prune — and answers the revision it applied, the source it came from, the declared/synced/pruned/failed counts and a per-resource result. This is the WRITE half of the plane: it mutates live cluster objects and, with prune enabled, deletes objects the source no longer declares.  SuperAdmin-only and fail-closed, with the gate INSIDE the op because a typed op is also reached by POST /mcp and by the by-name call plane, where no route middleware runs. The git source is read AS THE PLATFORM, not as the caller: the coordinate is this deployment\&#39;s own configuration and never a parameter, which is why the op reads no request body at all. A deployment with the engine switched off, or with no usable cluster config, answers 503; a failure to start, render or sync is a 502.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postDeployReconcile(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postDeployReconcile(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postDeployReconcile(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postDeployReconcile(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postDeployReconcile(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconcileReport>;
+    public postDeployReconcile(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconcileReport>>;
+    public postDeployReconcile(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconcileReport>>;
+    public postDeployReconcile(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1163,6 +1175,7 @@ export class DeployApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1186,7 +1199,7 @@ export class DeployApi extends BaseService {
 
         let localVarPath = `/v1/deploy/reconcile`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ReconcileReport>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

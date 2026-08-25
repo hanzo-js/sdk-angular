@@ -29,7 +29,7 @@ export interface Tool {
      */
     name?: string;
     /**
-     * Price is what a call costs and who is paid, absent for a free tool. Enforcement is the x402 settlement seam; this is the declaration.
+     * Price is what a call costs and who is paid, absent for a free tool. Enforcement is the x402 settlement client; this is the declaration.
      */
     price?: Price;
     /**

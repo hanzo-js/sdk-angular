@@ -38,9 +38,13 @@ import { BaseService } from '../api.base.service';
 
 
 export interface KmsApiGetKmsSecretsRequestParams {
+    /** Env selects the environment, which is part of a secret\&#39;s storage key. OMITTED means EVERY environment — this is the enumeration surface, so it must be able to answer \&quot;what is in here\&quot; without being told where to look. */
     env?: string;
+    /** Environment is the KMS operator\&#39;s spelling of Env, accepted so one caller need not learn the other\&#39;s vocabulary. Env wins when both are sent. */
     environment?: string;
+    /** Path narrows the listing to one subtree beneath the caller\&#39;s org root, as a &#x60;/&#x60;-separated path such as &#x60;/ci&#x60;. OMITTED means the whole org. */
     path?: string;
+    /** SecretPath is the KMS operator\&#39;s spelling of Path. Path wins when both are sent. */
     secretPath?: string;
 }
 
@@ -242,7 +246,7 @@ export class KmsApi extends BaseService {
 
     /**
      * Exchanges a machine credential for an IAM bearer token.
-     * Exchanges a machine credential for an IAM bearer token.  Takes a tenant\&#39;s machine credential — a client id and client secret — and returns an owner-scoped IAM access token with its lifetime, which is the bearer the caller then carries on the org-scoped secret operations.  It is deliberately public and unauthenticated, because it IS the credential exchange and runs before any principal exists. That makes it the one route in this subsystem rate-limited PER SOURCE IP, keyed on the real TCP peer rather than on any caller-supplied header, and body-capped at the same door.  The submitted secret is never logged and never echoed, and failures collapse to one clean status with no upstream detail: 401 when the credential does not authenticate, 502 when the identity provider is unreachable, 503 when no issuer is configured. That is on purpose — a richer error would be a validity oracle for guessed credentials.
+     * Exchanges a machine credential for an IAM bearer token.  Takes a tenant\&#39;s machine credential — a client id and client secret — and returns an owner-scoped IAM access token with its lifetime, which is the bearer the caller then carries on the org-scoped secret operations.  It is deliberately public and unauthenticated, because it IS the credential exchange and runs before any principal exists. That makes it the one route in this subsystem rate-limited PER SOURCE IP, keyed on the real TCP peer rather than on any caller-supplied header, and body-capped in the same place.  The submitted secret is never logged and never echoed, and failures collapse to one clean status with no upstream detail: 401 when the credential does not authenticate, 502 when the identity provider is unreachable, 503 when no issuer is configured. That is on purpose — a richer error would be a validity oracle for guessed credentials.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

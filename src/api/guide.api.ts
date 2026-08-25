@@ -68,6 +68,7 @@ export interface GuideApiPostGuideStepsByIdDoRequestParams {
 }
 
 export interface GuideApiPostGuideStepsByIdDoneRequestParams {
+    /** ID is the step\&#39;s id, as it appears in the journey (e.g. \&quot;gsuite\&quot;). */
     id: string;
 }
 
@@ -82,6 +83,7 @@ export interface GuideApiPostGuideStepsByIdSkipRequestParams {
 }
 
 export interface GuideApiPostGuideStepsByIdStartRequestParams {
+    /** ID is the step\&#39;s id, as it appears in the journey (e.g. \&quot;gsuite\&quot;). */
     id: string;
 }
 
@@ -838,16 +840,16 @@ export class GuideApi extends BaseService {
     }
 
     /**
-     * Mark a step of your org\&#39;s journey finished
-     * Moves one step of the caller org\&#39;s journey to done and answers the whole refreshed journey, which is what unblocks everything downstream of it.  Dependency-GATED like start: finishing a step whose prerequisites are themselves unfinished is 409 carrying &#x60;{error, step, blockedBy}&#x60; naming what is in the way, not a silent success. A step id the org\&#39;s active journey does not contain is 404. Skipping is the ungated alternative — a founder declaring a step does not apply — and it lives at /skip.  Requires a validated org; 403 without one. The mark is recorded as &#x60;manual&#x60;, and /reset returns the step to todo.
+     * Marks one step of the caller org\&#39;s journey complete and returns the refreshed journey.
+     * Marks one step of the caller org\&#39;s journey complete and returns the refreshed journey.  Dependency-GATED, exactly as start is: a step whose prerequisites are unfinished is refused 409 carrying {error, step, blockedBy} naming what is in the way.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OverviewView>;
+    public postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OverviewView>>;
+    public postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OverviewView>>;
+    public postGuideStepsByIdDone(requestParameters: GuideApiPostGuideStepsByIdDoneRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling postGuideStepsByIdDone.');
@@ -859,6 +861,7 @@ export class GuideApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -882,7 +885,7 @@ export class GuideApi extends BaseService {
 
         let localVarPath = `/v1/guide/steps/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/done`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<OverviewView>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1014,16 +1017,16 @@ export class GuideApi extends BaseService {
     }
 
     /**
-     * Mark a step of your org\&#39;s journey started
-     * Moves one step of the caller org\&#39;s journey to in-progress and answers the whole refreshed journey, so a console needs no second read.  The transition is dependency-GATED, and that is why the answer set is wider than a success: a step whose prerequisites are unfinished is 409 carrying &#x60;{error, step, blockedBy}&#x60;, where &#x60;blockedBy&#x60; names the exact steps in the way — enough to render the blockage rather than merely report it. A step id the org\&#39;s active journey does not contain is 404.  Requires a validated org; 403 without one, and the journey read and written is that org\&#39;s alone. The mark is recorded as &#x60;manual&#x60;, and the journey is reconciled against the auto-detectors on every read, so a step the org has demonstrably completed elsewhere can still be moved to done underneath it.
+     * Marks one step of the caller org\&#39;s journey in progress and returns the refreshed journey.
+     * Marks one step of the caller org\&#39;s journey in progress and returns the refreshed journey.  Dependency-GATED: a step whose prerequisites are unfinished is refused 409 carrying {error, step, blockedBy}, where blockedBy names the exact steps in the way — enough to render the reason without asking again.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OverviewView>;
+    public postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OverviewView>>;
+    public postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OverviewView>>;
+    public postGuideStepsByIdStart(requestParameters: GuideApiPostGuideStepsByIdStartRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling postGuideStepsByIdStart.');
@@ -1035,6 +1038,7 @@ export class GuideApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -1058,7 +1062,7 @@ export class GuideApi extends BaseService {
 
         let localVarPath = `/v1/guide/steps/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/start`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<OverviewView>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
