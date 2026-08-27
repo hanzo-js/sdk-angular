@@ -2224,6 +2224,7 @@ src/model/seriesPoint.ts
 src/model/sessionDetail.ts
 src/model/sessionEnded.ts
 src/model/sessionList.ts
+src/model/sessionProgress.ts
 src/model/sessionUser.ts
 src/model/sessionView.ts
 src/model/setEnvReq.ts

@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { LastEventView } from './lastEventView';
+import { SessionProgress } from './sessionProgress';
 
 
 export interface SessionView { 
@@ -63,6 +64,10 @@ export interface SessionView {
      * ParentSessionID is the session that spawned this one, making this a subagent of it. Empty means this session is a root — a flow of its own. A parent always belongs to the same org, so a tree never crosses a tenant.
      */
     parentSessionId?: string;
+    /**
+     * Progress is how far along this run is — a share of its goal, a phase, and a line saying what it is doing. Always present, so a board never branches on whether it is there; `phase` says \"unknown\" when nothing has estimated it. It is a MODEL ESTIMATE wherever `estimated` is true, and the row\'s own word where it is false. See progress.go.
+     */
+    progress?: SessionProgress;
     /**
      * The readable build: the product this session built and whether its story is public (provenance.go).
      */
