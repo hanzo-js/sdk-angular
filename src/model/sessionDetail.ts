@@ -9,6 +9,7 @@
  */
 import { LastEventView } from './lastEventView';
 import { SessionView } from './sessionView';
+import { SessionProgress } from './sessionProgress';
 import { EventView } from './eventView';
 
 
@@ -30,6 +31,7 @@ export interface SessionDetail {
     lastEvent?: LastEventView;
     org?: string;
     parentSessionId?: string;
+    progress?: SessionProgress;
     project?: string;
     provider?: string;
     published?: boolean;
