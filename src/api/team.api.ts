@@ -32,6 +32,12 @@ import { PlanInfo } from '../model/planInfo';
 import { ProviderInfo } from '../model/providerInfo';
 // @ts-ignore
 import { StatsOut } from '../model/statsOut';
+// @ts-ignore
+import { TeamRoom } from '../model/teamRoom';
+// @ts-ignore
+import { TeamRoomBind } from '../model/teamRoomBind';
+// @ts-ignore
+import { TeamRooms } from '../model/teamRooms';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -84,6 +90,12 @@ export interface TeamApiPostTeamCollaboratorRpcByDocumentidRequestParams {
 export interface TeamApiPostTeamFilesByWorkspaceRequestParams {
     workspace: string;
     body?: Blob;
+}
+
+export interface TeamApiPutTeamRoomsByIdRequestParams {
+    /** ID is the room to bind, from the path. The URL is the authority; a body carrying another id cannot redirect the write. */
+    id: string;
+    teamRoomBind: TeamRoomBind;
 }
 
 
@@ -645,6 +657,60 @@ export class TeamApi extends BaseService {
     }
 
     /**
+     * Returns every room of the caller\&#39;s org, across the workspaces it owns, with the work facet each carries.
+     * Returns every room of the caller\&#39;s org, across the workspaces it owns, with the work facet each carries.  It reads the SAME Chunter documents the transactor serves, so a room opened in the Team client appears here with no sync, and a facet written here is read by anything holding the document. Direct messages are included: a room between two people is a room with no name, not a different kind of thing.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTeamRooms(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TeamRooms>;
+    public getTeamRooms(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TeamRooms>>;
+    public getTeamRooms(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TeamRooms>>;
+    public getTeamRooms(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/team/rooms`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TeamRooms>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Statistics returns the transactor\&#39;s live sessions for the workspace the caller\&#39;s credential names — the endpoint the front\&#39;s workspace switcher and server panel poll on the transactor base.
      * Statistics returns the transactor\&#39;s live sessions for the workspace the caller\&#39;s credential names — the endpoint the front\&#39;s workspace switcher and server panel poll on the transactor base. &#x60;token&#x60; carries the same two lanes the socket\&#39;s path segment does: a workspace UUID names the workspace and is authorized against the membership rows, an HS256 workspace token names it in its signed claims. activeSessions carries ONLY that one workspace, never another tenant\&#39;s sessions. An unverifiable credential, or one the caller is no member under, is 401.
      * @param requestParameters
@@ -1107,6 +1173,79 @@ export class TeamApi extends BaseService {
         return this.httpClient.request<CookieAck>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * States what a room is for: its lifecycle intent, and what it is about.
+     * States what a room is for: its lifecycle intent, and what it is about. It answers the room as it now stands.  The write is a platform MIXIN on the room document, applied through the SAME applyTx path the Team client\&#39;s own writes take and broadcast to every connected client — so a room bound here updates live in an open workspace rather than on the next reload.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putTeamRoomsById(requestParameters: TeamApiPutTeamRoomsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TeamRoom>;
+    public putTeamRoomsById(requestParameters: TeamApiPutTeamRoomsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TeamRoom>>;
+    public putTeamRoomsById(requestParameters: TeamApiPutTeamRoomsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TeamRoom>>;
+    public putTeamRoomsById(requestParameters: TeamApiPutTeamRoomsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling putTeamRoomsById.');
+        }
+        const teamRoomBind = requestParameters?.teamRoomBind;
+        if (teamRoomBind === null || teamRoomBind === undefined) {
+            throw new Error('Required parameter teamRoomBind was null or undefined when calling putTeamRoomsById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/team/rooms/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TeamRoom>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: teamRoomBind,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

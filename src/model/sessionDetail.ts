@@ -38,6 +38,7 @@ export interface SessionDetail {
      */
     recentEvents?: Array<EventView>;
     repo?: string;
+    room?: string;
     rootSessionId?: string;
     startedAt?: string;
     status?: string;

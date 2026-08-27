@@ -17,6 +17,8 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
+import { Call } from '../model/call';
+// @ts-ignore
 import { MeetHealth } from '../model/meetHealth';
 // @ts-ignore
 import { RecordIn } from '../model/recordIn';
@@ -28,6 +30,13 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 import { BaseService } from '../api.base.service';
 
+
+export interface MeetApiMeetCallRequestParams {
+    /** Workspace is the workspace uuid holding the room, as GET /v1/team/rooms reports it. It is the segment the caller\&#39;s membership is checked against. */
+    workspace: string;
+    /** Room is the room\&#39;s own id within that workspace, as GET /v1/team/rooms reports it. It is opaque here: meet keeps no rooms and cannot say whether one exists, only whether this caller may be seated in the workspace holding it. */
+    room: string;
+}
 
 export interface MeetApiMeetRecordReadRequestParams {
     /** Room is the LiveKit room, named the way the office client names one (&#x60;&lt;workspace&gt;_&lt;name&gt;_&lt;id&gt;&#x60;). Its leading segment is what binds the room to a tenant, and it is the segment the caller\&#39;s membership is checked against. */
@@ -150,6 +159,76 @@ export class MeetApi extends BaseService {
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Where a room\&#39;s call happens
+     * Answers where a room\&#39;s call happens, for a caller who may join it.  It is the \&quot;resolved at render\&quot; half of HIP-0523 §12: a surface showing a channel asks for the room\&#39;s call at the moment it draws one, rather than reading a media room name someone stored on the room. Nothing here is persisted and nothing is created — a media room begins existing when the first participant connects and stops when the last leaves, so there is no call to create and none to clean up.  AUTHORIZATION IS THE JOIN DECISION, unchanged and shared. It delegates to state.admits, the same function POST /v1/meet/getToken and all three recording operations admit on, so a caller who is told where a call is, is a caller who could have joined it. Answering the address to someone who cannot join would make this a workspace-membership oracle for anyone who can guess a room id.  It deliberately does NOT report whether a call is in progress. That is a fact the media server holds and this binary would have to ask for it over the network, which is a different decision with a different failure mode — and reporting \&quot;nobody is in this call\&quot; when the question could not be asked would be exactly the unknown-rendered-as-zero this surface refuses elsewhere.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Call>;
+    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Call>>;
+    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Call>>;
+    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const workspace = requestParameters?.workspace;
+        if (workspace === null || workspace === undefined) {
+            throw new Error('Required parameter workspace was null or undefined when calling meetCall.');
+        }
+        const room = requestParameters?.room;
+        if (room === null || room === undefined) {
+            throw new Error('Required parameter room was null or undefined when calling meetCall.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>workspace, 'workspace');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>room, 'room');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/meet/call`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Call>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

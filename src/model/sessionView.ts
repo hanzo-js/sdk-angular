@@ -80,6 +80,10 @@ export interface SessionView {
      */
     repo?: string;
     /**
+     * Room is the collaborative room this run was started in (HIP-0523), empty when it came from anywhere else — a CLI, a schedule, an API call. It is what lets a workspace view show the runs of one room beside its messages.
+     */
+    room?: string;
+    /**
      * RootSessionID is the top of this session\'s tree, inherited from the parent and shared by every node in one flow. A root session\'s own id, when it has no parent. It is the key one indexed read pulls a whole flow by, and what ?root= narrows a list or a stream to.
      */
     rootSessionId?: string;

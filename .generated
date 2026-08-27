@@ -34,6 +34,7 @@ src/api/dataroom.api.ts
 src/api/dataset.api.ts
 src/api/deploy.api.ts
 src/api/destination.api.ts
+src/api/dns.api.ts
 src/api/domain.api.ts
 src/api/engine.api.ts
 src/api/entitlement.api.ts
@@ -2124,6 +2125,7 @@ src/model/rollbackReq.ts
 src/model/rollup.ts
 src/model/rollupAllotment.ts
 src/model/rollupBalance.ts
+src/model/roomWork.ts
 src/model/root.ts
 src/model/roundInput.ts
 src/model/roundOut.ts
@@ -2325,6 +2327,9 @@ src/model/tariffIn.ts
 src/model/taxon.ts
 src/model/taxonIn.ts
 src/model/taxonomy.ts
+src/model/teamRoom.ts
+src/model/teamRoomBind.ts
+src/model/teamRooms.ts
 src/model/templateCatalog.ts
 src/model/templateOverride.ts
 src/model/templateReply.ts

@@ -27,7 +27,7 @@ export interface CaptableClassHolding {
      */
     name?: string;
     /**
-     * ShareClassID is the share class.
+     * ShareClassID addresses the class this position is for.
      */
     shareClassId?: string;
 }
