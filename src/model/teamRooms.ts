@@ -7,12 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TeamRoom } from './teamRoom';
 
 
-export interface PolicyList { 
+export interface TeamRooms { 
     /**
-     * Policies is the organization\'s published policy documents, each as the centre holds it.
+     * Rooms is every room of every workspace the caller\'s org owns, each with the work facet it carries.
      */
-    policies?: Array<any>;
+    rooms?: Array<TeamRoom>;
 }
 

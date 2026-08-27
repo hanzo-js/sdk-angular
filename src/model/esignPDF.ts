@@ -15,7 +15,7 @@ export interface EsignPDF {
      */
     filename?: string;
     /**
-     * ID is the document.
+     * ID is the document this PDF was rendered from.
      */
     id?: string;
     /**

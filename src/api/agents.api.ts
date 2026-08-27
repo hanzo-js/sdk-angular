@@ -146,6 +146,8 @@ export interface AgentsApiGetAgentsSessionsRequestParams {
     status?: string;
     /** Project filters to the sessions tagged with one product slug. */
     project?: string;
+    /** Room filters to the sessions started in one collaborative room — the query a workspace view runs to show what has been run in it. */
+    room?: string;
     /** Limit caps the page. Absent, zero or over 500 reads as 100. */
     limit?: number;
 }
@@ -1045,6 +1047,7 @@ export class AgentsApi extends BaseService {
         const parent = requestParameters?.parent;
         const status = requestParameters?.status;
         const project = requestParameters?.project;
+        const room = requestParameters?.room;
         const limit = requestParameters?.limit;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -1056,6 +1059,8 @@ export class AgentsApi extends BaseService {
           <any>status, 'status');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>project, 'project');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>room, 'room');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>limit, 'limit');
 

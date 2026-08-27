@@ -27,6 +27,8 @@ import { IssueView } from '../model/issueView';
 // @ts-ignore
 import { NewIssue } from '../model/newIssue';
 // @ts-ignore
+import { RoomWork } from '../model/roomWork';
+// @ts-ignore
 import { TodoProject } from '../model/todoProject';
 
 // @ts-ignore
@@ -67,6 +69,8 @@ export interface TodoApiGetTodoIssuesRequestParams {
     kind?: string;
     /** Repo keeps issues bound to one git repository. */
     repo?: string;
+    /** Room keeps issues bound to one collaboration room, spelled \&quot;&lt;workspace&gt;_&lt;room&gt;\&quot; — the exact value GET /v1/meet/call answers with, so a channel\&#39;s call and its todo list name the room the same way. This is the read a channel view runs to draw its own list; it spans every board of the org, because the work a channel is about is not confined to one board. */
+    room?: string;
     /** Source keeps one origin: team, git, crm, helpdesk, cms, agent. \&quot;git\&quot; is how you ask for the mirrored GitHub issues specifically. */
     source?: string;
     /** Assignee keeps issues held by one person. Pass \&quot;me\&quot; for yourself. */
@@ -102,6 +106,11 @@ export interface TodoApiGetTodoProjectsByKeyIssuesByNumRequestParams {
     key: string;
     /** Num is the issue\&#39;s number on that board. */
     num: number;
+}
+
+export interface TodoApiGetTodoRoomsByRoomRequestParams {
+    /** Room is the room, spelled \&quot;&lt;workspace&gt;_&lt;room&gt;\&quot; — the same value GET /v1/meet/call answers with, so a channel\&#39;s call and its work name the room identically. From the path. */
+    room: string;
 }
 
 export interface TodoApiPatchTodoProjectsByKeyRequestParams {
@@ -290,6 +299,7 @@ export class TodoApi extends BaseService {
         const status = requestParameters?.status;
         const kind = requestParameters?.kind;
         const repo = requestParameters?.repo;
+        const room = requestParameters?.room;
         const source = requestParameters?.source;
         const assignee = requestParameters?.assignee;
         const limit = requestParameters?.limit;
@@ -305,6 +315,8 @@ export class TodoApi extends BaseService {
           <any>kind, 'kind');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>repo, 'repo');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>room, 'room');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>source, 'source');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
@@ -600,6 +612,65 @@ export class TodoApi extends BaseService {
         let localVarPath = `/v1/todo/projects/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/issues/${this.configuration.encodeParam({name: "num", value: num, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<IssueView>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Summarises one room\&#39;s work.
+     * Summarises one room\&#39;s work.  The room is opaque here and is deliberately not resolved: this package cannot say whether a room exists — apps/team owns that document — so an unknown room answers an EMPTY board rather than a 404. That is the honest answer and the useful one: a channel that has never had an item filed in it and a channel id that was mistyped both have no work, and inventing a distinction would require this surface to hold a second copy of the room list (HIP-0523 §2 forbids it, and it would drift the first time a room was renamed).  Tenancy is the validated principal\&#39;s org and nothing else, so a caller cannot read another tenant\&#39;s channel by naming its room.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTodoRoomsByRoom(requestParameters: TodoApiGetTodoRoomsByRoomRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoomWork>;
+    public getTodoRoomsByRoom(requestParameters: TodoApiGetTodoRoomsByRoomRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoomWork>>;
+    public getTodoRoomsByRoom(requestParameters: TodoApiGetTodoRoomsByRoomRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoomWork>>;
+    public getTodoRoomsByRoom(requestParameters: TodoApiGetTodoRoomsByRoomRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const room = requestParameters?.room;
+        if (room === null || room === undefined) {
+            throw new Error('Required parameter room was null or undefined when calling getTodoRoomsByRoom.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/todo/rooms/${this.configuration.encodeParam({name: "room", value: room, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RoomWork>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

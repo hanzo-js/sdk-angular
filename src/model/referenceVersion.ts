@@ -19,7 +19,7 @@ export interface ReferenceVersion {
      */
     refusal?: string;
     /**
-     * Set is the set.
+     * Set is the name the consulted set is addressed by.
      */
     set?: string;
     /**

@@ -19,7 +19,7 @@ export interface Allowance {
      */
     plan?: string;
     /**
-     * unix seconds; when the count starts again
+     * unix seconds; when THAT window starts again
      */
     resets?: number;
     /**
@@ -30,5 +30,9 @@ export interface Allowance {
      * Used is how many zero-priced calls this subject has been SERVED in the period ending at Resets — the UTC calendar day. Only a served call counts, so an admission check, a refusal, or a vendor that never answered leaves it where it stood. It stops AT Limit rather than climbing past it, so Limit-Used is what remains and never goes negative.
      */
     used?: number;
+    /**
+     * Window is which ceiling these numbers describe — \"hour\" or \"day\" — because a caller is held to both and only one of them is the answer. It is the window that REFUSED where one did, and otherwise the one with least left, so Limit-Used is always the number that will actually stop them next. Empty where no window bounds the subject at all.
+     */
+    window?: string;
 }
 

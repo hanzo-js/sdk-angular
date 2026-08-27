@@ -35,7 +35,7 @@ export interface FrameworkRow {
      */
     unit?: string;
     /**
-     * Units is the plural of Unit.
+     * Units is Unit\'s plural, carried so a caller renders \"12 controls\" without having to pluralise a word it does not know.
      */
     units?: string;
 }
