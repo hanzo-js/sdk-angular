@@ -17,13 +17,13 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { Call } from '../model/call';
-// @ts-ignore
 import { MeetHealth } from '../model/meetHealth';
 // @ts-ignore
 import { RecordIn } from '../model/recordIn';
 // @ts-ignore
 import { Recording } from '../model/recording';
+// @ts-ignore
+import { Venue } from '../model/venue';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -176,9 +176,9 @@ export class MeetApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Call>;
-    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Call>>;
-    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Call>>;
+    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Venue>;
+    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Venue>>;
+    public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Venue>>;
     public meetCall(requestParameters: MeetApiMeetCallRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const workspace = requestParameters?.workspace;
         if (workspace === null || workspace === undefined) {
@@ -225,7 +225,7 @@ export class MeetApi extends BaseService {
 
         let localVarPath = `/v1/meet/call`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Call>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Venue>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
