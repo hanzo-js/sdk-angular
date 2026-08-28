@@ -11,16 +11,28 @@
 
 export interface Call { 
     /**
-     * Name is the media room to join: the value POST /v1/meet/getToken takes as roomName, and the value the media server keys participants on.
+     * Agent names the Hanzo assistant handling the call. Set means the call was answered by that assistant rather than connected to a person.
      */
-    name?: string;
+    agent?: string;
     /**
-     * Ready reports that this deployment can mint a join token for this room. It is false on a deployment holding no media-server key, where Name is still correct — the name is a property of the room and the key is a property of the deployment, so a caller learns the room\'s identity either way and learns not to offer a join button.
+     * From is the calling number in E.164. It must be one this org holds: a carrier refuses an origination from a number nobody proved they own.
      */
-    ready?: boolean;
+    from?: string;
     /**
-     * WS is where the media plane is — the address a client opens its own browser-to-server connection to. Empty when this deployment has not been told where its media server lives, which is reported rather than refused: a surface can say a call is unavailable without a second request.
+     * ID is the carrier\'s handle for the call — what a hangup or a lookup names.
      */
-    ws?: string;
+    id?: string;
+    /**
+     * Org is the tenant the call was placed for or received by.
+     */
+    org?: string;
+    /**
+     * Status is where the call is: \"queued\", \"ringing\", \"answered\", \"completed\" or \"failed\". Only the last two are terminal.
+     */
+    status?: string;
+    /**
+     * To is the called number in E.164.
+     */
+    to?: string;
 }
 

@@ -2294,6 +2294,7 @@ export * from './validatorList';
 export * from './variant';
 export * from './vendorRow';
 export * from './vendorsOut';
+export * from './venue';
 export * from './verdict';
 export * from './verificationDecision';
 export * from './verificationReq';
