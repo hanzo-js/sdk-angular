@@ -17,9 +17,9 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { Request } from '../model/request';
+import { Fusion } from '../model/fusion';
 // @ts-ignore
-import { Response } from '../model/response';
+import { Request } from '../model/request';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -48,9 +48,9 @@ export class SearchApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public search(requestParameters: SearchApiSearchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Response>;
-    public search(requestParameters: SearchApiSearchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Response>>;
-    public search(requestParameters: SearchApiSearchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Response>>;
+    public search(requestParameters: SearchApiSearchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Fusion>;
+    public search(requestParameters: SearchApiSearchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Fusion>>;
+    public search(requestParameters: SearchApiSearchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Fusion>>;
     public search(requestParameters: SearchApiSearchRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const request = requestParameters?.request;
         if (request === null || request === undefined) {
@@ -96,7 +96,7 @@ export class SearchApi extends BaseService {
 
         let localVarPath = `/v1/search`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Response>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Fusion>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: request,

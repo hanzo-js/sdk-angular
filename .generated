@@ -672,6 +672,7 @@ src/model/frameworkRow.ts
 src/model/functionDetail.ts
 src/model/functionView.ts
 src/model/funnel.ts
+src/model/fusion.ts
 src/model/gLRow.ts
 src/model/gPU.ts
 src/model/gcOut.ts
@@ -982,7 +983,6 @@ src/model/machineView.ts
 src/model/makeIn.ts
 src/model/marketCatalog.ts
 src/model/marketItem.ts
-src/model/match.ts
 src/model/mcpCatalog.ts
 src/model/mcpCatalogSync.ts
 src/model/mcpServerList.ts
@@ -1954,6 +1954,7 @@ src/model/promptList.ts
 src/model/promptMeta.ts
 src/model/promptReq.ts
 src/model/propSpec.ts
+src/model/provenance.ts
 src/model/providerBreakdown.ts
 src/model/providerInfo.ts
 src/model/providerRow.ts
@@ -2059,7 +2060,6 @@ src/model/request.ts
 src/model/resolveReferenceIn.ts
 src/model/resolveReferenceOut.ts
 src/model/resourceUsage.ts
-src/model/response.ts
 src/model/responsible.ts
 src/model/restartRef.ts
 src/model/restarted.ts

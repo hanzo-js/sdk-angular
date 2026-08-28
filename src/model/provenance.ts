@@ -9,9 +9,9 @@
  */
 
 
-export interface Match { 
+export interface Provenance { 
     /**
-     * Backend is the leg that contributed this match: \"index\" (lexical), \"vector\" (semantic) or \"code\" (the org\'s repositories). It is the same name that leg reports itself under in Response.Backends, so a hit can be traced to a status.
+     * Backend is the leg that contributed this match: \"index\" (lexical), \"vector\" (semantic) or \"code\" (the org\'s repositories). It is the same name that leg reports itself under in Fusion.Backends, so a hit can be traced to a status.
      */
     backend?: string;
     /**
