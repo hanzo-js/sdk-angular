@@ -11,7 +11,7 @@ import { Hit } from './hit';
 import { BackendStatus } from './backendStatus';
 
 
-export interface Response { 
+export interface Fusion { 
     /**
      * Backends is the per-leg report. Always populated.
      */
