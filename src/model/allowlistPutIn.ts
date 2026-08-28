@@ -15,7 +15,7 @@ export interface AllowlistPutIn {
      */
     accessGroups?: { [key: string]: { [key: string]: Array<string>; }; };
     /**
-     * Channel is the transport to edit: discord, slack, teams or telegram. Required; an unknown value is a 404.
+     * Channel is the transport to edit: discord, slack, teams, telegram or whatsapp. Required; an unknown value is a 404.
      */
     channel?: string;
     /**
