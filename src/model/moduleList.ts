@@ -7,13 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ModuleInfo } from './moduleInfo';
+import { Module } from './module';
 
 
 export interface ModuleList { 
     /**
-     * Data is every module compiled into this binary, with the DocTypes it installs.
+     * Data is every module compiled into this binary, with the DocTypes it installs and whether the caller\'s org has turned it on.
      */
-    data?: Array<ModuleInfo>;
+    data?: Array<Module>;
 }
 

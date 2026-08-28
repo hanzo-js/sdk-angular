@@ -67,11 +67,6 @@ export interface TeamApiGetTeamFilesByWorkspaceByFilenameRequestParams {
     filename: string;
 }
 
-export interface TeamApiGetTeamTransactorApiV1StatisticsRequestParams {
-    /** Token is the workspace token minted by selectWorkspace. */
-    token?: string;
-}
-
 export interface TeamApiGetTeamTransactorByTokenRequestParams {
     token: string;
 }
@@ -700,67 +695,6 @@ export class TeamApi extends BaseService {
         return this.httpClient.request<TeamRooms>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Statistics returns the transactor\&#39;s live sessions for the workspace the caller\&#39;s credential names — the endpoint the front\&#39;s workspace switcher and server panel poll on the transactor base.
-     * Statistics returns the transactor\&#39;s live sessions for the workspace the caller\&#39;s credential names — the endpoint the front\&#39;s workspace switcher and server panel poll on the transactor base. &#x60;token&#x60; carries the same two lanes the socket\&#39;s path segment does: a workspace UUID names the workspace and is authorized against the membership rows, an HS256 workspace token names it in its signed claims. activeSessions carries ONLY that one workspace, never another tenant\&#39;s sessions. An unverifiable credential, or one the caller is no member under, is 401.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getTeamTransactorApiV1Statistics(requestParameters?: TeamApiGetTeamTransactorApiV1StatisticsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StatsOut>;
-    public getTeamTransactorApiV1Statistics(requestParameters?: TeamApiGetTeamTransactorApiV1StatisticsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StatsOut>>;
-    public getTeamTransactorApiV1Statistics(requestParameters?: TeamApiGetTeamTransactorApiV1StatisticsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StatsOut>>;
-    public getTeamTransactorApiV1Statistics(requestParameters?: TeamApiGetTeamTransactorApiV1StatisticsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const token = requestParameters?.token;
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>token, 'token');
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/team/transactor/api/v1/statistics`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<StatsOut>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
