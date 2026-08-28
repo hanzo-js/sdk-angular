@@ -11,7 +11,7 @@
 
 export interface ApprovePairingIn { 
     /**
-     * Channel is the transport the request came in on: discord, slack, teams or telegram.
+     * Channel is the transport the request came in on: discord, slack, teams, telegram or whatsapp.
      */
     channel?: string;
     /**
