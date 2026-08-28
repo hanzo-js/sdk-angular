@@ -42,8 +42,6 @@ import { IndexTask } from '../model/indexTask';
 import { IndexVersion } from '../model/indexVersion';
 // @ts-ignore
 import { IndexView } from '../model/indexView';
-// @ts-ignore
-import { PostIndexIndexesByUidDocumentsDeleteBatchRequest } from '../model/postIndexIndexesByUidDocumentsDeleteBatchRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -99,7 +97,7 @@ export interface IndexApiPostIndexIndexesByUidDocumentsRequestParams {
 
 export interface IndexApiPostIndexIndexesByUidDocumentsDeleteBatchRequestParams {
     uid: string;
-    arraystringArraynumber?: Array<string> | Array<number> | null;
+    requestBody?: Array<any> | null;
 }
 
 export interface IndexApiPostIndexIndexesByUidSearchRequestParams {
@@ -995,7 +993,7 @@ export class IndexApi extends BaseService {
         if (uid === null || uid === undefined) {
             throw new Error('Required parameter uid was null or undefined when calling postIndexIndexesByUidDocumentsDeleteBatch.');
         }
-        const arraystringArraynumber = requestParameters?.arraystringArraynumber;
+        const requestBody = requestParameters?.requestBody;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1039,7 +1037,7 @@ export class IndexApi extends BaseService {
         return this.httpClient.request<IndexEnqueued>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: arraystringArraynumber,
+                body: requestBody,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

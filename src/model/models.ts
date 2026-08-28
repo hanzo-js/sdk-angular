@@ -1770,7 +1770,6 @@ export * from './poolScale';
 export * from './populatedFlow';
 export * from './position';
 export * from './postEventRequest';
-export * from './postIndexIndexesByUidDocumentsDeleteBatchRequest';
 export * from './postList';
 export * from './prefsView';
 export * from './preset';
