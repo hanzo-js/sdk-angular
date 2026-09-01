@@ -1,7 +1,7 @@
 {
   "name": "hanzoai-angular",
   "version": "8.5.156",
-  "description": "The Hanzo API client for Angular — injectable services, HttpClient, RxJS Observables.",
+  "description": "The Hanzo API client for Angular \u2014 injectable services, HttpClient, RxJS Observables.",
   "author": "Hanzo <dev@hanzo.ai>",
   "license": "Apache-2.0",
   "repository": "github:hanzo-js/sdk-angular",
@@ -29,6 +29,6 @@
     "@angular/core": "^22.1.2",
     "ng-packagr": "^22.1.1",
     "rxjs": "^7.8.2",
-    "typescript": "~6.0.3"
+    "typescript": "^7.0.2"
   }
 }
