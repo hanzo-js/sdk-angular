@@ -25,6 +25,10 @@ import { AlertPatch } from '../model/alertPatch';
 // @ts-ignore
 import { AlertSpec } from '../model/alertSpec';
 // @ts-ignore
+import { AutoRecharge } from '../model/autoRecharge';
+// @ts-ignore
+import { AutoRechargeEdit } from '../model/autoRechargeEdit';
+// @ts-ignore
 import { BillingAccount } from '../model/billingAccount';
 // @ts-ignore
 import { CapVerdict } from '../model/capVerdict';
@@ -76,6 +80,8 @@ import { Subscriptions } from '../model/subscriptions';
 import { Tier } from '../model/tier';
 // @ts-ignore
 import { TopupIn } from '../model/topupIn';
+// @ts-ignore
+import { Transaction } from '../model/transaction';
 // @ts-ignore
 import { Transactions } from '../model/transactions';
 // @ts-ignore
@@ -151,6 +157,10 @@ export interface BillingApiGetBillingTransactionsRequestParams {
     offset?: string;
 }
 
+export interface BillingApiGetBillingTransactionsByIdRequestParams {
+    id: string;
+}
+
 export interface BillingApiGetInvoiceRequestParams {
     /** ID is the invoice id. */
     id: string;
@@ -186,6 +196,10 @@ export interface BillingApiPostBillingTopupRequestParams {
 export interface BillingApiPostBillingTopupTokenRequestParams {
     topupIn: TopupIn;
     xIdempotencyKey?: string;
+}
+
+export interface BillingApiPutBillingRechargeRequestParams {
+    autoRechargeEdit: AutoRechargeEdit;
 }
 
 export interface BillingApiRaiseInvoiceRequestParams {
@@ -1472,6 +1486,60 @@ export class BillingApi extends BaseService {
     }
 
     /**
+     * Reads the caller\&#39;s auto-reload rule: top the balance up by &#x60;amountCents&#x60; whenever it falls below &#x60;thresholdCents&#x60;, charging the card on file off-session.
+     * Reads the caller\&#39;s auto-reload rule: top the balance up by &#x60;amountCents&#x60; whenever it falls below &#x60;thresholdCents&#x60;, charging the card on file off-session. It is the same setting every prepaid AI account calls auto-reload.  An org that has never set one reads as disabled with zeroes rather than as an error — \&quot;no rule\&quot; answers the question — and &#x60;stored&#x60; is how a caller tells never-configured from deliberately-off.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getBillingRecharge(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AutoRecharge>;
+    public getBillingRecharge(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AutoRecharge>>;
+    public getBillingRecharge(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AutoRecharge>>;
+    public getBillingRecharge(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/billing/recharge`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AutoRecharge>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Answers the PUBLIC half of this org\&#39;s processor configuration — the ids a browser needs to tokenize a card, and the environment it must tokenize against.
      * Answers the PUBLIC half of this org\&#39;s processor configuration — the ids a browser needs to tokenize a card, and the environment it must tokenize against.  It carries no secret: an application id is published to every checkout page by design. What matters is that it names the SAME processor account the charge will be made on, because a card vaulted against one account and charged against another is a card that saves and then cannot be used.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1690,6 +1758,65 @@ export class BillingApi extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reads one ledger entry by its id.
+     * Reads one ledger entry by its id.  It is the MEMBER of the collection beside it rather than a second way to ask — the same rows GET /v1/billing/transactions lists, addressed one at a time. A top-up receipt is read here, because a receipt IS a ledger entry: the id this takes is the &#x60;transactionId&#x60; a top-up hands back.  The read is narrower than the list: commerce\&#39;s core loads the row and refuses anything that is not a deposit, so a row that exists but is not a top-up answers 404. That asymmetry is stated rather than closed, because widening a money read to make two shapes match is not a change worth making for symmetry.  The books are the caller\&#39;s own and cannot be named, so a guessed id misses rather than reaching another tenant\&#39;s ledger.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getBillingTransactionsById(requestParameters: BillingApiGetBillingTransactionsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Transaction>;
+    public getBillingTransactionsById(requestParameters: BillingApiGetBillingTransactionsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Transaction>>;
+    public getBillingTransactionsById(requestParameters: BillingApiGetBillingTransactionsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Transaction>>;
+    public getBillingTransactionsById(requestParameters: BillingApiGetBillingTransactionsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getBillingTransactionsById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/billing/transactions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Transaction>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -2662,6 +2789,75 @@ export class BillingApi extends BaseService {
             {
                 context: localVarHttpContext,
                 body: topupIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Sets the caller\&#39;s auto-reload rule, and answers with the rule as stored.
+     * Sets the caller\&#39;s auto-reload rule, and answers with the rule as stored.  ENABLING REQUIRES A CARD ON FILE (400), because the sweep charges off-session: a rule naming no chargeable method is a promise the schedule cannot keep. A non-positive amount and a negative threshold are refused the same way, each naming the field that was wrong.  The rule is the caller\&#39;s OWN. The org comes from the validated principal and the body names none, so there is no field a write could be steered through onto another tenant\&#39;s schedule.  A named handler, not a closure, so zipdoc can lift this prose into the registry.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putBillingRecharge(requestParameters: BillingApiPutBillingRechargeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AutoRecharge>;
+    public putBillingRecharge(requestParameters: BillingApiPutBillingRechargeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AutoRecharge>>;
+    public putBillingRecharge(requestParameters: BillingApiPutBillingRechargeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AutoRecharge>>;
+    public putBillingRecharge(requestParameters: BillingApiPutBillingRechargeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const autoRechargeEdit = requestParameters?.autoRechargeEdit;
+        if (autoRechargeEdit === null || autoRechargeEdit === undefined) {
+            throw new Error('Required parameter autoRechargeEdit was null or undefined when calling putBillingRecharge.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/billing/recharge`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AutoRecharge>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: autoRechargeEdit,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

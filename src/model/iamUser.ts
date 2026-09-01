@@ -8,11 +8,9 @@
  * Do not edit the class manually.
  */
 import { IamAddress } from './iamAddress';
-import { IamPermission } from './iamPermission';
 import { IamMfaItem } from './iamMfaItem';
 import { IamManagedAccount } from './iamManagedAccount';
 import { IamFaceId } from './iamFaceId';
-import { IamRole } from './iamRole';
 import { IamMfaProps } from './iamMfaProps';
 import { IamConsentRecord } from './iamConsentRecord';
 import { IamMfaAccount } from './iamMfaAccount';
@@ -21,7 +19,7 @@ import { IamCartItem } from './iamCartItem';
 
 export interface IamUser { 
     /**
-     * API credentials. AccessSecret / AccessSecretHash / the OAuth tokens are bearer material. AccessSecretHash MUST persist (orm stores via JSON; a json:\"-\" field is never saved), so it carries a real json tag and the handler\'s redact() strips it (and AccessSecret + the token fields) before responding.
+     * API credentials. AccessSecret / AccessSecretHash / the OAuth tokens are bearer material, so Mask blanks them and the handler\'s redact() strips them before responding. They carry real json tags because a field orm never saves is a field that silently vanishes.  A presented secret is resolved through Key.AccessSecretDigest and nowhere else, so no credential is ISSUED into these columns: they hold what older rows left behind, and every writer that touches them clears them.
      */
     accessKey?: string;
     accessSecret?: string;
@@ -104,7 +102,6 @@ export interface IamUser {
     github?: string;
     gitlab?: string;
     google?: string;
-    groups?: Array<string>;
     hash?: string;
     heroku?: string;
     homepage?: string;
@@ -188,7 +185,6 @@ export interface IamUser {
     patreon?: string;
     paypal?: string;
     permanentAvatar?: string;
-    permissions?: Array<IamPermission>;
     phone?: string;
     preHash?: string;
     preferredMfaType?: string;
@@ -200,10 +196,6 @@ export interface IamUser {
     region?: string;
     registerSource?: string;
     registerType?: string;
-    /**
-     * Authorization attachments. Roles and Permissions are computed on read from the authz store and carried here for API parity with v1.
-     */
-    roles?: Array<IamRole>;
     salesforce?: string;
     score?: number;
     shopify?: string;

@@ -12,7 +12,7 @@ import { BotMember } from './botMember';
 
 export interface BotRoster { 
     /**
-     * Bots is every agent of the caller\'s org, projected as a workspace member.
+     * Bots is every agent of the caller\'s org, projected as a space member.
      */
     bots?: Array<BotMember>;
 }

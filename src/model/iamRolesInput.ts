@@ -14,11 +14,11 @@ export interface IamRolesInput {
     description?: string;
     displayName?: string;
     domains?: Array<string>;
-    groups?: Array<string>;
     isEnabled?: boolean;
     name?: string;
     owner?: string;
     roles?: Array<string>;
+    teams?: Array<string>;
     users?: Array<string>;
 }
 

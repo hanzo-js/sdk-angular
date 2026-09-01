@@ -51,7 +51,7 @@ export interface RegisterReq {
      */
     repo?: string;
     /**
-     * Room is the collaborative room this run was started in (HIP-0523), so a workspace view can list the sessions of one room. It is PROVENANCE and is set only here: there is deliberately no way to move a session to another room, so it is absent from the patch input and from UpdateSession\'s SET list.
+     * Room is the collaborative room this run was started in (HIP-0523), so a space view can list the sessions of one room. It is PROVENANCE and is set only here: there is deliberately no way to move a session to another room, so it is absent from the patch input and from UpdateSession\'s SET list.
      */
     room?: string;
     /**

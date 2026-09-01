@@ -121,6 +121,16 @@ import { IamSession } from '../model/iamSession';
 // @ts-ignore
 import { IamSetAvatarInput } from '../model/iamSetAvatarInput';
 // @ts-ignore
+import { IamSetProfileInput } from '../model/iamSetProfileInput';
+// @ts-ignore
+import { IamTeam } from '../model/iamTeam';
+// @ts-ignore
+import { IamTeamsDeleteOutput } from '../model/iamTeamsDeleteOutput';
+// @ts-ignore
+import { IamTeamsInput } from '../model/iamTeamsInput';
+// @ts-ignore
+import { IamTeamsListOutput } from '../model/iamTeamsListOutput';
+// @ts-ignore
 import { IamToken } from '../model/iamToken';
 // @ts-ignore
 import { IamTokenMutation } from '../model/iamTokenMutation';
@@ -225,6 +235,10 @@ export interface IamApiDeleteIamScimV2UsersByOwnerByNameRequestParams {
 }
 
 export interface IamApiDeleteIamServiceAccountsByNameRequestParams {
+    name: string;
+}
+
+export interface IamApiDeleteIamTeamsByNameRequestParams {
     name: string;
 }
 
@@ -382,8 +396,12 @@ export interface IamApiGetIamServiceAccountsRequestParams {
     pageSize?: number;
 }
 
+export interface IamApiGetIamTeamsByNameRequestParams {
+    name: string;
+}
+
 export interface IamApiGetIamUsersRequestParams {
-    owner: string;
+    owner?: string;
     /** Email narrows the page to the accounts carrying one address. Looking a person up by their address is a QUERY over the collection, not an item read: an address is not the natural key, two rows in one org can carry one, and a caller that gets a page SEES both — where a single-item read would have to choose, and choosing is how somebody joins a team under a colleague\&#39;s identity. */
     email?: string;
     limit?: number;
@@ -443,7 +461,7 @@ export interface IamApiListProvidersRequestParams {
 }
 
 export interface IamApiListSessionsRequestParams {
-    owner: string;
+    owner?: string;
     name?: string;
     application?: string;
 }
@@ -508,6 +526,10 @@ export interface IamApiPostIamRolesRequestParams {
 
 export interface IamApiPostIamServiceAccountsByNameKeysRequestParams {
     name: string;
+}
+
+export interface IamApiPostIamTeamsRequestParams {
+    iamTeamsInput: IamTeamsInput;
 }
 
 export interface IamApiPostIamUsersRequestParams {
@@ -590,6 +612,12 @@ export interface IamApiPutIamScimV2UsersByOwnerByNameRequestParams {
     name: string;
 }
 
+export interface IamApiPutIamTeamsByNameRequestParams {
+    /** Name addresses the team on update and names it on create; every other field is content and binds from the BODY, never the URL. */
+    name: string;
+    iamTeamsInput: IamTeamsInput;
+}
+
 export interface IamApiPutIamUsersByOwnerByNameRequestParams {
     owner: string;
     name: string;
@@ -604,6 +632,10 @@ export interface IamApiPutIamWorkspacesByOwnerByNameRequestParams {
 
 export interface IamApiSetOrganizationAvatarRequestParams {
     iamSetAvatarInput: IamSetAvatarInput;
+}
+
+export interface IamApiSetOrganizationProfileRequestParams {
+    iamSetProfileInput: IamSetProfileInput;
 }
 
 export interface IamApiUpdateOrganizationRequestParams {
@@ -934,8 +966,8 @@ export class IamApi extends BaseService {
     }
 
     /**
-     * Records a sign-in.
-     * Records a sign-in. Signing in again from another browser adds to the session rather than replacing it, so one person can be signed in from a laptop and a phone at once.  Ask for an exclusive sign-in and the opposite holds: the new sign-in is the only one left and every other browser is signed out. That is the setting to use when one person may hold only one live session at a time.
+     * Records a sign-in and answers with the cookie id it minted.
+     * Records a sign-in and answers with the cookie id it minted. Signing in again from another browser adds to the session rather than replacing it, so one person can be signed in from a laptop and a phone at once.  Ask for an exclusive sign-in and the opposite holds: the new sign-in is the only one left and every other browser is signed out. That is the setting to use when one person may hold only one live session at a time.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -1667,6 +1699,65 @@ export class IamApi extends BaseService {
         let localVarPath = `/v1/iam/service-accounts/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Removes a team.
+     * Removes a team. Everyone in it loses the access it carried; their accounts, and any other team they are in, are untouched.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteIamTeamsByName(requestParameters: IamApiDeleteIamTeamsByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamTeamsDeleteOutput>;
+    public deleteIamTeamsByName(requestParameters: IamApiDeleteIamTeamsByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamTeamsDeleteOutput>>;
+    public deleteIamTeamsByName(requestParameters: IamApiDeleteIamTeamsByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamTeamsDeleteOutput>>;
+    public deleteIamTeamsByName(requestParameters: IamApiDeleteIamTeamsByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const name = requestParameters?.name;
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling deleteIamTeamsByName.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/iam/teams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<IamTeamsDeleteOutput>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -2917,8 +3008,8 @@ export class IamApi extends BaseService {
     }
 
     /**
-     * Returns your organization\&#39;s API keys, newest first — what each is called, what it may reach, and its publishable half.
-     * Returns your organization\&#39;s API keys, newest first — what each is called, what it may reach, and its publishable half. Secret halves are never listed.
+     * Returns an organization\&#39;s API keys, newest first — what each is called, what it may reach, and its publishable half.
+     * Returns an organization\&#39;s API keys, newest first — what each is called, what it may reach, and its publishable half. Secret halves are never listed.  Which organization comes from your credentials, not from the request: you read your own and no one else\&#39;s. The capability that admits a confidential client to this collection does not itself name a tenant, so the tenant is decided here.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -3201,7 +3292,7 @@ export class IamApi extends BaseService {
 
     /**
      * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.
-     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.  Both are org-scoped: a non-SuperAdmin may ask about ITS OWN org\&#39;s roster, or about a user whose home org is its own, and nothing else. The bound comes from the verified credential via authz.Scope, so a request parameter can never widen it — a membership row names who may act and spend in an org, so a cross-tenant read is a customer roster leak.
+     * Answers either question about who belongs where: which organizations one person can act in, or who can act in one organization.  Both are org-scoped: a non-SuperAdmin may ask about ITS OWN org\&#39;s roster, or about a user whose home org is its own, and nothing else. The bound comes from the verified credential via principal.Scope, so a request parameter can never widen it — a membership row names who may act and spend in an org, so a cross-tenant read is a customer roster leak.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -4416,20 +4507,130 @@ export class IamApi extends BaseService {
     }
 
     /**
-     * Returns a page of the people in your organization, with the total so you can page through the rest.
-     * Returns a page of the people in your organization, with the total so you can page through the rest. Passwords, API secrets and MFA material are stripped from every entry.
+     * Returns your organization\&#39;s teams, newest first — each a named set of people that roles and permissions are granted to.
+     * Returns your organization\&#39;s teams, newest first — each a named set of people that roles and permissions are granted to.  You see your own organization\&#39;s teams and no one else\&#39;s; which organization that is comes from your credentials, not from the request.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getIamTeams(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamTeamsListOutput>;
+    public getIamTeams(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamTeamsListOutput>>;
+    public getIamTeams(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamTeamsListOutput>>;
+    public getIamTeams(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/iam/teams`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<IamTeamsListOutput>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns one team: who is in it.
+     * Returns one team: who is in it.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIamUsers(requestParameters: IamApiGetIamUsersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamUsersListOutput>;
-    public getIamUsers(requestParameters: IamApiGetIamUsersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamUsersListOutput>>;
-    public getIamUsers(requestParameters: IamApiGetIamUsersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamUsersListOutput>>;
-    public getIamUsers(requestParameters: IamApiGetIamUsersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const owner = requestParameters?.owner;
-        if (owner === null || owner === undefined) {
-            throw new Error('Required parameter owner was null or undefined when calling getIamUsers.');
+    public getIamTeamsByName(requestParameters: IamApiGetIamTeamsByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamTeam>;
+    public getIamTeamsByName(requestParameters: IamApiGetIamTeamsByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamTeam>>;
+    public getIamTeamsByName(requestParameters: IamApiGetIamTeamsByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamTeam>>;
+    public getIamTeamsByName(requestParameters: IamApiGetIamTeamsByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const name = requestParameters?.name;
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling getIamTeamsByName.');
         }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/iam/teams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<IamTeam>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a page of the people in an organization, with the total so you can page through the rest.
+     * Returns a page of the people in an organization, with the total so you can page through the rest. Passwords, API secrets and MFA material are stripped from every entry.  Which organization comes from your credentials, not from the request: you read your own and no one else\&#39;s, and a credential whose scope spans tenants reads the tenant it names — or, naming none, every one of them.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getIamUsers(requestParameters?: IamApiGetIamUsersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamUsersListOutput>;
+    public getIamUsers(requestParameters?: IamApiGetIamUsersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamUsersListOutput>>;
+    public getIamUsers(requestParameters?: IamApiGetIamUsersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamUsersListOutput>>;
+    public getIamUsers(requestParameters?: IamApiGetIamUsersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const owner = requestParameters?.owner;
         const email = requestParameters?.email;
         const limit = requestParameters?.limit;
         const offset = requestParameters?.offset;
@@ -5504,20 +5705,17 @@ export class IamApi extends BaseService {
     }
 
     /**
-     * Returns who is currently signed in to your organization, newest first, and can be narrowed to one person or one application.
-     * Returns who is currently signed in to your organization, newest first, and can be narrowed to one person or one application. It is what you read before signing someone out.
+     * Returns who is currently signed in to an organization, newest first, and can be narrowed to one person or one application.
+     * Returns who is currently signed in to an organization, newest first, and can be narrowed to one person or one application. It is what you read before signing someone out.  Which organization comes from your credentials, not from the request: you read your own and no one else\&#39;s. A session row names a live account and the applications it is signed in to, so the tenant is decided here rather than taken from the query.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listSessions(requestParameters: IamApiListSessionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamListSessionsOut>;
-    public listSessions(requestParameters: IamApiListSessionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamListSessionsOut>>;
-    public listSessions(requestParameters: IamApiListSessionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamListSessionsOut>>;
-    public listSessions(requestParameters: IamApiListSessionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listSessions(requestParameters?: IamApiListSessionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamListSessionsOut>;
+    public listSessions(requestParameters?: IamApiListSessionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamListSessionsOut>>;
+    public listSessions(requestParameters?: IamApiListSessionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamListSessionsOut>>;
+    public listSessions(requestParameters?: IamApiListSessionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const owner = requestParameters?.owner;
-        if (owner === null || owner === undefined) {
-            throw new Error('Required parameter owner was null or undefined when calling listSessions.');
-        }
         const name = requestParameters?.name;
         const application = requestParameters?.application;
 
@@ -7797,6 +7995,75 @@ export class IamApi extends BaseService {
     }
 
     /**
+     * Makes a team — a named set of people that roles and permissions grant to.
+     * Makes a team — a named set of people that roles and permissions grant to. Granting to a team rather than to each person keeps access correct as people come and go: add someone and they inherit what the team can do. A name already used in your organization is refused.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIamTeams(requestParameters: IamApiPostIamTeamsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamTeam>;
+    public postIamTeams(requestParameters: IamApiPostIamTeamsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamTeam>>;
+    public postIamTeams(requestParameters: IamApiPostIamTeamsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamTeam>>;
+    public postIamTeams(requestParameters: IamApiPostIamTeamsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const iamTeamsInput = requestParameters?.iamTeamsInput;
+        if (iamTeamsInput === null || iamTeamsInput === undefined) {
+            throw new Error('Required parameter iamTeamsInput was null or undefined when calling postIamTeams.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/iam/teams`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<IamTeam>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: iamTeamsInput,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Mints an access token for the &#x60;?id&#x3D;&lt;owner&gt;/&lt;name&gt;&#x60; target user (optional &#x60;?aud&#x3D;&#x60; resource, RFC 8707), issued by the authenticated + allow-listed confidential client.
      * Mints an access token for the &#x60;?id&#x3D;&lt;owner&gt;/&lt;name&gt;&#x60; target user (optional &#x60;?aud&#x3D;&#x60; resource, RFC 8707), issued by the authenticated + allow-listed confidential client. The token\&#39;s subject + owner are the TARGET USER\&#39;s, so a resource server scopes on the validated owner claim to the user\&#39;s tenant — indistinguishable from a token the user obtained directly. Response is the camelCase &#x60;{accessToken, expiresIn}&#x60; body identity.ts consumes. Equivalent to the RFC 8693 token-exchange grant, minus the subject_token proof (the console has the user\&#39;s id, not a token) — the reason this compat shim exists.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -9200,6 +9467,79 @@ export class IamApi extends BaseService {
     }
 
     /**
+     * Changes who is in a team.
+     * Changes who is in a team. Access changes for everyone in it as soon as the write lands. The name and the created stamp do not change.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putIamTeamsByName(requestParameters: IamApiPutIamTeamsByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamTeam>;
+    public putIamTeamsByName(requestParameters: IamApiPutIamTeamsByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamTeam>>;
+    public putIamTeamsByName(requestParameters: IamApiPutIamTeamsByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamTeam>>;
+    public putIamTeamsByName(requestParameters: IamApiPutIamTeamsByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const name = requestParameters?.name;
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling putIamTeamsByName.');
+        }
+        const iamTeamsInput = requestParameters?.iamTeamsInput;
+        if (iamTeamsInput === null || iamTeamsInput === undefined) {
+            throw new Error('Required parameter iamTeamsInput was null or undefined when calling putIamTeamsByName.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/iam/teams/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<IamTeam>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: iamTeamsInput,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Changes a person\&#39;s profile, their roles, or the credentials they sign in with.
      * Changes a person\&#39;s profile, their roles, or the credentials they sign in with. Send a password to reset it; leave it out and their current one keeps working.  Who they are does not change: their organization, username and the identifier their existing sessions are keyed on all survive the write, so an update never signs anyone out.
      * @param requestParameters
@@ -9423,6 +9763,75 @@ export class IamApi extends BaseService {
     }
 
     /**
+     * Changes how an organization reads: its display name, its website and its favicon.
+     * Changes how an organization reads: its display name, its website and its favicon.  IT EXISTS FOR THE REASON SetAvatar DOES, and the reason is worth stating because the obvious alternative is a trap. Update REPLACES the whole record, so a caller that wants to change one field has to send every other field back — and a record read back first arrives MASKED, so the read half of that read-modify-write hands you \&quot;***\&quot; for the master password and the salt, and the write half stores it. Renaming an organization through Update therefore costs it its credential settings; sending only the new name costs it everything else. Neither is a rename.  So this writes the fields it names and touches nothing else. A nil pointer is not sent and not changed; an empty string is sent and clears the field.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public setOrganizationProfile(requestParameters: IamApiSetOrganizationProfileRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IamOrganization>;
+    public setOrganizationProfile(requestParameters: IamApiSetOrganizationProfileRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IamOrganization>>;
+    public setOrganizationProfile(requestParameters: IamApiSetOrganizationProfileRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IamOrganization>>;
+    public setOrganizationProfile(requestParameters: IamApiSetOrganizationProfileRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const iamSetProfileInput = requestParameters?.iamSetProfileInput;
+        if (iamSetProfileInput === null || iamSetProfileInput === undefined) {
+            throw new Error('Required parameter iamSetProfileInput was null or undefined when calling setOrganizationProfile.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/iam/organizations/profile`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<IamOrganization>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: iamSetProfileInput,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Changes an organization\&#39;s display, its defaults and the sign-in rules everyone in it inherits.
      * Changes an organization\&#39;s display, its defaults and the sign-in rules everyone in it inherits. Which organization it is does not change, and neither does when it was created.
      * @param requestParameters
@@ -9577,8 +9986,8 @@ export class IamApi extends BaseService {
     }
 
     /**
-     * Replaces the set of browsers a session covers — signing out the ones you leave off while the session itself stays live.
-     * Replaces the set of browsers a session covers — signing out the ones you leave off while the session itself stays live. A session that does not exist is reported as missing rather than created.
+     * Names the browsers a session keeps — signing out the ones you leave off while the session itself stays live.
+     * Names the browsers a session keeps — signing out the ones you leave off while the session itself stays live. A session that does not exist is reported as missing rather than created.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

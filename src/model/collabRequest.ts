@@ -12,7 +12,7 @@ import { CollabPayload } from './collabPayload';
 
 export interface CollabRequest { 
     /**
-     * DocumentID addresses the document field, as \"<workspaceUuid>|<objectClass>|<objectId>|<objectAttr>\" — the collaborator-client encodeDocumentId shape, from the path.
+     * DocumentID addresses the document field, as \"<spaceUuid>|<objectClass>|<objectId>|<objectAttr>\" — the collaborator-client encodeDocumentId shape, from the path.
      */
     documentId?: string;
     /**

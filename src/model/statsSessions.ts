@@ -12,7 +12,7 @@ import { StatsUser } from './statsUser';
 
 export interface StatsSessions { 
     /**
-     * ActiveSessions maps a workspace uuid to its connected sessions. It carries only the token\'s OWN workspace, and is empty for a token that names none.
+     * ActiveSessions maps a space uuid to its connected sessions. It carries only the token\'s OWN space, and is empty for a token that names none.
      */
     activeSessions?: { [key: string]: Array<StatsUser>; };
 }

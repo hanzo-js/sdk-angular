@@ -79,6 +79,18 @@ import { GithubSearchReq } from '../model/githubSearchReq';
 // @ts-ignore
 import { GitlabProjectsOut } from '../model/gitlabProjectsOut';
 // @ts-ignore
+import { LinearBackfillIn } from '../model/linearBackfillIn';
+// @ts-ignore
+import { LinearBackfillResult } from '../model/linearBackfillResult';
+// @ts-ignore
+import { LinearClaimIn } from '../model/linearClaimIn';
+// @ts-ignore
+import { LinearClaimOut } from '../model/linearClaimOut';
+// @ts-ignore
+import { LinearCommentIn } from '../model/linearCommentIn';
+// @ts-ignore
+import { LinearCommentOut } from '../model/linearCommentOut';
+// @ts-ignore
 import { ListOut } from '../model/listOut';
 // @ts-ignore
 import { ProviderView } from '../model/providerView';
@@ -191,6 +203,18 @@ export interface IntegrationsApiPostIntegrationsGithubReposImportRequestParams {
 
 export interface IntegrationsApiPostIntegrationsGithubSearchRequestParams {
     githubSearchReq: GithubSearchReq;
+}
+
+export interface IntegrationsApiPostIntegrationsLinearClaimRequestParams {
+    linearClaimIn: LinearClaimIn;
+}
+
+export interface IntegrationsApiPostIntegrationsLinearCommentsRequestParams {
+    linearCommentIn: LinearCommentIn;
+}
+
+export interface IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams {
+    linearBackfillIn: LinearBackfillIn;
 }
 
 export interface IntegrationsApiPostIntegrationsOpenrouterWebhookRequestParams {
@@ -2660,6 +2684,266 @@ export class IntegrationsApi extends BaseService {
         }
 
         let localVarPath = `/v1/integrations/github/webhook`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Binds the caller\&#39;s Linear organization to the org and seals the webhook secret.
+     * Binds the caller\&#39;s Linear organization to the org and seals the webhook secret. The organization is READ from the caller\&#39;s own key, never taken from the body: a person can only bind an organization they are a member of. An organization another org already holds is refused.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearClaimOut>;
+    public postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearClaimOut>>;
+    public postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearClaimOut>>;
+    public postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const linearClaimIn = requestParameters?.linearClaimIn;
+        if (linearClaimIn === null || linearClaimIn === undefined) {
+            throw new Error('Required parameter linearClaimIn was null or undefined when calling postIntegrationsLinearClaim.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/linear/claim`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<LinearClaimOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: linearClaimIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Posts a comment on a Linear issue with the caller\&#39;s own key, so it carries their name.
+     * Posts a comment on a Linear issue with the caller\&#39;s own key, so it carries their name. This is the op an agent is offered when it should answer in Linear rather than in chat.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearCommentOut>;
+    public postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearCommentOut>>;
+    public postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearCommentOut>>;
+    public postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const linearCommentIn = requestParameters?.linearCommentIn;
+        if (linearCommentIn === null || linearCommentIn === undefined) {
+            throw new Error('Required parameter linearCommentIn was null or undefined when calling postIntegrationsLinearComments.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/linear/comments`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<LinearCommentOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: linearCommentIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Seeds the native todo with the EXISTING Linear issues the caller\&#39;s key can see (default state&#x3D;open); the webhook keeps them live thereafter.
+     * Seeds the native todo with the EXISTING Linear issues the caller\&#39;s key can see (default state&#x3D;open); the webhook keeps them live thereafter. Synchronous and bounded, idempotent by ExtRef.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearBackfillResult>;
+    public postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearBackfillResult>>;
+    public postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearBackfillResult>>;
+    public postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const linearBackfillIn = requestParameters?.linearBackfillIn;
+        if (linearBackfillIn === null || linearBackfillIn === undefined) {
+            throw new Error('Required parameter linearBackfillIn was null or undefined when calling postIntegrationsLinearIssuesBackfill.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/linear/issues/backfill`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<LinearBackfillResult>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: linearBackfillIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Linear webhook
+     * The address Linear delivers Issue and Comment events to. An issue event is mirrored into the native todo — idempotently by identifier, so ENG-123 is one row however many times it is edited, moved or closed — and every issue and comment event is handed to the automations engine as a verified trigger, which is how an org runs an agent when an issue is assigned to it or a comment mentions it. A remove is never propagated: the native side is canonical.  It answers a benign 200 for what it does not act on — an unknown organization, other event types — so Linear does not retry-storm. A bad signature and a delivery older than a minute are 401; only a sink failure is 502.  The delivery names its Linear organization; that organization\&#39;s own webhook secret — sealed at /v1/integrations/linear/claim — verifies the HMAC over the raw body, so the tenant is the organization the signature proves, never a header.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationsLinearWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationsLinearWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationsLinearWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationsLinearWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integrations/linear/webhook`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {

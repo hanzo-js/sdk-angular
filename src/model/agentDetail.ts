@@ -11,9 +11,11 @@ import { AgentRunView } from './agentRunView';
 
 
 export interface AgentDetail { 
+    avatar?: string;
     computeRef?: string;
     createdAt?: string;
     description?: string;
+    emoji?: string;
     executionMode?: string;
     id?: string;
     /**

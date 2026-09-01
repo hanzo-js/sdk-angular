@@ -11,7 +11,7 @@
 
 export interface SearchIn { 
     /**
-     * DocTypes restricts retrieval to a subset of the indexed knowledge doctypes (kb-page, kb-memory, kb-source). An empty or foreign list reads all of them.
+     * DocTypes restricts retrieval to a subset of the indexed knowledge doctypes (kb.page, kb.memory, kb.source). An empty or foreign list reads all of them.
      */
     doctypes?: Array<string>;
     /**

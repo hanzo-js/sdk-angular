@@ -7,13 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RoleAssignment } from './roleAssignment';
+import { IamTeam } from './iamTeam';
 
 
-export interface RoleList { 
-    /**
-     * Data is every (user, role) assignment in the caller\'s org.
-     */
-    data?: Array<RoleAssignment>;
+export interface IamTeamsListOutput { 
+    teams?: Array<IamTeam>;
+    total?: number;
 }
 

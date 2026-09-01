@@ -16,12 +16,12 @@ export interface IamRole {
     description?: string;
     displayName?: string;
     domains?: Array<string>;
-    groups?: Array<string>;
     id?: string;
     isEnabled?: boolean;
     name?: string;
     owner?: string;
     roles?: Array<string>;
+    teams?: Array<string>;
     updatedAt?: string;
     users?: Array<string>;
 }

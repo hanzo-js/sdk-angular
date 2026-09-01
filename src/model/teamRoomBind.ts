@@ -23,8 +23,8 @@ export interface TeamRoomBind {
      */
     life?: string;
     /**
-     * Workspace names the workspace holding the room. It is required, because a room id is unique only within one and searching every workspace for a matching id would make the write\'s target depend on iteration order.
+     * Space names the space holding the room. It is required, because a room id is unique only within one and searching every space for a matching id would make the write\'s target depend on iteration order.
      */
-    workspace?: string;
+    space?: string;
 }
 

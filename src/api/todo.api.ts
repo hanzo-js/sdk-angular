@@ -69,7 +69,7 @@ export interface TodoApiGetTodoIssuesRequestParams {
     kind?: string;
     /** Repo keeps issues bound to one git repository. */
     repo?: string;
-    /** Room keeps issues bound to one collaboration room, spelled \&quot;&lt;workspace&gt;_&lt;room&gt;\&quot; — the exact value GET /v1/meet/call answers with, so a channel\&#39;s call and its todo list name the room the same way. This is the read a channel view runs to draw its own list; it spans every board of the org, because the work a channel is about is not confined to one board. */
+    /** Room keeps issues bound to one collaboration room, spelled \&quot;&lt;space&gt;_&lt;room&gt;\&quot; — the exact value GET /v1/meet/call answers with, so a channel\&#39;s call and its todo list name the room the same way. This is the read a channel view runs to draw its own list; it spans every board of the org, because the work a channel is about is not confined to one board. */
     room?: string;
     /** Source keeps one origin: team, git, crm, helpdesk, cms, agent. \&quot;git\&quot; is how you ask for the mirrored GitHub issues specifically. */
     source?: string;
@@ -109,7 +109,7 @@ export interface TodoApiGetTodoProjectsByKeyIssuesByNumRequestParams {
 }
 
 export interface TodoApiGetTodoRoomsByRoomRequestParams {
-    /** Room is the room, spelled \&quot;&lt;workspace&gt;_&lt;room&gt;\&quot; — the same value GET /v1/meet/call answers with, so a channel\&#39;s call and its work name the room identically. From the path. */
+    /** Room is the room, spelled \&quot;&lt;space&gt;_&lt;room&gt;\&quot; — the same value GET /v1/meet/call answers with, so a channel\&#39;s call and its work name the room identically. From the path. */
     room: string;
 }
 

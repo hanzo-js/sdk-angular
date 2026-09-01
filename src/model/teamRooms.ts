@@ -12,7 +12,7 @@ import { TeamRoom } from './teamRoom';
 
 export interface TeamRooms { 
     /**
-     * Rooms is every room of every workspace the caller\'s org owns, each with the work facet it carries.
+     * Rooms is every room of every space the caller\'s org owns, each with the work facet it carries.
      */
     rooms?: Array<TeamRoom>;
 }

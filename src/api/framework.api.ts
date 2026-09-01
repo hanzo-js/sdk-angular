@@ -29,10 +29,6 @@ import { ModuleList } from '../model/moduleList';
 // @ts-ignore
 import { ModuleState } from '../model/moduleState';
 // @ts-ignore
-import { RoleAssignment } from '../model/roleAssignment';
-// @ts-ignore
-import { RoleList } from '../model/roleList';
-// @ts-ignore
 import { SummaryView } from '../model/summaryView';
 
 // @ts-ignore
@@ -42,26 +38,19 @@ import { BaseService } from '../api.base.service';
 
 
 export interface FrameworkApiDeleteFrameworkByDoctypeByNameRequestParams {
-    /** DocType is the document\&#39;s DocType, from the path. */
+    /** DocType is the document\&#39;s DocType, by ADDRESS — \&quot;module.name\&quot;, from the path. */
     doctype: string;
     /** Name is the document\&#39;s name — its key within the DocType — from the path. A name containing a space arrives percent-encoded and is decoded before it is matched against the stored one. */
     name: string;
 }
 
 export interface FrameworkApiDeleteFrameworkDoctypesByNameRequestParams {
-    /** Name is the DocType\&#39;s name, from the path. A name containing a space (\&quot;Sales Invoice\&quot;) arrives percent-encoded and is decoded before it is matched against the stored one. */
+    /** Name is the DocType\&#39;s ADDRESS — \&quot;module.name\&quot;, e.g. \&quot;kb.page\&quot;. A name containing a space (\&quot;erp.Sales Invoice\&quot;) arrives percent-encoded and is decoded before it is matched against the stored one. */
     name: string;
 }
 
-export interface FrameworkApiDeleteFrameworkRolesByUserByRoleRequestParams {
-    /** User is the assignee whose grant is being revoked, from the path. */
-    user: string;
-    /** Role is the role to revoke, from the path. A role name containing a space (\&quot;System Manager\&quot;) arrives percent-encoded and is decoded before it is matched against the stored assignment. */
-    role: string;
-}
-
 export interface FrameworkApiGetFrameworkByDoctypeRequestParams {
-    /** DocType is the DocType to list, from the path. */
+    /** DocType is the DocType to list, by ADDRESS — \&quot;module.name\&quot;, from the path. */
     doctype: string;
     /** Filters is a JSON object of equality matches, e.g. {\&quot;priority\&quot;:\&quot;High\&quot;}. Every key must be a field the DocType declares (or the managed name / docstatus); an undeclared one is refused rather than silently ignored. */
     filters?: string;
@@ -74,14 +63,14 @@ export interface FrameworkApiGetFrameworkByDoctypeRequestParams {
 }
 
 export interface FrameworkApiGetFrameworkByDoctypeByNameRequestParams {
-    /** DocType is the document\&#39;s DocType, from the path. */
+    /** DocType is the document\&#39;s DocType, by ADDRESS — \&quot;module.name\&quot;, from the path. */
     doctype: string;
     /** Name is the document\&#39;s name — its key within the DocType — from the path. A name containing a space arrives percent-encoded and is decoded before it is matched against the stored one. */
     name: string;
 }
 
 export interface FrameworkApiGetFrameworkDoctypesByNameRequestParams {
-    /** Name is the DocType\&#39;s name, from the path. A name containing a space (\&quot;Sales Invoice\&quot;) arrives percent-encoded and is decoded before it is matched against the stored one. */
+    /** Name is the DocType\&#39;s ADDRESS — \&quot;module.name\&quot;, e.g. \&quot;kb.page\&quot;. A name containing a space (\&quot;erp.Sales Invoice\&quot;) arrives percent-encoded and is decoded before it is matched against the stored one. */
     name: string;
 }
 
@@ -95,14 +84,14 @@ export interface FrameworkApiPostFrameworkByDoctypeRequestParams {
 }
 
 export interface FrameworkApiPostFrameworkByDoctypeByNameCancelRequestParams {
-    /** DocType is the document\&#39;s DocType, from the path. */
+    /** DocType is the document\&#39;s DocType, by ADDRESS — \&quot;module.name\&quot;, from the path. */
     doctype: string;
     /** Name is the document\&#39;s name — its key within the DocType — from the path. A name containing a space arrives percent-encoded and is decoded before it is matched against the stored one. */
     name: string;
 }
 
 export interface FrameworkApiPostFrameworkByDoctypeByNameSubmitRequestParams {
-    /** DocType is the document\&#39;s DocType, from the path. */
+    /** DocType is the document\&#39;s DocType, by ADDRESS — \&quot;module.name\&quot;, from the path. */
     doctype: string;
     /** Name is the document\&#39;s name — its key within the DocType — from the path. A name containing a space arrives percent-encoded and is decoded before it is matched against the stored one. */
     name: string;
@@ -115,10 +104,6 @@ export interface FrameworkApiPostFrameworkDoctypesRequestParams {
 export interface FrameworkApiPostFrameworkModulesByModuleInstallRequestParams {
     /** Module is the lane\&#39;s registered name (\&quot;cms\&quot;, \&quot;erp\&quot;), from the path. */
     module: string;
-}
-
-export interface FrameworkApiPostFrameworkRolesRequestParams {
-    roleAssignment: RoleAssignment;
 }
 
 export interface FrameworkApiPutFrameworkByDoctypeByNameRequestParams {
@@ -247,68 +232,6 @@ export class FrameworkApi extends BaseService {
         }
 
         let localVarPath = `/v1/framework/doctypes/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Removes one (user, role) grant in the caller\&#39;s org.
-     * Removes one (user, role) grant in the caller\&#39;s org. Manager-only. Answers 204; a grant that does not exist is not found.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteFrameworkRolesByUserByRole(requestParameters: FrameworkApiDeleteFrameworkRolesByUserByRoleRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteFrameworkRolesByUserByRole(requestParameters: FrameworkApiDeleteFrameworkRolesByUserByRoleRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteFrameworkRolesByUserByRole(requestParameters: FrameworkApiDeleteFrameworkRolesByUserByRoleRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteFrameworkRolesByUserByRole(requestParameters: FrameworkApiDeleteFrameworkRolesByUserByRoleRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const user = requestParameters?.user;
-        if (user === null || user === undefined) {
-            throw new Error('Required parameter user was null or undefined when calling deleteFrameworkRolesByUserByRole.');
-        }
-        const role = requestParameters?.role;
-        if (role === null || role === undefined) {
-            throw new Error('Required parameter role was null or undefined when calling deleteFrameworkRolesByUserByRole.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/framework/roles/${this.configuration.encodeParam({name: "user", value: user, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "role", value: role, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -687,60 +610,6 @@ export class FrameworkApi extends BaseService {
     }
 
     /**
-     * Returns every (user, role) assignment in the caller\&#39;s org.
-     * Returns every (user, role) assignment in the caller\&#39;s org. Roles are what DocType permissions are written against, so this is the grant table the permission calculus resolves a member\&#39;s rights from.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getFrameworkRoles(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleList>;
-    public getFrameworkRoles(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleList>>;
-    public getFrameworkRoles(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleList>>;
-    public getFrameworkRoles(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/framework/roles`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<RoleList>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Reports how much of the DocType surface the caller\&#39;s org uses: how many DocTypes it has defined, and how many documents exist across them.
      * Reports how much of the DocType surface the caller\&#39;s org uses: how many DocTypes it has defined, and how many documents exist across them.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1096,75 +965,6 @@ export class FrameworkApi extends BaseService {
         return this.httpClient.request<Install>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Grants one user one role in the caller\&#39;s org — how a member gains rights on a DocType, since permissions name roles and never users.
-     * Grants one user one role in the caller\&#39;s org — how a member gains rights on a DocType, since permissions name roles and never users. Manager-only. Answers 201.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postFrameworkRoles(requestParameters: FrameworkApiPostFrameworkRolesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleAssignment>;
-    public postFrameworkRoles(requestParameters: FrameworkApiPostFrameworkRolesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleAssignment>>;
-    public postFrameworkRoles(requestParameters: FrameworkApiPostFrameworkRolesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleAssignment>>;
-    public postFrameworkRoles(requestParameters: FrameworkApiPostFrameworkRolesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const roleAssignment = requestParameters?.roleAssignment;
-        if (roleAssignment === null || roleAssignment === undefined) {
-            throw new Error('Required parameter roleAssignment was null or undefined when calling postFrameworkRoles.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/framework/roles`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<RoleAssignment>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: roleAssignment,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
