@@ -24,7 +24,6 @@ export interface IamPermission {
     displayName?: string;
     domains?: Array<string>;
     effect?: string;
-    groups?: Array<string>;
     id?: string;
     isEnabled?: boolean;
     /**
@@ -44,6 +43,7 @@ export interface IamPermission {
      * Submission / approval workflow.
      */
     submitter?: string;
+    teams?: Array<string>;
     updatedAt?: string;
     /**
      * Subjects the grant is evaluated for.

@@ -23,6 +23,10 @@ import { AllowlistView } from '../model/allowlistView';
 // @ts-ignore
 import { ApprovePairingIn } from '../model/approvePairingIn';
 // @ts-ignore
+import { ChannelAgents } from '../model/channelAgents';
+// @ts-ignore
+import { ChannelAgentsPut } from '../model/channelAgentsPut';
+// @ts-ignore
 import { ChatChannels } from '../model/chatChannels';
 // @ts-ignore
 import { InboxPage } from '../model/inboxPage';
@@ -37,8 +41,13 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
+export interface ChannelsApiGetChannelsAgentRequestParams {
+    /** Channel is the transport: discord, github, linear, slack, teams, telegram or whatsapp. Required; an unknown value is a 404. */
+    channel?: string;
+}
+
 export interface ChannelsApiGetChannelsAllowlistRequestParams {
-    /** Channel is the transport to read: discord, slack, teams, telegram or whatsapp. Required; an unknown value is a 404. */
+    /** Channel is the transport to read: discord, github, linear, slack, teams, telegram or whatsapp. Required; an unknown value is a 404. */
     channel?: string;
 }
 
@@ -55,6 +64,10 @@ export interface ChannelsApiPostChannelsByChannelSendRequestParams {
 
 export interface ChannelsApiPostChannelsPairingApproveRequestParams {
     approvePairingIn: ApprovePairingIn;
+}
+
+export interface ChannelsApiPutChannelsAgentRequestParams {
+    channelAgentsPut: ChannelAgentsPut;
 }
 
 export interface ChannelsApiPutChannelsAllowlistRequestParams {
@@ -115,6 +128,67 @@ export class ChannelsApi extends BaseService {
         return this.httpClient.request<ChatChannels>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns which agent answers the caller org\&#39;s channel: the default and every room bound to another agent.
+     * Returns which agent answers the caller org\&#39;s channel: the default and every room bound to another agent.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getChannelsAgent(requestParameters?: ChannelsApiGetChannelsAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChannelAgents>;
+    public getChannelsAgent(requestParameters?: ChannelsApiGetChannelsAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChannelAgents>>;
+    public getChannelsAgent(requestParameters?: ChannelsApiGetChannelsAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChannelAgents>>;
+    public getChannelsAgent(requestParameters?: ChannelsApiGetChannelsAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const channel = requestParameters?.channel;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>channel, 'channel');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/channels/agent`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ChannelAgents>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -306,7 +380,7 @@ export class ChannelsApi extends BaseService {
 
     /**
      * Send a message from your org\&#39;s bot to one chat room
-     * Delivers text, attachments and actions to one room on a connected chat transport — discord, slack, teams, telegram or whatsapp — and answers that transport\&#39;s own receipt, the &#x60;messageId&#x60; it assigned and the Unix second it landed. An unknown channel is a 404.  The body is the envelope\&#39;s NARROW outbound projection: &#x60;room&#x60;, &#x60;text&#x60;, &#x60;attachments&#x60;, &#x60;actions&#x60;, &#x60;replyTo&#x60; and &#x60;idempotency&#x60;, and nothing else. Identity is not a field — the channel is the path segment and the sender is the caller\&#39;s validated org — so a body carrying &#x60;sender&#x60;, &#x60;account&#x60; or &#x60;channel&#x60; is refused with 400 rather than having it silently dropped. &#x60;room.id&#x60; is required, and so is something to say: text, or at least one attachment.  Requires a validated principal; 403 without one. The room must already belong to the caller\&#39;s org — each transport verifies the binding itself, so a room this org has not bound is 403 and a room whose route the bot has never learned is 409, meaning someone has to message the bot there first. A route learned only so a pairing reply could be delivered lasts exactly as long as that pairing request does, so a room whose sender was never approved goes back to 409 within the hour. A transport that fails answers 502 carrying status and shape only, never a token.  Sending is at-most-once only if you ask for it: pass an &#x60;idempotency&#x60; string and a replay answers 200 with the PRIOR receipt instead of sending twice, while a send that fails releases the key so the caller can re-attempt. Bodies over 1 MiB are refused. Every transport currently renders text only, so attachments and actions are flattened deterministically to one line each after the text rather than dropped.
+     * Delivers text, attachments and actions to one room on a connected chat transport — discord, github, linear, slack, teams, telegram or whatsapp — and answers that transport\&#39;s own receipt, the &#x60;messageId&#x60; it assigned and the Unix second it landed. An unknown channel is a 404.  The body is the envelope\&#39;s NARROW outbound projection: &#x60;room&#x60;, &#x60;text&#x60;, &#x60;attachments&#x60;, &#x60;actions&#x60;, &#x60;replyTo&#x60; and &#x60;idempotency&#x60;, and nothing else. Identity is not a field — the channel is the path segment and the sender is the caller\&#39;s validated org — so a body carrying &#x60;sender&#x60;, &#x60;account&#x60; or &#x60;channel&#x60; is refused with 400 rather than having it silently dropped. &#x60;room.id&#x60; is required, and so is something to say: text, or at least one attachment.  Requires a validated principal; 403 without one. The room must already belong to the caller\&#39;s org — each transport verifies the binding itself, so a room this org has not bound is 403 and a room whose route the bot has never learned is 409, meaning someone has to message the bot there first. A route learned only so a pairing reply could be delivered lasts exactly as long as that pairing request does, so a room whose sender was never approved goes back to 409 within the hour. A transport that fails answers 502 carrying status and shape only, never a token.  Sending is at-most-once only if you ask for it: pass an &#x60;idempotency&#x60; string and a replay answers 200 with the PRIOR receipt instead of sending twice, while a send that fails releases the key so the caller can re-attempt. Bodies over 1 MiB are refused. Every transport currently renders text only, so attachments and actions are flattened deterministically to one line each after the text rather than dropped.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -421,6 +495,75 @@ export class ChannelsApi extends BaseService {
             {
                 context: localVarHttpContext,
                 body: approvePairingIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Binds agents to the caller org\&#39;s channel and answers the bindings as GET would.
+     * Binds agents to the caller org\&#39;s channel and answers the bindings as GET would. It requires ORG ADMIN. The agent is named by its ref — the name an org gave it at POST /v1/agents, or a built-in such as dev, des or vi.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChannelAgents>;
+    public putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChannelAgents>>;
+    public putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChannelAgents>>;
+    public putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const channelAgentsPut = requestParameters?.channelAgentsPut;
+        if (channelAgentsPut === null || channelAgentsPut === undefined) {
+            throw new Error('Required parameter channelAgentsPut was null or undefined when calling putChannelsAgent.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/channels/agent`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ChannelAgents>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: channelAgentsPut,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

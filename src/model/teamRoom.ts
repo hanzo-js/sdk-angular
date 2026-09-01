@@ -23,7 +23,7 @@ export interface TeamRoom {
      */
     direct?: boolean;
     /**
-     * ID is the room document\'s own id, and the value the bind op addresses. It is unique within a workspace, not across the org.
+     * ID is the room document\'s own id, and the value the bind op addresses. It is unique within a space, not across the org.
      */
     id?: string;
     /**
@@ -31,7 +31,7 @@ export interface TeamRoom {
      */
     life?: string;
     /**
-     * Members are the account uuids in the room, agents included: an agent projects as a workspace member under a uuid derived from its id, so a caller comparing this against GET /v1/team/bots learns which rooms an agent is in.
+     * Members are the account uuids in the room, agents included: an agent projects as a space member under a uuid derived from its id, so a caller comparing this against GET /v1/team/bots learns which rooms an agent is in.
      */
     members?: Array<string>;
     /**
@@ -43,12 +43,12 @@ export interface TeamRoom {
      */
     'private'?: boolean;
     /**
+     * Space is the space uuid holding this room. It is part of the room\'s address: two spaces of one org may each hold a room with the same name, and only the pair identifies one.
+     */
+    space?: string;
+    /**
      * Topic is the room\'s own one-line subject, as the Team client sets it.
      */
     topic?: string;
-    /**
-     * Workspace is the workspace uuid holding this room. It is part of the room\'s address: two workspaces of one org may each hold a room with the same name, and only the pair identifies one.
-     */
-    workspace?: string;
 }
 

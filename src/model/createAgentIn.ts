@@ -11,6 +11,10 @@
 
 export interface CreateAgentIn { 
     /**
+     * Avatar and Emoji are how the agent APPEARS. An image wins when both are given — it is the thing somebody made — and both empty leaves the agent drawn as its initial. Validated by iam/pkg/schema, the same rule a person\'s avatar passes, so the 96 KiB bound and the accepted URL forms are stated once for every subject that has a face.
+     */
+    avatar?: string;
+    /**
      * ComputeRef optionally binds this bot to a visor machine. Opaque here, bounded at 256 characters, and not resolved — this package stores the reference and the binding\'s lifecycle belongs elsewhere.
      */
     computeRef?: string;
@@ -18,6 +22,10 @@ export interface CreateAgentIn {
      * Description is the one line published as the description of the `agent_<name>` tool, which is how another agent decides whether to call this one. Optional, and worth writing for exactly that reason.
      */
     description?: string;
+    /**
+     * Emoji is the single glyph shown when there is no image. An image WINS when both are given — it is the thing somebody made — and both empty leaves the agent drawn as its initial.
+     */
+    emoji?: string;
     /**
      * ExecutionMode is one-shot or long-running. Empty takes one-shot, which runs only when something POSTs to it. long-running additionally requires Schedule, and counts against a per-org cap that answers 409 when it is full.
      */

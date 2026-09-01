@@ -9,14 +9,10 @@
  */
 
 
-export interface RoleAssignment { 
-    /**
-     * Role is the granted role\'s name.
-     */
-    role?: string;
-    /**
-     * User is the member the role is granted to.
-     */
-    user?: string;
+export interface Figures { 
+    count?: number;
+    locked?: string;
+    pools?: number;
+    volume?: string;
 }
 
