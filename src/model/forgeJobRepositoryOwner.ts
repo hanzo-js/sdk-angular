@@ -9,7 +9,7 @@
  */
 
 
-export interface PushPusher { 
+export interface ForgeJobRepositoryOwner { 
     login?: string;
     username?: string;
 }

@@ -252,7 +252,7 @@ export class MqApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/message/${this.configuration.encodeParam({name: "seq", value: seq, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/v1/mq/stream/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/message/${this.configuration.encodeParam({name: "seq", value: seq, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "uint64"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {

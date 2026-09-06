@@ -11,8 +11,8 @@
 
 export interface O11yO11yAgentCheckInIn { 
     account_id?: string;
-    cloud_account_id?: string;
     cloudIntegrationId?: any | null;
+    cloud_account_id?: string;
     data?: { [key: string]: object; };
     providerAccountId?: string;
 }

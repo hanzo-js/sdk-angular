@@ -7,11 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PushPusher } from './pushPusher';
 
 
-export interface PushRepository { 
-    name?: string;
-    owner?: PushPusher;
+export interface ForgeLaunched { 
+    job?: number;
+    org?: string;
+    repo?: string;
+    runner?: string;
 }
 

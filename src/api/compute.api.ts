@@ -23,10 +23,6 @@ import { BindAgentReq } from '../model/bindAgentReq';
 // @ts-ignore
 import { BindingList } from '../model/bindingList';
 // @ts-ignore
-import { BotList } from '../model/botList';
-// @ts-ignore
-import { BotView } from '../model/botView';
-// @ts-ignore
 import { ClusterAttach } from '../model/clusterAttach';
 // @ts-ignore
 import { ClusterDetached } from '../model/clusterDetached';
@@ -77,48 +73,43 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface VisorApiAttachClusterRequestParams {
+export interface ComputeApiAttachClusterRequestParams {
     clusterAttach: ClusterAttach;
 }
 
-export interface VisorApiBindMachineAgentRequestParams {
+export interface ComputeApiBindMachineAgentRequestParams {
     /** ID is the machine to bind, from the URL path. */
     id: string;
     bindAgentReq: BindAgentReq;
 }
 
-export interface VisorApiCancelFleetJobRequestParams {
+export interface ComputeApiCancelFleetJobRequestParams {
     /** ID is the job (activity) id, from the URL path. */
     id: string;
     jobCancel: JobCancel;
 }
 
-export interface VisorApiCreateKubernetesClusterRequestParams {
+export interface ComputeApiCreateKubernetesClusterRequestParams {
     createClusterReq: CreateClusterReq;
 }
 
-export interface VisorApiCreateNodePoolRequestParams {
+export interface ComputeApiCreateNodePoolRequestParams {
     /** ClusterID is the cluster to add the pool to, from the URL path. */
     clusterId: string;
     poolCreate: PoolCreate;
 }
 
-export interface VisorApiDeleteBotRequestParams {
-    /** ID is the bot machine\&#39;s id — the same id the machines surface addresses it by. Scoped to the caller\&#39;s org upstream, so another tenant\&#39;s id is 404. */
-    id: string;
-}
-
-export interface VisorApiDeleteKubernetesClusterRequestParams {
+export interface ComputeApiDeleteKubernetesClusterRequestParams {
     /** ID is the provider\&#39;s DOKS cluster id. Visor scopes the lookup to the caller\&#39;s org, so another tenant\&#39;s id resolves to not-found rather than their cluster. */
     id: string;
 }
 
-export interface VisorApiDeleteMachineRequestParams {
+export interface ComputeApiDeleteMachineRequestParams {
     /** ID is the machine\&#39;s org-scoped NAME — the stable key Visor addresses a machine by (owner/name), not the ephemeral provider id. */
     id: string;
 }
 
-export interface VisorApiDeleteNodePoolRequestParams {
+export interface ComputeApiDeleteNodePoolRequestParams {
     /** ClusterID and PoolID address the pool, from the URL path. */
     clusterId: string;
     poolId: string;
@@ -126,39 +117,34 @@ export interface VisorApiDeleteNodePoolRequestParams {
     provider?: string;
 }
 
-export interface VisorApiDetachClusterRequestParams {
+export interface ComputeApiDetachClusterRequestParams {
     /** ID is the cluster\&#39;s fleet name (the &#x60;name&#x60; it was attached under), matched lower-cased. */
     id: string;
 }
 
-export interface VisorApiGetBotRequestParams {
-    /** ID is the bot machine\&#39;s id — the same id the machines surface addresses it by. Scoped to the caller\&#39;s org upstream, so another tenant\&#39;s id is 404. */
-    id: string;
-}
-
-export interface VisorApiGetKubernetesClusterRequestParams {
+export interface ComputeApiGetKubernetesClusterRequestParams {
     /** ID is the provider\&#39;s DOKS cluster id. Visor scopes the lookup to the caller\&#39;s org, so another tenant\&#39;s id resolves to not-found rather than their cluster. */
     id: string;
 }
 
-export interface VisorApiGetMachineRequestParams {
+export interface ComputeApiGetMachineRequestParams {
     /** ID is the machine\&#39;s org-scoped NAME — the stable key Visor addresses a machine by (owner/name), not the ephemeral provider id. */
     id: string;
 }
 
-export interface VisorApiGetMachineAgentRequestParams {
+export interface ComputeApiGetMachineAgentRequestParams {
     /** ID is the machine\&#39;s org-scoped NAME — the stable key Visor addresses a machine by (owner/name), not the ephemeral provider id. */
     id: string;
 }
 
-export interface VisorApiListFleetJobsRequestParams {
+export interface ComputeApiListFleetJobsRequestParams {
     /** GPU selects one node\&#39;s lane: jobs TARGETED at it (gpu:&lt;node&gt;) or CLAIMED by it. The literal \&quot;shared\&quot; selects the any-GPU lane — no target, no claimant. Matched case-insensitively. */
     gpu?: string;
     /** Status selects one lifecycle state: queued, running, stalled, completed, failed or canceled. */
     status?: string;
 }
 
-export interface VisorApiListFleetSamplesRequestParams {
+export interface ComputeApiListFleetSamplesRequestParams {
     /** Unit selects one compute unit\&#39;s series by its source-local id. */
     unit?: string;
     /** Source selects one plane: \&quot;agent\&quot;, \&quot;byo\&quot; or \&quot;visor\&quot;. */
@@ -167,16 +153,20 @@ export interface VisorApiListFleetSamplesRequestParams {
     range?: string;
 }
 
-export interface VisorApiPostVisorComputeBotsByIdByActionRequestParams {
+export interface ComputeApiListMachinesRequestParams {
+    kind?: string;
+}
+
+export interface ComputeApiPostComputeMachinesByIdByActionRequestParams {
     id: string;
     action: string;
 }
 
-export interface VisorApiRecordFleetSampleRequestParams {
+export interface ComputeApiRecordFleetSampleRequestParams {
     sampleIngest: SampleIngest;
 }
 
-export interface VisorApiScaleNodePoolRequestParams {
+export interface ComputeApiScaleNodePoolRequestParams {
     /** ClusterID is the cluster holding the pool, from the URL path. */
     clusterId: string;
     /** PoolID is the pool to resize, from the URL path — the &#x60;poolId&#x60; a cluster read reports for it. Required. */
@@ -184,7 +174,7 @@ export interface VisorApiScaleNodePoolRequestParams {
     poolScale: PoolScale;
 }
 
-export interface VisorApiUnbindMachineAgentRequestParams {
+export interface ComputeApiUnbindMachineAgentRequestParams {
     /** ID is the machine\&#39;s org-scoped NAME — the stable key Visor addresses a machine by (owner/name), not the ephemeral provider id. */
     id: string;
 }
@@ -193,23 +183,23 @@ export interface VisorApiUnbindMachineAgentRequestParams {
 @Injectable({
   providedIn: 'root'
 })
-export class VisorApi extends BaseService {
+export class ComputeApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * Attaches a BYO cluster to the caller\&#39;s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/visor/clusters.
-     * Attaches a BYO cluster to the caller\&#39;s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/visor/clusters. Billed the nominal management fee: the customer brings the compute, Hanzo meters the management plane.
+     * Attaches a BYO cluster to the caller\&#39;s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/compute/clusters.
+     * Attaches a BYO cluster to the caller\&#39;s org — the kubeconfig is validated, KMS-sealed and added to the fleet — and answers 201 with the cluster as it now appears on GET /v1/compute/clusters. Billed the nominal management fee: the customer brings the compute, Hanzo meters the management plane.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public attachCluster(requestParameters: VisorApiAttachClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClusterView>;
-    public attachCluster(requestParameters: VisorApiAttachClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClusterView>>;
-    public attachCluster(requestParameters: VisorApiAttachClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClusterView>>;
-    public attachCluster(requestParameters: VisorApiAttachClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public attachCluster(requestParameters: ComputeApiAttachClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClusterView>;
+    public attachCluster(requestParameters: ComputeApiAttachClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClusterView>>;
+    public attachCluster(requestParameters: ComputeApiAttachClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClusterView>>;
+    public attachCluster(requestParameters: ComputeApiAttachClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const clusterAttach = requestParameters?.clusterAttach;
         if (clusterAttach === null || clusterAttach === undefined) {
             throw new Error('Required parameter clusterAttach was null or undefined when calling attachCluster.');
@@ -252,7 +242,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/clusters`;
+        let localVarPath = `/v1/compute/clusters`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ClusterView>('post', `${basePath}${localVarPath}`,
             {
@@ -275,10 +265,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public bindMachineAgent(requestParameters: VisorApiBindMachineAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentBinding>;
-    public bindMachineAgent(requestParameters: VisorApiBindMachineAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentBinding>>;
-    public bindMachineAgent(requestParameters: VisorApiBindMachineAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentBinding>>;
-    public bindMachineAgent(requestParameters: VisorApiBindMachineAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public bindMachineAgent(requestParameters: ComputeApiBindMachineAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentBinding>;
+    public bindMachineAgent(requestParameters: ComputeApiBindMachineAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentBinding>>;
+    public bindMachineAgent(requestParameters: ComputeApiBindMachineAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentBinding>>;
+    public bindMachineAgent(requestParameters: ComputeApiBindMachineAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling bindMachineAgent.');
@@ -325,7 +315,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/agent`;
+        let localVarPath = `/v1/compute/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/agent`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AgentBinding>('put', `${basePath}${localVarPath}`,
             {
@@ -348,10 +338,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public cancelFleetJob(requestParameters: VisorApiCancelFleetJobRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<JobCanceled>;
-    public cancelFleetJob(requestParameters: VisorApiCancelFleetJobRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<JobCanceled>>;
-    public cancelFleetJob(requestParameters: VisorApiCancelFleetJobRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<JobCanceled>>;
-    public cancelFleetJob(requestParameters: VisorApiCancelFleetJobRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public cancelFleetJob(requestParameters: ComputeApiCancelFleetJobRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<JobCanceled>;
+    public cancelFleetJob(requestParameters: ComputeApiCancelFleetJobRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<JobCanceled>>;
+    public cancelFleetJob(requestParameters: ComputeApiCancelFleetJobRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<JobCanceled>>;
+    public cancelFleetJob(requestParameters: ComputeApiCancelFleetJobRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling cancelFleetJob.');
@@ -398,7 +388,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/fleet/jobs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/cancel`;
+        let localVarPath = `/v1/compute/fleet/jobs/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/cancel`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<JobCanceled>('post', `${basePath}${localVarPath}`,
             {
@@ -421,10 +411,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createKubernetesCluster(requestParameters: VisorApiCreateKubernetesClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClusterView>;
-    public createKubernetesCluster(requestParameters: VisorApiCreateKubernetesClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClusterView>>;
-    public createKubernetesCluster(requestParameters: VisorApiCreateKubernetesClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClusterView>>;
-    public createKubernetesCluster(requestParameters: VisorApiCreateKubernetesClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createKubernetesCluster(requestParameters: ComputeApiCreateKubernetesClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClusterView>;
+    public createKubernetesCluster(requestParameters: ComputeApiCreateKubernetesClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClusterView>>;
+    public createKubernetesCluster(requestParameters: ComputeApiCreateKubernetesClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClusterView>>;
+    public createKubernetesCluster(requestParameters: ComputeApiCreateKubernetesClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const createClusterReq = requestParameters?.createClusterReq;
         if (createClusterReq === null || createClusterReq === undefined) {
             throw new Error('Required parameter createClusterReq was null or undefined when calling createKubernetesCluster.');
@@ -467,7 +457,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/k8s/clusters`;
+        let localVarPath = `/v1/compute/k8s/clusters`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ClusterView>('post', `${basePath}${localVarPath}`,
             {
@@ -490,10 +480,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createNodePool(requestParameters: VisorApiCreateNodePoolRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<NodePoolView>;
-    public createNodePool(requestParameters: VisorApiCreateNodePoolRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NodePoolView>>;
-    public createNodePool(requestParameters: VisorApiCreateNodePoolRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NodePoolView>>;
-    public createNodePool(requestParameters: VisorApiCreateNodePoolRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createNodePool(requestParameters: ComputeApiCreateNodePoolRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<NodePoolView>;
+    public createNodePool(requestParameters: ComputeApiCreateNodePoolRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NodePoolView>>;
+    public createNodePool(requestParameters: ComputeApiCreateNodePoolRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NodePoolView>>;
+    public createNodePool(requestParameters: ComputeApiCreateNodePoolRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const clusterId = requestParameters?.clusterId;
         if (clusterId === null || clusterId === undefined) {
             throw new Error('Required parameter clusterId was null or undefined when calling createNodePool.');
@@ -540,70 +530,12 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/clusters/${this.configuration.encodeParam({name: "clusterId", value: clusterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pools`;
+        let localVarPath = `/v1/compute/clusters/${this.configuration.encodeParam({name: "clusterId", value: clusterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pools`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<NodePoolView>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: poolCreate,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Tears down both halves of a bot: it unbinds the agent (best-effort — a bot with no binding still deletes), then terminates the machine.
-     * Tears down both halves of a bot: it unbinds the agent (best-effort — a bot with no binding still deletes), then terminates the machine. Answers 204.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteBot(requestParameters: VisorApiDeleteBotRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteBot(requestParameters: VisorApiDeleteBotRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteBot(requestParameters: VisorApiDeleteBotRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteBot(requestParameters: VisorApiDeleteBotRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const id = requestParameters?.id;
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteBot.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/visor/compute/bots/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -621,10 +553,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteKubernetesCluster(requestParameters: VisorApiDeleteKubernetesClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteKubernetesCluster(requestParameters: VisorApiDeleteKubernetesClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteKubernetesCluster(requestParameters: VisorApiDeleteKubernetesClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteKubernetesCluster(requestParameters: VisorApiDeleteKubernetesClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteKubernetesCluster(requestParameters: ComputeApiDeleteKubernetesClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteKubernetesCluster(requestParameters: ComputeApiDeleteKubernetesClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteKubernetesCluster(requestParameters: ComputeApiDeleteKubernetesClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteKubernetesCluster(requestParameters: ComputeApiDeleteKubernetesClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteKubernetesCluster.');
@@ -657,7 +589,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/k8s/clusters/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/compute/k8s/clusters/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -679,10 +611,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteMachine(requestParameters: VisorApiDeleteMachineRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteMachine(requestParameters: VisorApiDeleteMachineRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteMachine(requestParameters: VisorApiDeleteMachineRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteMachine(requestParameters: VisorApiDeleteMachineRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteMachine(requestParameters: ComputeApiDeleteMachineRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteMachine(requestParameters: ComputeApiDeleteMachineRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteMachine(requestParameters: ComputeApiDeleteMachineRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteMachine(requestParameters: ComputeApiDeleteMachineRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteMachine.');
@@ -715,7 +647,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/compute/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -737,10 +669,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteNodePool(requestParameters: VisorApiDeleteNodePoolRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteNodePool(requestParameters: VisorApiDeleteNodePoolRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteNodePool(requestParameters: VisorApiDeleteNodePoolRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteNodePool(requestParameters: VisorApiDeleteNodePoolRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteNodePool(requestParameters: ComputeApiDeleteNodePoolRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteNodePool(requestParameters: ComputeApiDeleteNodePoolRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteNodePool(requestParameters: ComputeApiDeleteNodePoolRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteNodePool(requestParameters: ComputeApiDeleteNodePoolRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const clusterId = requestParameters?.clusterId;
         if (clusterId === null || clusterId === undefined) {
             throw new Error('Required parameter clusterId was null or undefined when calling deleteNodePool.');
@@ -782,7 +714,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/clusters/${this.configuration.encodeParam({name: "clusterId", value: clusterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pools/${this.configuration.encodeParam({name: "poolId", value: poolId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/compute/clusters/${this.configuration.encodeParam({name: "clusterId", value: clusterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pools/${this.configuration.encodeParam({name: "poolId", value: poolId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -805,10 +737,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public detachCluster(requestParameters: VisorApiDetachClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClusterDetached>;
-    public detachCluster(requestParameters: VisorApiDetachClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClusterDetached>>;
-    public detachCluster(requestParameters: VisorApiDetachClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClusterDetached>>;
-    public detachCluster(requestParameters: VisorApiDetachClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public detachCluster(requestParameters: ComputeApiDetachClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClusterDetached>;
+    public detachCluster(requestParameters: ComputeApiDetachClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClusterDetached>>;
+    public detachCluster(requestParameters: ComputeApiDetachClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClusterDetached>>;
+    public detachCluster(requestParameters: ComputeApiDetachClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling detachCluster.');
@@ -842,7 +774,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/clusters/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/compute/clusters/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ClusterDetached>('delete', `${basePath}${localVarPath}`,
             {
@@ -858,20 +790,15 @@ export class VisorApi extends BaseService {
     }
 
     /**
-     * Returns one of the caller org\&#39;s bot machines with its agent binding.
-     * Returns one of the caller org\&#39;s bot machines with its agent binding.  A machine counts as a Bot if it carries the hanzo-kind:bot tag OR has an agent binding — either signal is authoritative, so a bot resolves even before its cloud-init has stamped every tag. A machine that is neither is 404: this route answers for bots, not for machines.
-     * @param requestParameters
+     * Regions lists the regions a machine can be launched in.
+     * Regions lists the regions a machine can be launched in.  The catalog is GLOBAL — identical for every tenant — so no owner is forwarded upstream. It is still org-gated, because a catalog is a map of what this deployment can spend money in and an anonymous caller has no business reading it.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getBot(requestParameters: VisorApiGetBotRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BotView>;
-    public getBot(requestParameters: VisorApiGetBotRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BotView>>;
-    public getBot(requestParameters: VisorApiGetBotRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BotView>>;
-    public getBot(requestParameters: VisorApiGetBotRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const id = requestParameters?.id;
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getBot.');
-        }
+    public getComputeRegions(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getComputeRegions(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getComputeRegions(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getComputeRegions(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -901,9 +828,63 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/compute/bots/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/compute/regions`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BotView>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Sizes lists the machine sizes available to launch, with their specifications.
+     * Sizes lists the machine sizes available to launch, with their specifications.  Global and org-gated, exactly as the region catalog is, and for the same reasons.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getComputeSizes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getComputeSizes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getComputeSizes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getComputeSizes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/compute/sizes`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -923,10 +904,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getKubernetesCluster(requestParameters: VisorApiGetKubernetesClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClusterDetailView>;
-    public getKubernetesCluster(requestParameters: VisorApiGetKubernetesClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClusterDetailView>>;
-    public getKubernetesCluster(requestParameters: VisorApiGetKubernetesClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClusterDetailView>>;
-    public getKubernetesCluster(requestParameters: VisorApiGetKubernetesClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getKubernetesCluster(requestParameters: ComputeApiGetKubernetesClusterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClusterDetailView>;
+    public getKubernetesCluster(requestParameters: ComputeApiGetKubernetesClusterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClusterDetailView>>;
+    public getKubernetesCluster(requestParameters: ComputeApiGetKubernetesClusterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClusterDetailView>>;
+    public getKubernetesCluster(requestParameters: ComputeApiGetKubernetesClusterRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getKubernetesCluster.');
@@ -960,7 +941,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/k8s/clusters/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/compute/k8s/clusters/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ClusterDetailView>('get', `${basePath}${localVarPath}`,
             {
@@ -982,10 +963,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMachine(requestParameters: VisorApiGetMachineRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MachineView>;
-    public getMachine(requestParameters: VisorApiGetMachineRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MachineView>>;
-    public getMachine(requestParameters: VisorApiGetMachineRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MachineView>>;
-    public getMachine(requestParameters: VisorApiGetMachineRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getMachine(requestParameters: ComputeApiGetMachineRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MachineView>;
+    public getMachine(requestParameters: ComputeApiGetMachineRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MachineView>>;
+    public getMachine(requestParameters: ComputeApiGetMachineRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MachineView>>;
+    public getMachine(requestParameters: ComputeApiGetMachineRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getMachine.');
@@ -1019,7 +1000,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/compute/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<MachineView>('get', `${basePath}${localVarPath}`,
             {
@@ -1041,10 +1022,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMachineAgent(requestParameters: VisorApiGetMachineAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentBinding>;
-    public getMachineAgent(requestParameters: VisorApiGetMachineAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentBinding>>;
-    public getMachineAgent(requestParameters: VisorApiGetMachineAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentBinding>>;
-    public getMachineAgent(requestParameters: VisorApiGetMachineAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getMachineAgent(requestParameters: ComputeApiGetMachineAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentBinding>;
+    public getMachineAgent(requestParameters: ComputeApiGetMachineAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentBinding>>;
+    public getMachineAgent(requestParameters: ComputeApiGetMachineAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentBinding>>;
+    public getMachineAgent(requestParameters: ComputeApiGetMachineAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getMachineAgent.');
@@ -1078,171 +1059,9 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/agent`;
+        let localVarPath = `/v1/compute/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/agent`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AgentBinding>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Regions lists the regions a machine can be launched in.
-     * Regions lists the regions a machine can be launched in.  The catalog is GLOBAL — identical for every tenant — so no owner is forwarded upstream. It is still org-gated, because a catalog is a map of what this deployment can spend money in and an anonymous caller has no business reading it.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getVisorComputeRegions(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getVisorComputeRegions(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getVisorComputeRegions(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getVisorComputeRegions(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/visor/compute/regions`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Sizes lists the machine sizes available to launch, with their specifications.
-     * Sizes lists the machine sizes available to launch, with their specifications.  Global and org-gated, exactly as the region catalog is, and for the same reasons.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getVisorComputeSizes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getVisorComputeSizes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getVisorComputeSizes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getVisorComputeSizes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/visor/compute/sizes`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Returns the caller org\&#39;s bot machines — the kind&#x3D;bot machines — each joined with the agent binding that says which cloud Agent it runs.
-     * Returns the caller org\&#39;s bot machines — the kind&#x3D;bot machines — each joined with the agent binding that says which cloud Agent it runs.  The bindings are read ONCE and joined by machine id, so the list is O(1) upstream calls, not N+1. A bindings read that fails only costs the reconciled status: a bot still lists without it.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public listBots(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BotList>;
-    public listBots(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BotList>>;
-    public listBots(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BotList>>;
-    public listBots(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/visor/compute/bots`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BotList>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1294,7 +1113,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/clusters`;
+        let localVarPath = `/v1/compute/clusters`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ClusterList>('get', `${basePath}${localVarPath}`,
             {
@@ -1348,7 +1167,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/fleet`;
+        let localVarPath = `/v1/compute/fleet`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<FleetBoard>('get', `${basePath}${localVarPath}`,
             {
@@ -1370,10 +1189,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listFleetJobs(requestParameters?: VisorApiListFleetJobsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<JobList>;
-    public listFleetJobs(requestParameters?: VisorApiListFleetJobsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<JobList>>;
-    public listFleetJobs(requestParameters?: VisorApiListFleetJobsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<JobList>>;
-    public listFleetJobs(requestParameters?: VisorApiListFleetJobsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listFleetJobs(requestParameters?: ComputeApiListFleetJobsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<JobList>;
+    public listFleetJobs(requestParameters?: ComputeApiListFleetJobsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<JobList>>;
+    public listFleetJobs(requestParameters?: ComputeApiListFleetJobsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<JobList>>;
+    public listFleetJobs(requestParameters?: ComputeApiListFleetJobsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const gpu = requestParameters?.gpu;
         const status = requestParameters?.status;
 
@@ -1411,7 +1230,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/fleet/jobs`;
+        let localVarPath = `/v1/compute/fleet/jobs`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<JobList>('get', `${basePath}${localVarPath}`,
             {
@@ -1434,10 +1253,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listFleetSamples(requestParameters?: VisorApiListFleetSamplesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SampleList>;
-    public listFleetSamples(requestParameters?: VisorApiListFleetSamplesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SampleList>>;
-    public listFleetSamples(requestParameters?: VisorApiListFleetSamplesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SampleList>>;
-    public listFleetSamples(requestParameters?: VisorApiListFleetSamplesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listFleetSamples(requestParameters?: ComputeApiListFleetSamplesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SampleList>;
+    public listFleetSamples(requestParameters?: ComputeApiListFleetSamplesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SampleList>>;
+    public listFleetSamples(requestParameters?: ComputeApiListFleetSamplesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SampleList>>;
+    public listFleetSamples(requestParameters?: ComputeApiListFleetSamplesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const unit = requestParameters?.unit;
         const source = requestParameters?.source;
         const range = requestParameters?.range;
@@ -1478,7 +1297,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/fleet/samples`;
+        let localVarPath = `/v1/compute/fleet/samples`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SampleList>('get', `${basePath}${localVarPath}`,
             {
@@ -1533,7 +1352,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/fleet/workers`;
+        let localVarPath = `/v1/compute/fleet/workers`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkerList>('get', `${basePath}${localVarPath}`,
             {
@@ -1587,7 +1406,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/gpus/alerts`;
+        let localVarPath = `/v1/compute/gpus/alerts`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GpuAlertList>('get', `${basePath}${localVarPath}`,
             {
@@ -1641,7 +1460,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/gpus`;
+        let localVarPath = `/v1/compute/gpus`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GpuList>('get', `${basePath}${localVarPath}`,
             {
@@ -1695,7 +1514,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/k8s/clusters`;
+        let localVarPath = `/v1/compute/k8s/clusters`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ClusterList>('get', `${basePath}${localVarPath}`,
             {
@@ -1749,7 +1568,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/k8s/nodes`;
+        let localVarPath = `/v1/compute/k8s/nodes`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<NodeList>('get', `${basePath}${localVarPath}`,
             {
@@ -1803,7 +1622,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/machines/agents`;
+        let localVarPath = `/v1/compute/machines/agents`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BindingList>('get', `${basePath}${localVarPath}`,
             {
@@ -1821,13 +1640,19 @@ export class VisorApi extends BaseService {
     /**
      * Returns every machine the caller\&#39;s org has — Visor\&#39;s registry, the live DigitalOcean droplets and the DOKS worker nodes (deduped into one union), plus the BYO machines that dialed in via &#x60;hanzo link&#x60; (provider \&quot;byo\&quot;).
      * Returns every machine the caller\&#39;s org has — Visor\&#39;s registry, the live DigitalOcean droplets and the DOKS worker nodes (deduped into one union), plus the BYO machines that dialed in via &#x60;hanzo link&#x60; (provider \&quot;byo\&quot;).  A source Visor cannot answer for is logged and skipped, never an error: one wedged upstream must not hide the machines the other sources can see.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listMachines(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MachineList>;
-    public listMachines(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MachineList>>;
-    public listMachines(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MachineList>>;
-    public listMachines(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listMachines(requestParameters?: ComputeApiListMachinesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MachineList>;
+    public listMachines(requestParameters?: ComputeApiListMachinesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MachineList>>;
+    public listMachines(requestParameters?: ComputeApiListMachinesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MachineList>>;
+    public listMachines(requestParameters?: ComputeApiListMachinesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const kind = requestParameters?.kind;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>kind, 'kind');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1857,9 +1682,63 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/machines`;
+        let localVarPath = `/v1/compute/machines`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<MachineList>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Launch a metered machine for your org, or price one first with dryRun
+     * Provisions a machine owned by the caller\&#39;s org and answers 201 with the machine. Send &#x60;dryRun: true&#x60; to get a PRICE QUOTE instead: 200 with the upstream quote passed through verbatim, nothing launched and nothing spent. Two response shapes on one address is the rule to know, and it is why this is not a typed op.  Metering is not this plane\&#39;s: the launch fronts the compute provider\&#39;s resell endpoint, which owns the balance gate and the per-hour meter, and cloud only forwards the tenant. Ownership is the validated principal\&#39;s org and is never read from the body, so a launch always lands in the caller\&#39;s OWN tenant and the machine it creates is only ever visible to that tenant. Fails closed: a validated principal is required (403 without one) and &#x60;size&#x60; (or its &#x60;instanceType&#x60; alias) is required (400).
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postComputeMachines(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postComputeMachines(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postComputeMachines(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postComputeMachines(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/compute/machines`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1879,17 +1758,17 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postVisorComputeBotsByIdByAction(requestParameters: VisorApiPostVisorComputeBotsByIdByActionRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postVisorComputeBotsByIdByAction(requestParameters: VisorApiPostVisorComputeBotsByIdByActionRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postVisorComputeBotsByIdByAction(requestParameters: VisorApiPostVisorComputeBotsByIdByActionRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postVisorComputeBotsByIdByAction(requestParameters: VisorApiPostVisorComputeBotsByIdByActionRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postComputeMachinesByIdByAction(requestParameters: ComputeApiPostComputeMachinesByIdByActionRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postComputeMachinesByIdByAction(requestParameters: ComputeApiPostComputeMachinesByIdByActionRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postComputeMachinesByIdByAction(requestParameters: ComputeApiPostComputeMachinesByIdByActionRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postComputeMachinesByIdByAction(requestParameters: ComputeApiPostComputeMachinesByIdByActionRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postVisorComputeBotsByIdByAction.');
+            throw new Error('Required parameter id was null or undefined when calling postComputeMachinesByIdByAction.');
         }
         const action = requestParameters?.action;
         if (action === null || action === undefined) {
-            throw new Error('Required parameter action was null or undefined when calling postVisorComputeBotsByIdByAction.');
+            throw new Error('Required parameter action was null or undefined when calling postComputeMachinesByIdByAction.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1919,113 +1798,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/compute/bots/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "action", value: action, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Launch a bot machine — an agent plus the machine that runs it — or price one
-     * Creates BOTH halves of a bot in one call and answers 201 with the bot: the cloud agent it runs, then a bot-kind machine bootstrapped with the bot runtime, then the binding between them, so a launched bot is immediately messageable. Send &#x60;dryRun: true&#x60; for a price quote instead — 200 with the upstream quote verbatim, no agent created, no machine launched, nothing spent.  The agent is created FIRST and on purpose: it is create-if-absent (an agent that already exists is reused, so a relaunch is fine and several bots may share one explicit &#x60;agent&#x60;), and doing it before the machine means a bad request — a model that is not in the catalog, say — fails with the real reason BEFORE any metered machine is provisioned. &#x60;agent&#x60; defaults to the bot\&#39;s name and an empty &#x60;model&#x60; takes the deployment default.  Org-scoped and fails closed: a validated principal is required (403 without one), the owning org is that principal\&#39;s and never a body field, &#x60;size&#x60; is required (400), and &#x60;name&#x60; is required for a real launch though not for a quote.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postVisorComputeBotsLaunch(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postVisorComputeBotsLaunch(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postVisorComputeBotsLaunch(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postVisorComputeBotsLaunch(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/visor/compute/bots/launch`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Launch a metered machine for your org, or price one first with dryRun
-     * Provisions a machine owned by the caller\&#39;s org and answers 201 with the machine. Send &#x60;dryRun: true&#x60; to get a PRICE QUOTE instead: 200 with the upstream quote passed through verbatim, nothing launched and nothing spent. Two response shapes on one address is the rule to know, and it is why this is not a typed op.  Metering is not this plane\&#39;s: the launch fronts the compute provider\&#39;s resell endpoint, which owns the balance gate and the per-hour meter, and cloud only forwards the tenant. Ownership is the validated principal\&#39;s org and is never read from the body, so a launch always lands in the caller\&#39;s OWN tenant and the machine it creates is only ever visible to that tenant. Fails closed: a validated principal is required (403 without one) and &#x60;size&#x60; (or its &#x60;instanceType&#x60; alias) is required (400).
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postVisorMachines(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postVisorMachines(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postVisorMachines(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postVisorMachines(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/visor/machines`;
+        let localVarPath = `/v1/compute/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "action", value: action, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -2047,10 +1820,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public recordFleetSample(requestParameters: VisorApiRecordFleetSampleRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SampleAccepted>;
-    public recordFleetSample(requestParameters: VisorApiRecordFleetSampleRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SampleAccepted>>;
-    public recordFleetSample(requestParameters: VisorApiRecordFleetSampleRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SampleAccepted>>;
-    public recordFleetSample(requestParameters: VisorApiRecordFleetSampleRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordFleetSample(requestParameters: ComputeApiRecordFleetSampleRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SampleAccepted>;
+    public recordFleetSample(requestParameters: ComputeApiRecordFleetSampleRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SampleAccepted>>;
+    public recordFleetSample(requestParameters: ComputeApiRecordFleetSampleRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SampleAccepted>>;
+    public recordFleetSample(requestParameters: ComputeApiRecordFleetSampleRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const sampleIngest = requestParameters?.sampleIngest;
         if (sampleIngest === null || sampleIngest === undefined) {
             throw new Error('Required parameter sampleIngest was null or undefined when calling recordFleetSample.');
@@ -2093,7 +1866,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/fleet/samples`;
+        let localVarPath = `/v1/compute/fleet/samples`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SampleAccepted>('post', `${basePath}${localVarPath}`,
             {
@@ -2116,10 +1889,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public scaleNodePool(requestParameters: VisorApiScaleNodePoolRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<NodePoolView>;
-    public scaleNodePool(requestParameters: VisorApiScaleNodePoolRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NodePoolView>>;
-    public scaleNodePool(requestParameters: VisorApiScaleNodePoolRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NodePoolView>>;
-    public scaleNodePool(requestParameters: VisorApiScaleNodePoolRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public scaleNodePool(requestParameters: ComputeApiScaleNodePoolRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<NodePoolView>;
+    public scaleNodePool(requestParameters: ComputeApiScaleNodePoolRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NodePoolView>>;
+    public scaleNodePool(requestParameters: ComputeApiScaleNodePoolRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NodePoolView>>;
+    public scaleNodePool(requestParameters: ComputeApiScaleNodePoolRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const clusterId = requestParameters?.clusterId;
         if (clusterId === null || clusterId === undefined) {
             throw new Error('Required parameter clusterId was null or undefined when calling scaleNodePool.');
@@ -2170,7 +1943,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/clusters/${this.configuration.encodeParam({name: "clusterId", value: clusterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pools/${this.configuration.encodeParam({name: "poolId", value: poolId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/scale`;
+        let localVarPath = `/v1/compute/clusters/${this.configuration.encodeParam({name: "clusterId", value: clusterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pools/${this.configuration.encodeParam({name: "poolId", value: poolId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/scale`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<NodePoolView>('post', `${basePath}${localVarPath}`,
             {
@@ -2193,10 +1966,10 @@ export class VisorApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public unbindMachineAgent(requestParameters: VisorApiUnbindMachineAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public unbindMachineAgent(requestParameters: VisorApiUnbindMachineAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public unbindMachineAgent(requestParameters: VisorApiUnbindMachineAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public unbindMachineAgent(requestParameters: VisorApiUnbindMachineAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public unbindMachineAgent(requestParameters: ComputeApiUnbindMachineAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public unbindMachineAgent(requestParameters: ComputeApiUnbindMachineAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public unbindMachineAgent(requestParameters: ComputeApiUnbindMachineAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public unbindMachineAgent(requestParameters: ComputeApiUnbindMachineAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling unbindMachineAgent.');
@@ -2229,7 +2002,7 @@ export class VisorApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/visor/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/agent`;
+        let localVarPath = `/v1/compute/machines/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/agent`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {

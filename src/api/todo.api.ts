@@ -609,7 +609,7 @@ export class TodoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/todo/projects/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/issues/${this.configuration.encodeParam({name: "num", value: num, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/v1/todo/projects/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/issues/${this.configuration.encodeParam({name: "num", value: num, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<IssueView>('get', `${basePath}${localVarPath}`,
             {
@@ -802,7 +802,7 @@ export class TodoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/todo/projects/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/issues/${this.configuration.encodeParam({name: "num", value: num, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/v1/todo/projects/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/issues/${this.configuration.encodeParam({name: "num", value: num, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<IssueView>('patch', `${basePath}${localVarPath}`,
             {
@@ -992,7 +992,7 @@ export class TodoApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/todo/projects/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/issues/${this.configuration.encodeParam({name: "num", value: num, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}/claim`;
+        let localVarPath = `/v1/todo/projects/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/issues/${this.configuration.encodeParam({name: "num", value: num, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/claim`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<IssueHit>('post', `${basePath}${localVarPath}`,
             {

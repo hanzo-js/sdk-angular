@@ -9,9 +9,10 @@
  */
 
 
-export interface ZapProcReq { 
-    description?: string;
+export interface ForgeJobWorkflowJob { 
+    id?: number;
+    labels?: Array<string>;
     name?: string;
-    project?: string;
+    run_id?: number;
 }
 

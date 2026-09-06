@@ -45,38 +45,38 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface FunctionsApiDeleteFunctionsByNameRequestParams {
+export interface FunctionApiDeleteFunctionByNameRequestParams {
     /** Name is the function the URL names. */
     name: string;
 }
 
-export interface FunctionsApiGetFunctionsByNameRequestParams {
+export interface FunctionApiGetFunctionByNameRequestParams {
     /** Name is the function the URL names. */
     name: string;
 }
 
-export interface FunctionsApiGetFunctionsByNameInvocationsRequestParams {
+export interface FunctionApiGetFunctionByNameInvocationsRequestParams {
     /** Name is the function the URL names. */
     name: string;
     /** Limit caps the page, defaulting to 100. */
     limit?: number;
 }
 
-export interface FunctionsApiGetFunctionsByNameLogsRequestParams {
+export interface FunctionApiGetFunctionByNameLogsRequestParams {
     /** Name is the function the URL names. */
     name: string;
 }
 
-export interface FunctionsApiGetFunctionsMetricsRequestParams {
+export interface FunctionApiGetFunctionMetricsRequestParams {
     /** Range is 1H, 6H, 24H (the default), 7D or 30D. Anything else falls back to 24H rather than failing. */
     range?: string;
 }
 
-export interface FunctionsApiPostFunctionsRequestParams {
+export interface FunctionApiPostFunctionRequestParams {
     definition: Definition;
 }
 
-export interface FunctionsApiPostFunctionsByNameInvokeRequestParams {
+export interface FunctionApiPostFunctionByNameInvokeRequestParams {
     name: string;
     invokeReq: InvokeReq;
 }
@@ -85,7 +85,7 @@ export interface FunctionsApiPostFunctionsByNameInvokeRequestParams {
 @Injectable({
   providedIn: 'root'
 })
-export class FunctionsApi extends BaseService {
+export class FunctionApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -98,13 +98,13 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteFunctionsByName(requestParameters: FunctionsApiDeleteFunctionsByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public deleteFunctionsByName(requestParameters: FunctionsApiDeleteFunctionsByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public deleteFunctionsByName(requestParameters: FunctionsApiDeleteFunctionsByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public deleteFunctionsByName(requestParameters: FunctionsApiDeleteFunctionsByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteFunctionByName(requestParameters: FunctionApiDeleteFunctionByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteFunctionByName(requestParameters: FunctionApiDeleteFunctionByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteFunctionByName(requestParameters: FunctionApiDeleteFunctionByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteFunctionByName(requestParameters: FunctionApiDeleteFunctionByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling deleteFunctionsByName.');
+            throw new Error('Required parameter name was null or undefined when calling deleteFunctionByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -113,7 +113,6 @@ export class FunctionsApi extends BaseService {
         localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -135,9 +134,9 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/function/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<object>('delete', `${basePath}${localVarPath}`,
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -156,10 +155,10 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFunctions(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FnList>;
-    public getFunctions(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FnList>>;
-    public getFunctions(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FnList>>;
-    public getFunctions(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFunction(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FnList>;
+    public getFunction(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FnList>>;
+    public getFunction(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FnList>>;
+    public getFunction(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -189,7 +188,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions`;
+        let localVarPath = `/v1/function`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<FnList>('get', `${basePath}${localVarPath}`,
             {
@@ -211,13 +210,13 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFunctionsByName(requestParameters: FunctionsApiGetFunctionsByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FunctionDetail>;
-    public getFunctionsByName(requestParameters: FunctionsApiGetFunctionsByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FunctionDetail>>;
-    public getFunctionsByName(requestParameters: FunctionsApiGetFunctionsByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FunctionDetail>>;
-    public getFunctionsByName(requestParameters: FunctionsApiGetFunctionsByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFunctionByName(requestParameters: FunctionApiGetFunctionByNameRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FunctionDetail>;
+    public getFunctionByName(requestParameters: FunctionApiGetFunctionByNameRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FunctionDetail>>;
+    public getFunctionByName(requestParameters: FunctionApiGetFunctionByNameRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FunctionDetail>>;
+    public getFunctionByName(requestParameters: FunctionApiGetFunctionByNameRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getFunctionsByName.');
+            throw new Error('Required parameter name was null or undefined when calling getFunctionByName.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -248,7 +247,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/function/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<FunctionDetail>('get', `${basePath}${localVarPath}`,
             {
@@ -270,13 +269,13 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFunctionsByNameInvocations(requestParameters: FunctionsApiGetFunctionsByNameInvocationsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvocationList>;
-    public getFunctionsByNameInvocations(requestParameters: FunctionsApiGetFunctionsByNameInvocationsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvocationList>>;
-    public getFunctionsByNameInvocations(requestParameters: FunctionsApiGetFunctionsByNameInvocationsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvocationList>>;
-    public getFunctionsByNameInvocations(requestParameters: FunctionsApiGetFunctionsByNameInvocationsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFunctionByNameInvocations(requestParameters: FunctionApiGetFunctionByNameInvocationsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvocationList>;
+    public getFunctionByNameInvocations(requestParameters: FunctionApiGetFunctionByNameInvocationsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvocationList>>;
+    public getFunctionByNameInvocations(requestParameters: FunctionApiGetFunctionByNameInvocationsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvocationList>>;
+    public getFunctionByNameInvocations(requestParameters: FunctionApiGetFunctionByNameInvocationsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getFunctionsByNameInvocations.');
+            throw new Error('Required parameter name was null or undefined when calling getFunctionByNameInvocations.');
         }
         const limit = requestParameters?.limit;
 
@@ -312,7 +311,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/invocations`;
+        let localVarPath = `/v1/function/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/invocations`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InvocationList>('get', `${basePath}${localVarPath}`,
             {
@@ -335,13 +334,13 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFunctionsByNameLogs(requestParameters: FunctionsApiGetFunctionsByNameLogsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LogLines>;
-    public getFunctionsByNameLogs(requestParameters: FunctionsApiGetFunctionsByNameLogsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LogLines>>;
-    public getFunctionsByNameLogs(requestParameters: FunctionsApiGetFunctionsByNameLogsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LogLines>>;
-    public getFunctionsByNameLogs(requestParameters: FunctionsApiGetFunctionsByNameLogsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFunctionByNameLogs(requestParameters: FunctionApiGetFunctionByNameLogsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LogLines>;
+    public getFunctionByNameLogs(requestParameters: FunctionApiGetFunctionByNameLogsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LogLines>>;
+    public getFunctionByNameLogs(requestParameters: FunctionApiGetFunctionByNameLogsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LogLines>>;
+    public getFunctionByNameLogs(requestParameters: FunctionApiGetFunctionByNameLogsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getFunctionsByNameLogs.');
+            throw new Error('Required parameter name was null or undefined when calling getFunctionByNameLogs.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -372,7 +371,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/logs`;
+        let localVarPath = `/v1/function/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/logs`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<LogLines>('get', `${basePath}${localVarPath}`,
             {
@@ -393,10 +392,10 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFunctionsDeployments(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FnList>;
-    public getFunctionsDeployments(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FnList>>;
-    public getFunctionsDeployments(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FnList>>;
-    public getFunctionsDeployments(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFunctionDeployments(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FnList>;
+    public getFunctionDeployments(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FnList>>;
+    public getFunctionDeployments(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FnList>>;
+    public getFunctionDeployments(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -426,7 +425,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/deployments`;
+        let localVarPath = `/v1/function/deployments`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<FnList>('get', `${basePath}${localVarPath}`,
             {
@@ -448,10 +447,10 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFunctionsMetrics(requestParameters?: FunctionsApiGetFunctionsMetricsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Usage>;
-    public getFunctionsMetrics(requestParameters?: FunctionsApiGetFunctionsMetricsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Usage>>;
-    public getFunctionsMetrics(requestParameters?: FunctionsApiGetFunctionsMetricsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Usage>>;
-    public getFunctionsMetrics(requestParameters?: FunctionsApiGetFunctionsMetricsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFunctionMetrics(requestParameters?: FunctionApiGetFunctionMetricsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Usage>;
+    public getFunctionMetrics(requestParameters?: FunctionApiGetFunctionMetricsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Usage>>;
+    public getFunctionMetrics(requestParameters?: FunctionApiGetFunctionMetricsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Usage>>;
+    public getFunctionMetrics(requestParameters?: FunctionApiGetFunctionMetricsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const range = requestParameters?.range;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -486,7 +485,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/metrics`;
+        let localVarPath = `/v1/function/metrics`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Usage>('get', `${basePath}${localVarPath}`,
             {
@@ -508,10 +507,10 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFunctionsSecrets(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SecretList>;
-    public getFunctionsSecrets(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SecretList>>;
-    public getFunctionsSecrets(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SecretList>>;
-    public getFunctionsSecrets(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFunctionSecrets(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SecretList>;
+    public getFunctionSecrets(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SecretList>>;
+    public getFunctionSecrets(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SecretList>>;
+    public getFunctionSecrets(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -541,7 +540,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/secrets`;
+        let localVarPath = `/v1/function/secrets`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SecretList>('get', `${basePath}${localVarPath}`,
             {
@@ -562,10 +561,10 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFunctionsTriggers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TriggerList>;
-    public getFunctionsTriggers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TriggerList>>;
-    public getFunctionsTriggers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TriggerList>>;
-    public getFunctionsTriggers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFunctionTriggers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TriggerList>;
+    public getFunctionTriggers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TriggerList>>;
+    public getFunctionTriggers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TriggerList>>;
+    public getFunctionTriggers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -595,7 +594,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/triggers`;
+        let localVarPath = `/v1/function/triggers`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TriggerList>('get', `${basePath}${localVarPath}`,
             {
@@ -617,13 +616,13 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postFunctions(requestParameters: FunctionsApiPostFunctionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FunctionView>;
-    public postFunctions(requestParameters: FunctionsApiPostFunctionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FunctionView>>;
-    public postFunctions(requestParameters: FunctionsApiPostFunctionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FunctionView>>;
-    public postFunctions(requestParameters: FunctionsApiPostFunctionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postFunction(requestParameters: FunctionApiPostFunctionRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FunctionView>;
+    public postFunction(requestParameters: FunctionApiPostFunctionRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FunctionView>>;
+    public postFunction(requestParameters: FunctionApiPostFunctionRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FunctionView>>;
+    public postFunction(requestParameters: FunctionApiPostFunctionRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const definition = requestParameters?.definition;
         if (definition === null || definition === undefined) {
-            throw new Error('Required parameter definition was null or undefined when calling postFunctions.');
+            throw new Error('Required parameter definition was null or undefined when calling postFunction.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -663,7 +662,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions`;
+        let localVarPath = `/v1/function`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<FunctionView>('post', `${basePath}${localVarPath}`,
             {
@@ -686,17 +685,17 @@ export class FunctionsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postFunctionsByNameInvoke(requestParameters: FunctionsApiPostFunctionsByNameInvokeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvocationView>;
-    public postFunctionsByNameInvoke(requestParameters: FunctionsApiPostFunctionsByNameInvokeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvocationView>>;
-    public postFunctionsByNameInvoke(requestParameters: FunctionsApiPostFunctionsByNameInvokeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvocationView>>;
-    public postFunctionsByNameInvoke(requestParameters: FunctionsApiPostFunctionsByNameInvokeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postFunctionByNameInvoke(requestParameters: FunctionApiPostFunctionByNameInvokeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvocationView>;
+    public postFunctionByNameInvoke(requestParameters: FunctionApiPostFunctionByNameInvokeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvocationView>>;
+    public postFunctionByNameInvoke(requestParameters: FunctionApiPostFunctionByNameInvokeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvocationView>>;
+    public postFunctionByNameInvoke(requestParameters: FunctionApiPostFunctionByNameInvokeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const name = requestParameters?.name;
         if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling postFunctionsByNameInvoke.');
+            throw new Error('Required parameter name was null or undefined when calling postFunctionByNameInvoke.');
         }
         const invokeReq = requestParameters?.invokeReq;
         if (invokeReq === null || invokeReq === undefined) {
-            throw new Error('Required parameter invokeReq was null or undefined when calling postFunctionsByNameInvoke.');
+            throw new Error('Required parameter invokeReq was null or undefined when calling postFunctionByNameInvoke.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -736,7 +735,7 @@ export class FunctionsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/functions/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/invoke`;
+        let localVarPath = `/v1/function/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/invoke`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InvocationView>('post', `${basePath}${localVarPath}`,
             {

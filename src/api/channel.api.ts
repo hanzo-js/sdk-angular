@@ -41,36 +41,36 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface ChannelsApiGetChannelsAgentRequestParams {
+export interface ChannelApiGetChannelAgentRequestParams {
     /** Channel is the transport: discord, github, linear, slack, teams, telegram or whatsapp. Required; an unknown value is a 404. */
     channel?: string;
 }
 
-export interface ChannelsApiGetChannelsAllowlistRequestParams {
+export interface ChannelApiGetChannelAllowlistRequestParams {
     /** Channel is the transport to read: discord, github, linear, slack, teams, telegram or whatsapp. Required; an unknown value is a 404. */
     channel?: string;
 }
 
-export interface ChannelsApiGetChannelsInboxRequestParams {
+export interface ChannelApiGetChannelInboxRequestParams {
     /** Since is the exclusive cursor: only messages with a higher row id come back. Empty starts at the beginning. Must parse as an integer. */
     since?: string;
     /** Limit caps how many messages come back. Empty or 0 uses the store\&#39;s default page size. Must parse as an integer. */
     limit?: string;
 }
 
-export interface ChannelsApiPostChannelsByChannelSendRequestParams {
+export interface ChannelApiPostChannelByChannelSendRequestParams {
     channel: string;
 }
 
-export interface ChannelsApiPostChannelsPairingApproveRequestParams {
+export interface ChannelApiPostChannelPairingApproveRequestParams {
     approvePairingIn: ApprovePairingIn;
 }
 
-export interface ChannelsApiPutChannelsAgentRequestParams {
+export interface ChannelApiPutChannelAgentRequestParams {
     channelAgentsPut: ChannelAgentsPut;
 }
 
-export interface ChannelsApiPutChannelsAllowlistRequestParams {
+export interface ChannelApiPutChannelAllowlistRequestParams {
     allowlistPutIn: AllowlistPutIn;
 }
 
@@ -78,7 +78,7 @@ export interface ChannelsApiPutChannelsAllowlistRequestParams {
 @Injectable({
   providedIn: 'root'
 })
-export class ChannelsApi extends BaseService {
+export class ChannelApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -90,10 +90,10 @@ export class ChannelsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChannels(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChatChannels>;
-    public getChannels(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChatChannels>>;
-    public getChannels(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChatChannels>>;
-    public getChannels(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getChannel(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChatChannels>;
+    public getChannel(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChatChannels>>;
+    public getChannel(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChatChannels>>;
+    public getChannel(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -123,7 +123,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels`;
+        let localVarPath = `/v1/channel`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChatChannels>('get', `${basePath}${localVarPath}`,
             {
@@ -145,10 +145,10 @@ export class ChannelsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChannelsAgent(requestParameters?: ChannelsApiGetChannelsAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChannelAgents>;
-    public getChannelsAgent(requestParameters?: ChannelsApiGetChannelsAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChannelAgents>>;
-    public getChannelsAgent(requestParameters?: ChannelsApiGetChannelsAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChannelAgents>>;
-    public getChannelsAgent(requestParameters?: ChannelsApiGetChannelsAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getChannelAgent(requestParameters?: ChannelApiGetChannelAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChannelAgents>;
+    public getChannelAgent(requestParameters?: ChannelApiGetChannelAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChannelAgents>>;
+    public getChannelAgent(requestParameters?: ChannelApiGetChannelAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChannelAgents>>;
+    public getChannelAgent(requestParameters?: ChannelApiGetChannelAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const channel = requestParameters?.channel;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -183,7 +183,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels/agent`;
+        let localVarPath = `/v1/channel/agent`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChannelAgents>('get', `${basePath}${localVarPath}`,
             {
@@ -206,10 +206,10 @@ export class ChannelsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChannelsAllowlist(requestParameters?: ChannelsApiGetChannelsAllowlistRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AllowlistView>;
-    public getChannelsAllowlist(requestParameters?: ChannelsApiGetChannelsAllowlistRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AllowlistView>>;
-    public getChannelsAllowlist(requestParameters?: ChannelsApiGetChannelsAllowlistRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AllowlistView>>;
-    public getChannelsAllowlist(requestParameters?: ChannelsApiGetChannelsAllowlistRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getChannelAllowlist(requestParameters?: ChannelApiGetChannelAllowlistRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AllowlistView>;
+    public getChannelAllowlist(requestParameters?: ChannelApiGetChannelAllowlistRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AllowlistView>>;
+    public getChannelAllowlist(requestParameters?: ChannelApiGetChannelAllowlistRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AllowlistView>>;
+    public getChannelAllowlist(requestParameters?: ChannelApiGetChannelAllowlistRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const channel = requestParameters?.channel;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -244,7 +244,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels/allowlist`;
+        let localVarPath = `/v1/channel/allowlist`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AllowlistView>('get', `${basePath}${localVarPath}`,
             {
@@ -267,10 +267,10 @@ export class ChannelsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChannelsInbox(requestParameters?: ChannelsApiGetChannelsInboxRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InboxPage>;
-    public getChannelsInbox(requestParameters?: ChannelsApiGetChannelsInboxRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InboxPage>>;
-    public getChannelsInbox(requestParameters?: ChannelsApiGetChannelsInboxRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InboxPage>>;
-    public getChannelsInbox(requestParameters?: ChannelsApiGetChannelsInboxRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getChannelInbox(requestParameters?: ChannelApiGetChannelInboxRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InboxPage>;
+    public getChannelInbox(requestParameters?: ChannelApiGetChannelInboxRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InboxPage>>;
+    public getChannelInbox(requestParameters?: ChannelApiGetChannelInboxRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InboxPage>>;
+    public getChannelInbox(requestParameters?: ChannelApiGetChannelInboxRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const since = requestParameters?.since;
         const limit = requestParameters?.limit;
 
@@ -308,7 +308,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels/inbox`;
+        let localVarPath = `/v1/channel/inbox`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InboxPage>('get', `${basePath}${localVarPath}`,
             {
@@ -326,14 +326,14 @@ export class ChannelsApi extends BaseService {
 
     /**
      * Returns the pairing requests waiting for the caller org to approve — one per person who messaged a connected bot on a channel whose DM policy is \&quot;pairing\&quot; and who is not allowed yet.
-     * Returns the pairing requests waiting for the caller org to approve — one per person who messaged a connected bot on a channel whose DM policy is \&quot;pairing\&quot; and who is not allowed yet. Each row carries the CODE an org admin passes to POST /v1/channels/pairing/approve. Expired requests are not returned. Codes are capability strings: they are shown here, and never logged.
+     * Returns the pairing requests waiting for the caller org to approve — one per person who messaged a connected bot on a channel whose DM policy is \&quot;pairing\&quot; and who is not allowed yet. Each row carries the CODE an org admin passes to POST /v1/channel/pairing/approve. Expired requests are not returned. Codes are capability strings: they are shown here, and never logged.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChannelsPairing(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PairingQueue>;
-    public getChannelsPairing(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PairingQueue>>;
-    public getChannelsPairing(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PairingQueue>>;
-    public getChannelsPairing(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getChannelPairing(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PairingQueue>;
+    public getChannelPairing(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PairingQueue>>;
+    public getChannelPairing(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PairingQueue>>;
+    public getChannelPairing(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -363,7 +363,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels/pairing`;
+        let localVarPath = `/v1/channel/pairing`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PairingQueue>('get', `${basePath}${localVarPath}`,
             {
@@ -385,13 +385,13 @@ export class ChannelsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postChannelsByChannelSend(requestParameters: ChannelsApiPostChannelsByChannelSendRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postChannelsByChannelSend(requestParameters: ChannelsApiPostChannelsByChannelSendRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postChannelsByChannelSend(requestParameters: ChannelsApiPostChannelsByChannelSendRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postChannelsByChannelSend(requestParameters: ChannelsApiPostChannelsByChannelSendRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postChannelByChannelSend(requestParameters: ChannelApiPostChannelByChannelSendRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postChannelByChannelSend(requestParameters: ChannelApiPostChannelByChannelSendRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postChannelByChannelSend(requestParameters: ChannelApiPostChannelByChannelSendRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postChannelByChannelSend(requestParameters: ChannelApiPostChannelByChannelSendRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const channel = requestParameters?.channel;
         if (channel === null || channel === undefined) {
-            throw new Error('Required parameter channel was null or undefined when calling postChannelsByChannelSend.');
+            throw new Error('Required parameter channel was null or undefined when calling postChannelByChannelSend.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -421,7 +421,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels/${this.configuration.encodeParam({name: "channel", value: channel, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/send`;
+        let localVarPath = `/v1/channel/${this.configuration.encodeParam({name: "channel", value: channel, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/send`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -443,13 +443,13 @@ export class ChannelsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postChannelsPairingApprove(requestParameters: ChannelsApiPostChannelsPairingApproveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PairingApproved>;
-    public postChannelsPairingApprove(requestParameters: ChannelsApiPostChannelsPairingApproveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PairingApproved>>;
-    public postChannelsPairingApprove(requestParameters: ChannelsApiPostChannelsPairingApproveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PairingApproved>>;
-    public postChannelsPairingApprove(requestParameters: ChannelsApiPostChannelsPairingApproveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postChannelPairingApprove(requestParameters: ChannelApiPostChannelPairingApproveRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PairingApproved>;
+    public postChannelPairingApprove(requestParameters: ChannelApiPostChannelPairingApproveRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PairingApproved>>;
+    public postChannelPairingApprove(requestParameters: ChannelApiPostChannelPairingApproveRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PairingApproved>>;
+    public postChannelPairingApprove(requestParameters: ChannelApiPostChannelPairingApproveRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const approvePairingIn = requestParameters?.approvePairingIn;
         if (approvePairingIn === null || approvePairingIn === undefined) {
-            throw new Error('Required parameter approvePairingIn was null or undefined when calling postChannelsPairingApprove.');
+            throw new Error('Required parameter approvePairingIn was null or undefined when calling postChannelPairingApprove.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -489,7 +489,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels/pairing/approve`;
+        let localVarPath = `/v1/channel/pairing/approve`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PairingApproved>('post', `${basePath}${localVarPath}`,
             {
@@ -507,18 +507,18 @@ export class ChannelsApi extends BaseService {
 
     /**
      * Binds agents to the caller org\&#39;s channel and answers the bindings as GET would.
-     * Binds agents to the caller org\&#39;s channel and answers the bindings as GET would. It requires ORG ADMIN. The agent is named by its ref — the name an org gave it at POST /v1/agents, or a built-in such as dev, des or vi.
+     * Binds agents to the caller org\&#39;s channel and answers the bindings as GET would. It requires ORG ADMIN. The agent is named by its ref — the name an org gave it at POST /v1/agent, or a built-in such as dev, des or vi.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChannelAgents>;
-    public putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChannelAgents>>;
-    public putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChannelAgents>>;
-    public putChannelsAgent(requestParameters: ChannelsApiPutChannelsAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putChannelAgent(requestParameters: ChannelApiPutChannelAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChannelAgents>;
+    public putChannelAgent(requestParameters: ChannelApiPutChannelAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChannelAgents>>;
+    public putChannelAgent(requestParameters: ChannelApiPutChannelAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChannelAgents>>;
+    public putChannelAgent(requestParameters: ChannelApiPutChannelAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const channelAgentsPut = requestParameters?.channelAgentsPut;
         if (channelAgentsPut === null || channelAgentsPut === undefined) {
-            throw new Error('Required parameter channelAgentsPut was null or undefined when calling putChannelsAgent.');
+            throw new Error('Required parameter channelAgentsPut was null or undefined when calling putChannelAgent.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -558,7 +558,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels/agent`;
+        let localVarPath = `/v1/channel/agent`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ChannelAgents>('put', `${basePath}${localVarPath}`,
             {
@@ -581,13 +581,13 @@ export class ChannelsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putChannelsAllowlist(requestParameters: ChannelsApiPutChannelsAllowlistRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AllowlistView>;
-    public putChannelsAllowlist(requestParameters: ChannelsApiPutChannelsAllowlistRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AllowlistView>>;
-    public putChannelsAllowlist(requestParameters: ChannelsApiPutChannelsAllowlistRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AllowlistView>>;
-    public putChannelsAllowlist(requestParameters: ChannelsApiPutChannelsAllowlistRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putChannelAllowlist(requestParameters: ChannelApiPutChannelAllowlistRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AllowlistView>;
+    public putChannelAllowlist(requestParameters: ChannelApiPutChannelAllowlistRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AllowlistView>>;
+    public putChannelAllowlist(requestParameters: ChannelApiPutChannelAllowlistRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AllowlistView>>;
+    public putChannelAllowlist(requestParameters: ChannelApiPutChannelAllowlistRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const allowlistPutIn = requestParameters?.allowlistPutIn;
         if (allowlistPutIn === null || allowlistPutIn === undefined) {
-            throw new Error('Required parameter allowlistPutIn was null or undefined when calling putChannelsAllowlist.');
+            throw new Error('Required parameter allowlistPutIn was null or undefined when calling putChannelAllowlist.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -627,7 +627,7 @@ export class ChannelsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/channels/allowlist`;
+        let localVarPath = `/v1/channel/allowlist`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AllowlistView>('put', `${basePath}${localVarPath}`,
             {

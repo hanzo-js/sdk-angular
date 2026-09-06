@@ -15,6 +15,10 @@ export interface Leased {
      */
     'class'?: string;
     /**
+     * Cluster is the attached cluster this sandbox runs on, when one was named. Empty is the home cluster.
+     */
+    cluster?: string;
+    /**
      * ID names this computer for every later call — run, read, write, stop and end all take it, and a LeaseIn carrying it resumes THIS sandbox instead of leasing a second one. Minted here; a caller cannot choose it, and a resumed lease that had expired comes back under a new one.
      */
     id?: string;

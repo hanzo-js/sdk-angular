@@ -13,7 +13,7 @@ import { EngineAdvertisement } from './engineAdvertisement';
 
 export interface ByoWorker { 
     /**
-     * Arch/CPUs/Memory are the connecting host\'s static CPU spec, mirrored from the registration: Arch is runtime.GOARCH (amd64 | arm64), Memory is total RAM in BYTES — the same fields a code-linked run-target carries, so the /v1/visor/fleet board renders a linked node\'s arch + cores + RAM like any other unit.
+     * Arch/CPUs/Memory are the connecting host\'s static CPU spec, mirrored from the registration: Arch is runtime.GOARCH (amd64 | arm64), Memory is total RAM in BYTES — the same fields a code-linked run-target carries, so the /v1/compute/fleet board renders a linked node\'s arch + cores + RAM like any other unit.
      */
     arch?: string;
     /**

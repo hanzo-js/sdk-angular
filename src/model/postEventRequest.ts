@@ -8,15 +8,20 @@
  * Do not edit the class manually.
  */
 import { CaptureEvent } from './captureEvent';
+import { SpanBody } from './spanBody';
+import { ClipBody } from './clipBody';
 import { CaptureBatch } from './captureBatch';
-import { Event } from './event';
+import { MetricBody } from './metricBody';
+import { LogBody } from './logBody';
 import { InsightsEvent } from './insightsEvent';
+import { Exception } from './exception';
 import { InsightsBody } from './insightsBody';
+import { UTM } from './uTM';
 
 
 /**
  * @type PostEventRequest
  * @export
  */
-export type PostEventRequest = Array<Event> | CaptureBatch | Event | InsightsBody;
+export type PostEventRequest = Array<CaptureEvent> | CaptureBatch | CaptureEvent | InsightsBody;
 

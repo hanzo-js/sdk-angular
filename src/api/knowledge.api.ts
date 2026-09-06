@@ -29,6 +29,8 @@ import { KbConnectorsOut } from '../model/kbConnectorsOut';
 // @ts-ignore
 import { KbSyncOut } from '../model/kbSyncOut';
 // @ts-ignore
+import { ReindexOut } from '../model/reindexOut';
+// @ts-ignore
 import { SearchIn } from '../model/searchIn';
 // @ts-ignore
 import { SearchOut } from '../model/searchOut';
@@ -542,6 +544,60 @@ export class KnowledgeApi extends BaseService {
         let localVarPath = `/v1/knowledge/import`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Rebuilds the caller org\&#39;s retrieval from its documents: the vector collection is dropped and created again at the configured embedding size and every page, memory and source is embedded into it; the lexical index is reconciled to the same set.
+     * Rebuilds the caller org\&#39;s retrieval from its documents: the vector collection is dropped and created again at the configured embedding size and every page, memory and source is embedded into it; the lexical index is reconciled to the same set. It is what an operator runs after the embedding model or its dimension changes, and what puts an org\&#39;s retrieval right after a vector outage. It requires ORG ADMIN and runs inline: an org\&#39;s knowledge is a few thousand documents, and the answer is the count.  The request has no body. Response: {\&quot;vectors\&quot;: 412, \&quot;lexical\&quot;: 412, \&quot;removed\&quot;: 3, \&quot;failed\&quot;: 0}
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postKnowledgeReindex(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReindexOut>;
+    public postKnowledgeReindex(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReindexOut>>;
+    public postKnowledgeReindex(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReindexOut>>;
+    public postKnowledgeReindex(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/knowledge/reindex`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReindexOut>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

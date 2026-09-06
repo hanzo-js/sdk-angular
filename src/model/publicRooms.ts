@@ -7,13 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BotView } from './botView';
+import { Listed } from './listed';
 
 
-export interface BotList { 
+export interface PublicRooms { 
     /**
-     * Bots is one row per kind=bot machine, each joined with its agent binding when it has one.
+     * Rooms is every published room the query matched, newest-written first.
      */
-    bots?: Array<BotView>;
+    rooms?: Array<Listed>;
 }
 

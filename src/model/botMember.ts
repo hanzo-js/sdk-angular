@@ -11,23 +11,23 @@
 
 export interface BotMember { 
     /**
-     * Active is whether the agent projects as a LIVE space member, derived from its registry status: empty, \"active\" and \"ready\" are live, anything else (archived/retired) is not. An inactive bot drops out of the Team list while its past authorship survives.
+     * Active is whether the agent projects as a LIVE space member, derived from its registry status: empty, \"active\" and \"ready\" are live, anything else (archived/retired) is not. An inactive bot drops out of the roster while its past authorship survives.
      */
     active?: boolean;
     /**
-     * the agent id
+     * ID is the agent id.
      */
     id?: string;
     /**
-     * display name
+     * Name is the display name.
      */
     name?: string;
     /**
-     * the projected Person _id
+     * PersonRef is the projected Person _id.
      */
     personRef?: string;
     /**
-     * derived member account uuid (personUuid)
+     * UserID is the derived member account uuid (personUuid).
      */
     userId?: string;
 }

@@ -697,7 +697,7 @@ export class IndexApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/index/tasks/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/v1/index/tasks/${this.configuration.encodeParam({name: "uid", value: uid, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<IndexTask>('get', `${basePath}${localVarPath}`,
             {

@@ -17,13 +17,23 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
+import { IdentityIn } from '../model/identityIn';
+// @ts-ignore
+import { IdentityList } from '../model/identityList';
+// @ts-ignore
+import { IdentityView } from '../model/identityView';
+// @ts-ignore
 import { MeshServiceList } from '../model/meshServiceList';
 // @ts-ignore
 import { NetworkList } from '../model/networkList';
 // @ts-ignore
 import { NetworkView } from '../model/networkView';
 // @ts-ignore
+import { PublishedView } from '../model/publishedView';
+// @ts-ignore
 import { RouterList } from '../model/routerList';
+// @ts-ignore
+import { ServiceIn } from '../model/serviceIn';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -31,9 +41,22 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
+export interface NetworkApiDeleteNetworkIdentitiesByIdRequestParams {
+    /** ID is the identity id from the path. The URL is the addressing authority, so it binds from there whatever else the request carries. */
+    id: string;
+}
+
 export interface NetworkApiGetNetworkByIdRequestParams {
     /** ID is the network id from the path. The URL is the addressing authority, so it binds from there whatever else the request carries. */
     id: string;
+}
+
+export interface NetworkApiPostNetworkIdentitiesRequestParams {
+    identityIn: IdentityIn;
+}
+
+export interface NetworkApiPostNetworkServicesRequestParams {
+    serviceIn: ServiceIn;
 }
 
 
@@ -44,6 +67,64 @@ export class NetworkApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Removes one of the org\&#39;s fabric identities.
+     * Removes one of the org\&#39;s fabric identities. The device\&#39;s credential stops authenticating and its enrollment, if unspent, stops enrolling.  An id belonging to another org — or to nothing — is 404 before any write reaches the controller: whether an identity exists is itself a cross-tenant fact, and a delete may only ever act on what the caller could list.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteNetworkIdentitiesById(requestParameters: NetworkApiDeleteNetworkIdentitiesByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteNetworkIdentitiesById(requestParameters: NetworkApiDeleteNetworkIdentitiesByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteNetworkIdentitiesById(requestParameters: NetworkApiDeleteNetworkIdentitiesByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteNetworkIdentitiesById(requestParameters: NetworkApiDeleteNetworkIdentitiesByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteNetworkIdentitiesById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/network/identities/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -160,6 +241,60 @@ export class NetworkApi extends BaseService {
     }
 
     /**
+     * Returns the fabric identities the caller\&#39;s org owns.
+     * Returns the fabric identities the caller\&#39;s org owns.  One row per identity tagged with the org\&#39;s \&quot;org-&lt;org&gt;\&quot; role attribute — a device minted here, enrolled or not. An identity that has not yet enrolled still carries its one-time enrollment, so a mislaid JWT is read again here rather than re-minted.  A tenancy read over the full inventory, so like the mesh list it does NOT degrade: an unconfigured deployment answers 503.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getNetworkIdentities(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IdentityList>;
+    public getNetworkIdentities(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IdentityList>>;
+    public getNetworkIdentities(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IdentityList>>;
+    public getNetworkIdentities(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/network/identities`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<IdentityList>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns the Zero Trust routers the caller\&#39;s org owns.
      * Returns the Zero Trust routers the caller\&#39;s org owns.  One row per real ZT edge-router tagged with the org\&#39;s \&quot;org-&lt;org&gt;\&quot; role attribute, carrying the controller\&#39;s own health signal: \&quot;online\&quot; when connected, \&quot;disabled\&quot; when administratively disabled, \&quot;offline\&quot; otherwise. region is filled only from a \&quot;region-&lt;slug&gt;\&quot; role attribute and omitted when the router carries none, so the column renders \&quot;—\&quot; rather than a guess.  The read degrades rather than erroring: a deployment with no ZT credential, and a controller that cannot be reached, both answer 200 with an empty list.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -257,6 +392,144 @@ export class NetworkApi extends BaseService {
         return this.httpClient.request<MeshServiceList>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Mints a fabric identity for a device the caller\&#39;s org brings.
+     * Mints a fabric identity for a device the caller\&#39;s org brings.  The identity is created of type Device, tagged with the org\&#39;s \&quot;org-&lt;org&gt;\&quot; role attribute plus any supplied roles — each scoped to the org, and a \&quot;&lt;service&gt;-host\&quot; role refused unless the org has published that service. The answer carries the controller\&#39;s one-time enrollment JWT: the device presents it once to join the fabric, and until it does the same token can be read back off GET /v1/network/identities.  A write, so it does not degrade: an unconfigured deployment answers 503.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postNetworkIdentities(requestParameters: NetworkApiPostNetworkIdentitiesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<IdentityView>;
+    public postNetworkIdentities(requestParameters: NetworkApiPostNetworkIdentitiesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<IdentityView>>;
+    public postNetworkIdentities(requestParameters: NetworkApiPostNetworkIdentitiesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<IdentityView>>;
+    public postNetworkIdentities(requestParameters: NetworkApiPostNetworkIdentitiesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const identityIn = requestParameters?.identityIn;
+        if (identityIn === null || identityIn === undefined) {
+            throw new Error('Required parameter identityIn was null or undefined when calling postNetworkIdentities.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/network/identities`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<IdentityView>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: identityIn,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Puts a name on the org\&#39;s overlay: a fabric service forwarding to host:port on whichever of the org\&#39;s devices carries the \&quot;&lt;name&gt;-host\&quot; role, dialable at \&quot;&lt;name&gt;.&lt;org&gt;.zt\&quot; by any of the org\&#39;s identities — and by the cloud\&#39;s own, which is what lets a BYO cluster\&#39;s apiserver be attached to the fleet with a \&quot;.zt\&quot; kubeconfig.
+     * Puts a name on the org\&#39;s overlay: a fabric service forwarding to host:port on whichever of the org\&#39;s devices carries the \&quot;&lt;name&gt;-host\&quot; role, dialable at \&quot;&lt;name&gt;.&lt;org&gt;.zt\&quot; by any of the org\&#39;s identities — and by the cloud\&#39;s own, which is what lets a BYO cluster\&#39;s apiserver be attached to the fleet with a \&quot;.zt\&quot; kubeconfig.  Answers 201 with the service and its DNS name. The objects behind it are created in dependency order and unwound on failure, so a half-published service never lingers on the fabric.  A write, so it does not degrade: an unconfigured deployment answers 503.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postNetworkServices(requestParameters: NetworkApiPostNetworkServicesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PublishedView>;
+    public postNetworkServices(requestParameters: NetworkApiPostNetworkServicesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PublishedView>>;
+    public postNetworkServices(requestParameters: NetworkApiPostNetworkServicesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PublishedView>>;
+    public postNetworkServices(requestParameters: NetworkApiPostNetworkServicesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const serviceIn = requestParameters?.serviceIn;
+        if (serviceIn === null || serviceIn === undefined) {
+            throw new Error('Required parameter serviceIn was null or undefined when calling postNetworkServices.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/network/services`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PublishedView>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: serviceIn,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -62,6 +62,7 @@ export interface IamUser {
     createdTime?: string;
     currency?: string;
     custom?: string;
+    custom10?: string;
     custom2?: string;
     custom3?: string;
     custom4?: string;
@@ -70,7 +71,6 @@ export interface IamUser {
     custom7?: string;
     custom8?: string;
     custom9?: string;
-    custom10?: string;
     dailymotion?: string;
     deezer?: string;
     deleted?: boolean;

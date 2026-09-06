@@ -70,8 +70,6 @@ import { SubscriptionView } from '../model/subscriptionView';
 import { TreeJSON } from '../model/treeJSON';
 // @ts-ignore
 import { UsageView } from '../model/usageView';
-// @ts-ignore
-import { ZapProcReq } from '../model/zapProcReq';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -89,14 +87,14 @@ export interface GitApiDeleteGitReposByNameRequestParams {
     name: string;
 }
 
-export interface GitApiDeleteGitReposByNameMirrorsByIdRequestParams {
+export interface GitApiDeleteGitReposByNameSubscriptionsByIdRequestParams {
     /** Name is the repo, from the :name path segment. */
     name: string;
     /** ID is the row to remove, from the :id path segment. */
     id: string;
 }
 
-export interface GitApiDeleteGitReposByNameSubscriptionsByIdRequestParams {
+export interface GitApiDeleteGitReposByNameTargetsByIdRequestParams {
     /** Name is the repo, from the :name path segment. */
     name: string;
     /** ID is the row to remove, from the :id path segment. */
@@ -158,11 +156,6 @@ export interface GitApiGetGitReposByNameFilesRequestParams {
     glob?: string;
 }
 
-export interface GitApiGetGitReposByNameMirrorsRequestParams {
-    /** Name is the repo\&#39;s org-unique handle, from the :name path segment. A trailing \&quot;.git\&quot; is stripped. */
-    name: string;
-}
-
 export interface GitApiGetGitReposByNamePullsRequestParams {
     /** Name is the repo, from the :name path segment. */
     name: string;
@@ -190,6 +183,11 @@ export interface GitApiGetGitReposByNameRefsRequestParams {
 }
 
 export interface GitApiGetGitReposByNameSubscriptionsRequestParams {
+    /** Name is the repo\&#39;s org-unique handle, from the :name path segment. A trailing \&quot;.git\&quot; is stripped. */
+    name: string;
+}
+
+export interface GitApiGetGitReposByNameTargetsRequestParams {
     /** Name is the repo\&#39;s org-unique handle, from the :name path segment. A trailing \&quot;.git\&quot; is stripped. */
     name: string;
 }
@@ -254,12 +252,6 @@ export interface GitApiPostGitReposByNameMirrorRequestParams {
     mirrorReq: MirrorReq;
 }
 
-export interface GitApiPostGitReposByNameMirrorsRequestParams {
-    /** Name is the repo whose advanced refs are pushed downstream, from the :name path segment. */
-    name: string;
-    mirrorTargetReq: MirrorTargetReq;
-}
-
 export interface GitApiPostGitReposByNamePullsRequestParams {
     /** Name is the repo the proposal belongs to, from the :name path segment. */
     name: string;
@@ -285,16 +277,10 @@ export interface GitApiPostGitReposByNameSubscriptionsRequestParams {
     subscribeReq: SubscribeReq;
 }
 
-export interface GitApiPostGitZapCreaterepoRequestParams {
-    zapProcReq?: ZapProcReq;
-}
-
-export interface GitApiPostGitZapDeleterepoRequestParams {
-    zapProcReq?: ZapProcReq;
-}
-
-export interface GitApiPostGitZapGetrepoRequestParams {
-    zapProcReq?: ZapProcReq;
+export interface GitApiPostGitReposByNameTargetsRequestParams {
+    /** Name is the repo whose advanced refs are pushed downstream, from the :name path segment. */
+    name: string;
+    mirrorTargetReq: MirrorTargetReq;
 }
 
 
@@ -424,68 +410,6 @@ export class GitApi extends BaseService {
     }
 
     /**
-     * Removes one outbound mirror target; later pushes stop being forwarded to it.
-     * Removes one outbound mirror target; later pushes stop being forwarded to it. Answers 204 with no body. Nothing is done to the downstream remote itself — only this repo\&#39;s intent to push there is dropped.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteGitReposByNameMirrorsById(requestParameters: GitApiDeleteGitReposByNameMirrorsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteGitReposByNameMirrorsById(requestParameters: GitApiDeleteGitReposByNameMirrorsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteGitReposByNameMirrorsById(requestParameters: GitApiDeleteGitReposByNameMirrorsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteGitReposByNameMirrorsById(requestParameters: GitApiDeleteGitReposByNameMirrorsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const name = requestParameters?.name;
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling deleteGitReposByNameMirrorsById.');
-        }
-        const id = requestParameters?.id;
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteGitReposByNameMirrorsById.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/mirrors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Removes one Slack subscription from a repo; the notifier stops posting that repo\&#39;s events to that channel.
      * Removes one Slack subscription from a repo; the notifier stops posting that repo\&#39;s events to that channel. Answers 204 with no body. An id that is not this repo\&#39;s subscription is not found.
      * @param requestParameters
@@ -533,6 +457,68 @@ export class GitApi extends BaseService {
         }
 
         let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/subscriptions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Removes one outbound mirror target; later pushes stop being forwarded to it.
+     * Removes one outbound mirror target; later pushes stop being forwarded to it. Answers 204 with no body. Nothing is done to the downstream remote itself — only this repo\&#39;s intent to push there is dropped.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteGitReposByNameTargetsById(requestParameters: GitApiDeleteGitReposByNameTargetsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteGitReposByNameTargetsById(requestParameters: GitApiDeleteGitReposByNameTargetsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteGitReposByNameTargetsById(requestParameters: GitApiDeleteGitReposByNameTargetsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteGitReposByNameTargetsById(requestParameters: GitApiDeleteGitReposByNameTargetsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const name = requestParameters?.name;
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling deleteGitReposByNameTargetsById.');
+        }
+        const id = requestParameters?.id;
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteGitReposByNameTargetsById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -1280,65 +1266,6 @@ export class GitApi extends BaseService {
     }
 
     /**
-     * Returns a repo\&#39;s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
-     * Returns a repo\&#39;s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getGitReposByNameMirrors(requestParameters: GitApiGetGitReposByNameMirrorsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MirrorList>;
-    public getGitReposByNameMirrors(requestParameters: GitApiGetGitReposByNameMirrorsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MirrorList>>;
-    public getGitReposByNameMirrors(requestParameters: GitApiGetGitReposByNameMirrorsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MirrorList>>;
-    public getGitReposByNameMirrors(requestParameters: GitApiGetGitReposByNameMirrorsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const name = requestParameters?.name;
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getGitReposByNameMirrors.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/mirrors`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MirrorList>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Returns a repo\&#39;s pull requests, newest number first — what is waiting to be reviewed, and what has already landed.
      * Returns a repo\&#39;s pull requests, newest number first — what is waiting to be reviewed, and what has already landed. Narrow it with ?state&#x3D;open or ?state&#x3D;merged; omit state for every proposal.
      * @param requestParameters
@@ -1451,7 +1378,7 @@ export class GitApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pulls/${this.configuration.encodeParam({name: "number", value: number, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
+        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pulls/${this.configuration.encodeParam({name: "number", value: number, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PullView>('get', `${basePath}${localVarPath}`,
             {
@@ -1637,6 +1564,65 @@ export class GitApi extends BaseService {
         let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/subscriptions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SubscriptionList>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a repo\&#39;s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
+     * Returns a repo\&#39;s outbound mirror targets — the downstream remotes the mirror reactor pushes to whenever a push lands here.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getGitReposByNameTargets(requestParameters: GitApiGetGitReposByNameTargetsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MirrorList>;
+    public getGitReposByNameTargets(requestParameters: GitApiGetGitReposByNameTargetsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MirrorList>>;
+    public getGitReposByNameTargets(requestParameters: GitApiGetGitReposByNameTargetsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MirrorList>>;
+    public getGitReposByNameTargets(requestParameters: GitApiGetGitReposByNameTargetsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const name = requestParameters?.name;
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling getGitReposByNameTargets.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/targets`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MirrorList>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -2415,79 +2401,6 @@ export class GitApi extends BaseService {
     }
 
     /**
-     * Registers a downstream remote the repo\&#39;s advanced refs are pushed to whenever a push lands here.
-     * Registers a downstream remote the repo\&#39;s advanced refs are pushed to whenever a push lands here. Answers 201. The URL must be https to a host on the mirror allowlist (github.com / gitlab.com): the same set the mirror credential may be sent to, so a target can never capture the shared token or point the push at an internal service. Any embedded userinfo is stripped — credentials ride env-only at push time and never enter the stored URL. One mirror per host per repo; a second is a 409.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postGitReposByNameMirrors(requestParameters: GitApiPostGitReposByNameMirrorsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MirrorTargetView>;
-    public postGitReposByNameMirrors(requestParameters: GitApiPostGitReposByNameMirrorsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MirrorTargetView>>;
-    public postGitReposByNameMirrors(requestParameters: GitApiPostGitReposByNameMirrorsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MirrorTargetView>>;
-    public postGitReposByNameMirrors(requestParameters: GitApiPostGitReposByNameMirrorsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const name = requestParameters?.name;
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling postGitReposByNameMirrors.');
-        }
-        const mirrorTargetReq = requestParameters?.mirrorTargetReq;
-        if (mirrorTargetReq === null || mirrorTargetReq === undefined) {
-            throw new Error('Required parameter mirrorTargetReq was null or undefined when calling postGitReposByNameMirrors.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/mirrors`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MirrorTargetView>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: mirrorTargetReq,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Proposes a branch for merging and returns it with its number.
      * Proposes a branch for merging and returns it with its number. Answers 201. Both branches must already exist — a proposal naming a branch nobody pushed is a typo, not a plan — and base defaults to the repo\&#39;s default branch.  Proposing the same head into the same base twice is a 409 while the first proposal is still open, so a retried agent run leaves ONE thing to review rather than a pile of identical ones. A repo outside the caller\&#39;s scope is a 404, exactly as reading it is.
      * @param requestParameters
@@ -2608,7 +2521,7 @@ export class GitApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pulls/${this.configuration.encodeParam({name: "number", value: number, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}/merge`;
+        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pulls/${this.configuration.encodeParam({name: "number", value: number, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/merge`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PullView>('post', `${basePath}${localVarPath}`,
             {
@@ -2770,8 +2683,81 @@ export class GitApi extends BaseService {
     }
 
     /**
-     * Retired — forge pushes build via platform.hanzo.ai
-     * GONE (410). Push-to-deploy belongs to POST https://platform.hanzo.ai/v1/git-webhook, which owns the build system-of-record and dispatches BuildKit Jobs. git.hanzo.ai delivers there through ONE forge-wide system webhook covering every repository; a repo opts in by committing hanzo.yml, not by owning a hook of its own.  Every delivery answers 410 whatever it carries — this endpoint reads no body and authenticates nothing.  410 rather than 404, because the address was real and its meaning moved, which is the distinction 410 carries. A 404 from this estate is ambiguous: Hanzo Git serves /v1, so /api/v1 404s too and reads as \&quot;the API is switched off\&quot;. A retired endpoint says it is retired and names its replacement, so the answer carries its own fix.
+     * Registers a downstream remote the repo\&#39;s advanced refs are pushed to whenever a push lands here.
+     * Registers a downstream remote the repo\&#39;s advanced refs are pushed to whenever a push lands here. Answers 201. The URL must be https to a host on the mirror allowlist (github.com / gitlab.com): the same set the mirror credential may be sent to, so a target can never capture the shared token or point the push at an internal service. Any embedded userinfo is stripped — credentials ride env-only at push time and never enter the stored URL. One mirror per host per repo; a second is a 409.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postGitReposByNameTargets(requestParameters: GitApiPostGitReposByNameTargetsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MirrorTargetView>;
+    public postGitReposByNameTargets(requestParameters: GitApiPostGitReposByNameTargetsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MirrorTargetView>>;
+    public postGitReposByNameTargets(requestParameters: GitApiPostGitReposByNameTargetsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MirrorTargetView>>;
+    public postGitReposByNameTargets(requestParameters: GitApiPostGitReposByNameTargetsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const name = requestParameters?.name;
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling postGitReposByNameTargets.');
+        }
+        const mirrorTargetReq = requestParameters?.mirrorTargetReq;
+        if (mirrorTargetReq === null || mirrorTargetReq === undefined) {
+            throw new Error('Required parameter mirrorTargetReq was null or undefined when calling postGitReposByNameTargets.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/git/repos/${this.configuration.encodeParam({name: "name", value: name, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/targets`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MirrorTargetView>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: mirrorTargetReq,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Retired — push-to-deploy has no inbound webhook
+     * GONE (410). Push-to-deploy is not triggered by an inbound webhook. A push into this host\&#39;s own git server fires the builder in-process, and a repository whose canonical home is GitHub is delivered by the Hanzo Platform GitHub App to POST /v1/integration/github/webhook. The forge does not report a push over HTTP.  Every delivery answers 410 whatever it carries — this endpoint reads no body and authenticates nothing.  410 rather than 404, because the address was real and its meaning moved, which is the distinction 410 carries. A 404 from this estate is ambiguous: Hanzo Git serves /v1, so /api/v1 404s too and reads as \&quot;the API is switched off\&quot;. A retired endpoint says it is retired and names its replacement, so the answer carries its own fix.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -2808,307 +2794,6 @@ export class GitApi extends BaseService {
         }
 
         let localVarPath = `/v1/git/webhook`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Create a repository over the ZAP transport
-     * Creates a repository in the caller\&#39;s org and project scope and answers with its record. &#x60;name&#x60; is required and &#x60;description&#x60; is optional; &#x60;project&#x60; narrows the scope within the org. A name already taken in that scope is a 409 envelope and an invalid name a 400.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\&#39;s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\&#39;s scope. Without a validated org the answer is a 403 envelope.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postGitZapCreaterepo(requestParameters?: GitApiPostGitZapCreaterepoRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postGitZapCreaterepo(requestParameters?: GitApiPostGitZapCreaterepoRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postGitZapCreaterepo(requestParameters?: GitApiPostGitZapCreaterepoRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postGitZapCreaterepo(requestParameters?: GitApiPostGitZapCreaterepoRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const zapProcReq = requestParameters?.zapProcReq;
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/git/zap/createRepo`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: zapProcReq,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Delete a repository over the ZAP transport
-     * Deletes the repository named by &#x60;name&#x60; and answers with the deleted name. A repository outside the caller\&#39;s org and project scope is a 404 envelope, so a delete can never reach another tenant\&#39;s repository.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\&#39;s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\&#39;s scope. Without a validated org the answer is a 403 envelope.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postGitZapDeleterepo(requestParameters?: GitApiPostGitZapDeleterepoRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postGitZapDeleterepo(requestParameters?: GitApiPostGitZapDeleterepoRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postGitZapDeleterepo(requestParameters?: GitApiPostGitZapDeleterepoRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postGitZapDeleterepo(requestParameters?: GitApiPostGitZapDeleterepoRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const zapProcReq = requestParameters?.zapProcReq;
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/git/zap/deleteRepo`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: zapProcReq,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Read one repository over the ZAP transport
-     * Answers a single repository\&#39;s record, named by &#x60;name&#x60;. A repository outside the caller\&#39;s org and project scope is a 404 envelope, the same answer one that does not exist gets.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\&#39;s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\&#39;s scope. Without a validated org the answer is a 403 envelope.
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postGitZapGetrepo(requestParameters?: GitApiPostGitZapGetrepoRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postGitZapGetrepo(requestParameters?: GitApiPostGitZapGetrepoRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postGitZapGetrepo(requestParameters?: GitApiPostGitZapGetrepoRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postGitZapGetrepo(requestParameters?: GitApiPostGitZapGetrepoRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        const zapProcReq = requestParameters?.zapProcReq;
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/git/zap/getRepo`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: zapProcReq,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * List your repositories over the ZAP transport
-     * Answers every repository in the caller\&#39;s org and project scope. It reads NO body — the scope is entirely the caller\&#39;s identity — so a request with an empty object is correct.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\&#39;s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\&#39;s scope. Without a validated org the answer is a 403 envelope.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postGitZapListrepos(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postGitZapListrepos(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postGitZapListrepos(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postGitZapListrepos(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/git/zap/listRepos`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Report your org\&#39;s git storage footprint over the ZAP transport
-     * Answers every repository in the caller\&#39;s org with its size in bytes, plus the org\&#39;s total — what git storage is actually being used, and by which repository. It reads NO body, and it is scoped to the caller\&#39;s own org, so it is that org\&#39;s footprint and never the fleet\&#39;s.  A ZAP PROCEDURE, not a REST resource. It answers the bridge\&#39;s {status, msg, data} envelope rather than the raw view the /v1 route returns, and it calls the SAME core function the REST route calls, so the two transports cannot diverge in behaviour. Org and project scope come from the request identity and NEVER from the body: the body cannot widen the caller\&#39;s scope. Without a validated org the answer is a 403 envelope.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postGitZapUsage(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postGitZapUsage(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postGitZapUsage(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postGitZapUsage(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/git/zap/usage`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {

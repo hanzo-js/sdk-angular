@@ -7,9 +7,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AgentBinding } from './agentBinding';
 
 
 export interface MachineView { 
+    /**
+     * Agent is the cloud Agent this machine runs, lifted out of the binding so a list reads without following one. Empty means nothing is bound — for a kind=bot machine that means it costs money and answers nothing.
+     */
+    agent?: string;
+    /**
+     * Binding is the record joining this machine to that agent, carrying vm\'s own reconciled status and its reason. Absent means no runtime is bound, which is also what a stopped bot looks like: stopping unbinds and leaves the machine running.
+     */
+    binding?: AgentBinding;
     /**
      * CreatedTime is when the machine came into being: the provider\'s own creation timestamp for a Visor machine, passed through in whatever form it states it, and for a BYO machine the RFC 3339 moment it first dialed in.
      */
@@ -19,7 +28,7 @@ export interface MachineView {
      */
     gpu?: string;
     /**
-     * ID addresses this machine on the /v1/visor/machines/:id routes: the org-scoped NAME Visor keys a machine by, falling back to the provider id for a machine that has no name. A BYO machine\'s is the id it dialed in under.
+     * ID addresses this machine on the /v1/compute/machines/:id routes: the org-scoped NAME Visor keys a machine by, falling back to the provider id for a machine that has no name. A BYO machine\'s is the id it dialed in under.
      */
     id?: string;
     /**
@@ -27,7 +36,7 @@ export interface MachineView {
      */
     image?: string;
     /**
-     * Mem is system RAM rendered for a human (\"8 GB\"), not a number to compute with. Empty when the provider\'s figure is ambiguous, or when the only figure available is a GPU slug\'s gb — that is VRAM, and reporting it as system RAM would be a fabrication. A BYO machine\'s RAM is on /v1/visor/fleet/workers.
+     * Mem is system RAM rendered for a human (\"8 GB\"), not a number to compute with. Empty when the provider\'s figure is ambiguous, or when the only figure available is a GPU slug\'s gb — that is VRAM, and reporting it as system RAM would be a fabrication. A BYO machine\'s RAM is on /v1/compute/fleet/workers.
      */
     mem?: string;
     /**
@@ -63,7 +72,7 @@ export interface MachineView {
      */
     type?: string;
     /**
-     * Vcpu is logical cores — the provider\'s own cpuSize when that is a clean integer, else the count read out of the size slug (4 from \"s-4vcpu-8gb\"). ABSENT, never 0, when neither says. A BYO machine leaves it absent here; its real core count is on GET /v1/visor/fleet/workers.
+     * Vcpu is logical cores — the provider\'s own cpuSize when that is a clean integer, else the count read out of the size slug (4 from \"s-4vcpu-8gb\"). ABSENT, never 0, when neither says. A BYO machine leaves it absent here; its real core count is on GET /v1/compute/fleet/workers.
      */
     vcpu?: number;
 }

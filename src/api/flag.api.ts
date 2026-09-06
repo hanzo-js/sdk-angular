@@ -35,30 +35,30 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface FlagsApiDeleteFlagsDefsByKeyRequestParams {
+export interface FlagApiDeleteFlagDefsByKeyRequestParams {
     /** Key is the flag key to act on, from the path. */
     key: string;
 }
 
-export interface FlagsApiGetFlagsActivityRequestParams {
+export interface FlagApiGetFlagActivityRequestParams {
     /** Limit caps the rows returned. 1–500; anything else takes the default 100. */
     limit?: number;
 }
 
-export interface FlagsApiGetFlagsDefsByKeyRequestParams {
+export interface FlagApiGetFlagDefsByKeyRequestParams {
     /** Key is the flag key to act on, from the path. */
     key: string;
 }
 
-export interface FlagsApiPostFlagsRequestParams {
+export interface FlagApiPostFlagRequestParams {
     evaluateIn: EvaluateIn;
 }
 
-export interface FlagsApiPostFlagsDecideRequestParams {
+export interface FlagApiPostFlagDecideRequestParams {
     evaluateIn: EvaluateIn;
 }
 
-export interface FlagsApiPutFlagsDefsByKeyRequestParams {
+export interface FlagApiPutFlagDefsByKeyRequestParams {
     /** Key is the flag key to write, from the path. */
     key: string;
     body: any | null;
@@ -68,7 +68,7 @@ export interface FlagsApiPutFlagsDefsByKeyRequestParams {
 @Injectable({
   providedIn: 'root'
 })
-export class FlagsApi extends BaseService {
+export class FlagApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -81,13 +81,13 @@ export class FlagsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteFlagsDefsByKey(requestParameters: FlagsApiDeleteFlagsDefsByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DeletedOut>;
-    public deleteFlagsDefsByKey(requestParameters: FlagsApiDeleteFlagsDefsByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DeletedOut>>;
-    public deleteFlagsDefsByKey(requestParameters: FlagsApiDeleteFlagsDefsByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DeletedOut>>;
-    public deleteFlagsDefsByKey(requestParameters: FlagsApiDeleteFlagsDefsByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteFlagDefsByKey(requestParameters: FlagApiDeleteFlagDefsByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DeletedOut>;
+    public deleteFlagDefsByKey(requestParameters: FlagApiDeleteFlagDefsByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DeletedOut>>;
+    public deleteFlagDefsByKey(requestParameters: FlagApiDeleteFlagDefsByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DeletedOut>>;
+    public deleteFlagDefsByKey(requestParameters: FlagApiDeleteFlagDefsByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const key = requestParameters?.key;
         if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling deleteFlagsDefsByKey.');
+            throw new Error('Required parameter key was null or undefined when calling deleteFlagDefsByKey.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -118,7 +118,7 @@ export class FlagsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/flags/defs/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/flag/defs/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<DeletedOut>('delete', `${basePath}${localVarPath}`,
             {
@@ -140,10 +140,10 @@ export class FlagsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFlagsActivity(requestParameters?: FlagsApiGetFlagsActivityRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivityOut>;
-    public getFlagsActivity(requestParameters?: FlagsApiGetFlagsActivityRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivityOut>>;
-    public getFlagsActivity(requestParameters?: FlagsApiGetFlagsActivityRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivityOut>>;
-    public getFlagsActivity(requestParameters?: FlagsApiGetFlagsActivityRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFlagActivity(requestParameters?: FlagApiGetFlagActivityRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivityOut>;
+    public getFlagActivity(requestParameters?: FlagApiGetFlagActivityRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivityOut>>;
+    public getFlagActivity(requestParameters?: FlagApiGetFlagActivityRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivityOut>>;
+    public getFlagActivity(requestParameters?: FlagApiGetFlagActivityRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const limit = requestParameters?.limit;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -178,7 +178,7 @@ export class FlagsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/flags/activity`;
+        let localVarPath = `/v1/flag/activity`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ActivityOut>('get', `${basePath}${localVarPath}`,
             {
@@ -200,10 +200,10 @@ export class FlagsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFlagsDefs(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DefsOut>;
-    public getFlagsDefs(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DefsOut>>;
-    public getFlagsDefs(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DefsOut>>;
-    public getFlagsDefs(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFlagDefs(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DefsOut>;
+    public getFlagDefs(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DefsOut>>;
+    public getFlagDefs(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DefsOut>>;
+    public getFlagDefs(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -233,7 +233,7 @@ export class FlagsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/flags/defs`;
+        let localVarPath = `/v1/flag/defs`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<DefsOut>('get', `${basePath}${localVarPath}`,
             {
@@ -255,13 +255,13 @@ export class FlagsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFlagsDefsByKey(requestParameters: FlagsApiGetFlagsDefsByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DefRow>;
-    public getFlagsDefsByKey(requestParameters: FlagsApiGetFlagsDefsByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DefRow>>;
-    public getFlagsDefsByKey(requestParameters: FlagsApiGetFlagsDefsByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DefRow>>;
-    public getFlagsDefsByKey(requestParameters: FlagsApiGetFlagsDefsByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFlagDefsByKey(requestParameters: FlagApiGetFlagDefsByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DefRow>;
+    public getFlagDefsByKey(requestParameters: FlagApiGetFlagDefsByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DefRow>>;
+    public getFlagDefsByKey(requestParameters: FlagApiGetFlagDefsByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DefRow>>;
+    public getFlagDefsByKey(requestParameters: FlagApiGetFlagDefsByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const key = requestParameters?.key;
         if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling getFlagsDefsByKey.');
+            throw new Error('Required parameter key was null or undefined when calling getFlagDefsByKey.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -292,7 +292,7 @@ export class FlagsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/flags/defs/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/flag/defs/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<DefRow>('get', `${basePath}${localVarPath}`,
             {
@@ -313,10 +313,10 @@ export class FlagsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getFlagsHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HealthOut>;
-    public getFlagsHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<HealthOut>>;
-    public getFlagsHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<HealthOut>>;
-    public getFlagsHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getFlagHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HealthOut>;
+    public getFlagHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<HealthOut>>;
+    public getFlagHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<HealthOut>>;
+    public getFlagHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -346,7 +346,7 @@ export class FlagsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/flags/health`;
+        let localVarPath = `/v1/flag/health`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<HealthOut>('get', `${basePath}${localVarPath}`,
             {
@@ -368,13 +368,13 @@ export class FlagsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postFlags(requestParameters: FlagsApiPostFlagsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postFlags(requestParameters: FlagsApiPostFlagsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postFlags(requestParameters: FlagsApiPostFlagsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postFlags(requestParameters: FlagsApiPostFlagsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postFlag(requestParameters: FlagApiPostFlagRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postFlag(requestParameters: FlagApiPostFlagRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postFlag(requestParameters: FlagApiPostFlagRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postFlag(requestParameters: FlagApiPostFlagRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const evaluateIn = requestParameters?.evaluateIn;
         if (evaluateIn === null || evaluateIn === undefined) {
-            throw new Error('Required parameter evaluateIn was null or undefined when calling postFlags.');
+            throw new Error('Required parameter evaluateIn was null or undefined when calling postFlag.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -414,7 +414,7 @@ export class FlagsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/flags`;
+        let localVarPath = `/v1/flag`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -437,13 +437,13 @@ export class FlagsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postFlagsDecide(requestParameters: FlagsApiPostFlagsDecideRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postFlagsDecide(requestParameters: FlagsApiPostFlagsDecideRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postFlagsDecide(requestParameters: FlagsApiPostFlagsDecideRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postFlagsDecide(requestParameters: FlagsApiPostFlagsDecideRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postFlagDecide(requestParameters: FlagApiPostFlagDecideRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postFlagDecide(requestParameters: FlagApiPostFlagDecideRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postFlagDecide(requestParameters: FlagApiPostFlagDecideRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postFlagDecide(requestParameters: FlagApiPostFlagDecideRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const evaluateIn = requestParameters?.evaluateIn;
         if (evaluateIn === null || evaluateIn === undefined) {
-            throw new Error('Required parameter evaluateIn was null or undefined when calling postFlagsDecide.');
+            throw new Error('Required parameter evaluateIn was null or undefined when calling postFlagDecide.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -483,7 +483,7 @@ export class FlagsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/flags/decide`;
+        let localVarPath = `/v1/flag/decide`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -506,17 +506,17 @@ export class FlagsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putFlagsDefsByKey(requestParameters: FlagsApiPutFlagsDefsByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DefRow>;
-    public putFlagsDefsByKey(requestParameters: FlagsApiPutFlagsDefsByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DefRow>>;
-    public putFlagsDefsByKey(requestParameters: FlagsApiPutFlagsDefsByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DefRow>>;
-    public putFlagsDefsByKey(requestParameters: FlagsApiPutFlagsDefsByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putFlagDefsByKey(requestParameters: FlagApiPutFlagDefsByKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DefRow>;
+    public putFlagDefsByKey(requestParameters: FlagApiPutFlagDefsByKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DefRow>>;
+    public putFlagDefsByKey(requestParameters: FlagApiPutFlagDefsByKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DefRow>>;
+    public putFlagDefsByKey(requestParameters: FlagApiPutFlagDefsByKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const key = requestParameters?.key;
         if (key === null || key === undefined) {
-            throw new Error('Required parameter key was null or undefined when calling putFlagsDefsByKey.');
+            throw new Error('Required parameter key was null or undefined when calling putFlagDefsByKey.');
         }
         const body = requestParameters?.body;
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling putFlagsDefsByKey.');
+            throw new Error('Required parameter body was null or undefined when calling putFlagDefsByKey.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -556,7 +556,7 @@ export class FlagsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/flags/defs/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/flag/defs/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<DefRow>('put', `${basePath}${localVarPath}`,
             {

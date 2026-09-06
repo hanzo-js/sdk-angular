@@ -41,6 +41,10 @@ import { DeviceStartOut } from '../model/deviceStartOut';
 // @ts-ignore
 import { DisconnectOut } from '../model/disconnectOut';
 // @ts-ignore
+import { ForgeJob } from '../model/forgeJob';
+// @ts-ignore
+import { ForgeLaunched } from '../model/forgeLaunched';
+// @ts-ignore
 import { GithubBackfillIn } from '../model/githubBackfillIn';
 // @ts-ignore
 import { GithubBackfillResult } from '../model/githubBackfillResult';
@@ -97,6 +101,8 @@ import { ProviderView } from '../model/providerView';
 // @ts-ignore
 import { RefreshOut } from '../model/refreshOut';
 // @ts-ignore
+import { SlackJoinOut } from '../model/slackJoinOut';
+// @ts-ignore
 import { VerifyOut } from '../model/verifyOut';
 
 // @ts-ignore
@@ -105,123 +111,127 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams {
+export interface IntegrationApiDeleteIntegrationConnectorsByIdRequestParams {
     /** ID is the connector id, provider + \&quot;:\&quot; + label (\&quot;openai:default\&quot;) — the auth-profile-id shape. Another user\&#39;s id is simply no row, so 404. */
     id: string;
 }
 
-export interface IntegrationsApiDeleteIntegrationsGithubReposByRepoPagesRequestParams {
+export interface IntegrationApiDeleteIntegrationGithubReposByRepoPagesRequestParams {
     /** Repo is the repository\&#39;s short name within the org\&#39;s installation, with no owner prefix (the owner is server-derived from the grant). A trailing \&quot;.git\&quot; is stripped. */
     repo: string;
 }
 
-export interface IntegrationsApiGetIntegrationsByProviderRequestParams {
-    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integrations/connectors) providers, which this surface never resolves. */
+export interface IntegrationApiGetIntegrationByProviderRequestParams {
+    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integration/connectors) providers, which this surface never resolves. */
     provider: string;
 }
 
-export interface IntegrationsApiGetIntegrationsByProviderCallbackRequestParams {
+export interface IntegrationApiGetIntegrationByProviderCallbackRequestParams {
     provider: string;
 }
 
-export interface IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams {
+export interface IntegrationApiGetIntegrationConnectorsByIdTokenRequestParams {
     /** ID is the connector id, provider + \&quot;:\&quot; + label (\&quot;openai:default\&quot;) — the auth-profile-id shape. Another user\&#39;s id is simply no row, so 404. */
     id: string;
 }
 
-export interface IntegrationsApiGetIntegrationsGithubReposByRepoPagesRequestParams {
+export interface IntegrationApiGetIntegrationGithubReposByRepoPagesRequestParams {
     /** Repo is the repository\&#39;s short name within the org\&#39;s installation, with no owner prefix (the owner is server-derived from the grant). A trailing \&quot;.git\&quot; is stripped. */
     repo: string;
 }
 
-export interface IntegrationsApiPostIntegrationsByProviderConnectRequestParams {
+export interface IntegrationApiPostIntegrationByProviderConnectRequestParams {
     /** Provider is the connector\&#39;s registry id, from the :provider path segment. */
     provider: string;
     connectIn: ConnectIn;
 }
 
-export interface IntegrationsApiPostIntegrationsByProviderDisconnectRequestParams {
-    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integrations/connectors) providers, which this surface never resolves. */
+export interface IntegrationApiPostIntegrationByProviderDisconnectRequestParams {
+    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integration/connectors) providers, which this surface never resolves. */
     provider: string;
 }
 
-export interface IntegrationsApiPostIntegrationsByProviderVerifyRequestParams {
-    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integrations/connectors) providers, which this surface never resolves. */
+export interface IntegrationApiPostIntegrationByProviderVerifyRequestParams {
+    /** Provider is the registry id of the connector — \&quot;slack\&quot;, \&quot;github\&quot;, \&quot;cloudflare\&quot;. Unknown ids are 404, as are the user-plane (/v1/integration/connectors) providers, which this surface never resolves. */
     provider: string;
 }
 
-export interface IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams {
+export interface IntegrationApiPostIntegrationConnectorsByIdRefreshRequestParams {
     /** ID is the connector id, provider + \&quot;:\&quot; + label (\&quot;openai:default\&quot;) — the auth-profile-id shape. Another user\&#39;s id is simply no row, so 404. */
     id: string;
 }
 
-export interface IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams {
+export interface IntegrationApiPostIntegrationConnectorsByProviderCredentialRequestParams {
     /** Provider is the user-scoped provider\&#39;s registry id, from the path. */
     provider: string;
     credentialIn: CredentialIn;
 }
 
-export interface IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams {
+export interface IntegrationApiPostIntegrationConnectorsByProviderDeviceRequestParams {
     /** Provider is the user-scoped provider\&#39;s registry id, from the path. */
     provider: string;
     deviceStartIn: DeviceStartIn;
 }
 
-export interface IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams {
+export interface IntegrationApiPostIntegrationConnectorsByProviderDeviceByFlowPollRequestParams {
     /** Provider is the user-scoped provider\&#39;s registry id, from the path. */
     provider: string;
     /** Flow is the id deviceStartOut returned. Expired or another user\&#39;s flow is indistinguishable from an unknown one: 404. */
     flow: string;
 }
 
-export interface IntegrationsApiPostIntegrationsGithubClaimRequestParams {
+export interface IntegrationApiPostIntegrationForgeWebhookRequestParams {
+    forgeJob?: ForgeJob;
+}
+
+export interface IntegrationApiPostIntegrationGithubClaimRequestParams {
     githubClaimIn: GithubClaimIn;
 }
 
-export interface IntegrationsApiPostIntegrationsGithubForkRequestParams {
+export interface IntegrationApiPostIntegrationGithubForkRequestParams {
     githubForkReq: GithubForkReq;
 }
 
-export interface IntegrationsApiPostIntegrationsGithubIssuesBackfillRequestParams {
+export interface IntegrationApiPostIntegrationGithubIssuesBackfillRequestParams {
     githubBackfillIn: GithubBackfillIn;
 }
 
-export interface IntegrationsApiPostIntegrationsGithubReposByRepoPagesRequestParams {
+export interface IntegrationApiPostIntegrationGithubReposByRepoPagesRequestParams {
     /** Repo is the repository, from the :repo path segment. */
     repo: string;
     githubPagesEnableReq: GithubPagesEnableReq;
 }
 
-export interface IntegrationsApiPostIntegrationsGithubReposByRepoPagesBuildsRequestParams {
+export interface IntegrationApiPostIntegrationGithubReposByRepoPagesBuildsRequestParams {
     /** Repo is the repository\&#39;s short name within the org\&#39;s installation, with no owner prefix (the owner is server-derived from the grant). A trailing \&quot;.git\&quot; is stripped. */
     repo: string;
 }
 
-export interface IntegrationsApiPostIntegrationsGithubReposImportRequestParams {
+export interface IntegrationApiPostIntegrationGithubReposImportRequestParams {
     githubImportIn: GithubImportIn;
 }
 
-export interface IntegrationsApiPostIntegrationsGithubSearchRequestParams {
+export interface IntegrationApiPostIntegrationGithubSearchRequestParams {
     githubSearchReq: GithubSearchReq;
 }
 
-export interface IntegrationsApiPostIntegrationsLinearClaimRequestParams {
+export interface IntegrationApiPostIntegrationLinearClaimRequestParams {
     linearClaimIn: LinearClaimIn;
 }
 
-export interface IntegrationsApiPostIntegrationsLinearCommentsRequestParams {
+export interface IntegrationApiPostIntegrationLinearCommentsRequestParams {
     linearCommentIn: LinearCommentIn;
 }
 
-export interface IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams {
+export interface IntegrationApiPostIntegrationLinearIssuesBackfillRequestParams {
     linearBackfillIn: LinearBackfillIn;
 }
 
-export interface IntegrationsApiPostIntegrationsOpenrouterWebhookRequestParams {
+export interface IntegrationApiPostIntegrationOpenrouterWebhookRequestParams {
     requestBody?: { [key: string]: any; };
 }
 
-export interface IntegrationsApiPutIntegrationsGithubReposByRepoPagesRequestParams {
+export interface IntegrationApiPutIntegrationGithubReposByRepoPagesRequestParams {
     /** Repo is the repository, from the :repo path segment. */
     repo: string;
     githubPagesUpdateReq: GithubPagesUpdateReq;
@@ -231,7 +241,7 @@ export interface IntegrationsApiPutIntegrationsGithubReposByRepoPagesRequestPara
 @Injectable({
   providedIn: 'root'
 })
-export class IntegrationsApi extends BaseService {
+export class IntegrationApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -244,13 +254,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DisconnectOut>;
-    public deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DisconnectOut>>;
-    public deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DisconnectOut>>;
-    public deleteIntegrationsConnectorsById(requestParameters: IntegrationsApiDeleteIntegrationsConnectorsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteIntegrationConnectorsById(requestParameters: IntegrationApiDeleteIntegrationConnectorsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DisconnectOut>;
+    public deleteIntegrationConnectorsById(requestParameters: IntegrationApiDeleteIntegrationConnectorsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DisconnectOut>>;
+    public deleteIntegrationConnectorsById(requestParameters: IntegrationApiDeleteIntegrationConnectorsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DisconnectOut>>;
+    public deleteIntegrationConnectorsById(requestParameters: IntegrationApiDeleteIntegrationConnectorsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteIntegrationsConnectorsById.');
+            throw new Error('Required parameter id was null or undefined when calling deleteIntegrationConnectorsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -281,7 +291,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/integration/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<DisconnectOut>('delete', `${basePath}${localVarPath}`,
             {
@@ -303,13 +313,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiDeleteIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesDisabledOut>;
-    public deleteIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiDeleteIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesDisabledOut>>;
-    public deleteIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiDeleteIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesDisabledOut>>;
-    public deleteIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiDeleteIntegrationsGithubReposByRepoPagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiDeleteIntegrationGithubReposByRepoPagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesDisabledOut>;
+    public deleteIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiDeleteIntegrationGithubReposByRepoPagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesDisabledOut>>;
+    public deleteIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiDeleteIntegrationGithubReposByRepoPagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesDisabledOut>>;
+    public deleteIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiDeleteIntegrationGithubReposByRepoPagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const repo = requestParameters?.repo;
         if (repo === null || repo === undefined) {
-            throw new Error('Required parameter repo was null or undefined when calling deleteIntegrationsGithubReposByRepoPages.');
+            throw new Error('Required parameter repo was null or undefined when calling deleteIntegrationGithubReposByRepoPages.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -340,7 +350,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
+        let localVarPath = `/v1/integration/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubPagesDisabledOut>('delete', `${basePath}${localVarPath}`,
             {
@@ -357,14 +367,14 @@ export class IntegrationsApi extends BaseService {
 
     /**
      * Returns every registered integration provider together with THIS org\&#39;s connection status for it — the catalog the console\&#39;s Integrations page renders.
-     * Returns every registered integration provider together with THIS org\&#39;s connection status for it — the catalog the console\&#39;s Integrations page renders. Org-authed: a caller with no validated principal is 403, because the status is per-org and there is no org-less answer. User-plane providers (the /v1/integrations/connectors surface) are omitted; the two planes are disjoint.
+     * Returns every registered integration provider together with THIS org\&#39;s connection status for it — the catalog the console\&#39;s Integrations page renders. Org-authed: a caller with no validated principal is 403, because the status is per-org and there is no org-less answer. User-plane providers (the /v1/integration/connectors surface) are omitted; the two planes are disjoint.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ListOut>;
-    public getIntegrations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ListOut>>;
-    public getIntegrations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ListOut>>;
-    public getIntegrations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegration(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ListOut>;
+    public getIntegration(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ListOut>>;
+    public getIntegration(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ListOut>>;
+    public getIntegration(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -394,7 +404,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations`;
+        let localVarPath = `/v1/integration`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ListOut>('get', `${basePath}${localVarPath}`,
             {
@@ -416,13 +426,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsByProvider(requestParameters: IntegrationsApiGetIntegrationsByProviderRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProviderView>;
-    public getIntegrationsByProvider(requestParameters: IntegrationsApiGetIntegrationsByProviderRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProviderView>>;
-    public getIntegrationsByProvider(requestParameters: IntegrationsApiGetIntegrationsByProviderRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProviderView>>;
-    public getIntegrationsByProvider(requestParameters: IntegrationsApiGetIntegrationsByProviderRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationByProvider(requestParameters: IntegrationApiGetIntegrationByProviderRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProviderView>;
+    public getIntegrationByProvider(requestParameters: IntegrationApiGetIntegrationByProviderRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProviderView>>;
+    public getIntegrationByProvider(requestParameters: IntegrationApiGetIntegrationByProviderRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProviderView>>;
+    public getIntegrationByProvider(requestParameters: IntegrationApiGetIntegrationByProviderRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const provider = requestParameters?.provider;
         if (provider === null || provider === undefined) {
-            throw new Error('Required parameter provider was null or undefined when calling getIntegrationsByProvider.');
+            throw new Error('Required parameter provider was null or undefined when calling getIntegrationByProvider.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -453,7 +463,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/integration/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProviderView>('get', `${basePath}${localVarPath}`,
             {
@@ -475,13 +485,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsByProviderCallback(requestParameters: IntegrationsApiGetIntegrationsByProviderCallbackRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsByProviderCallback(requestParameters: IntegrationsApiGetIntegrationsByProviderCallbackRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsByProviderCallback(requestParameters: IntegrationsApiGetIntegrationsByProviderCallbackRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsByProviderCallback(requestParameters: IntegrationsApiGetIntegrationsByProviderCallbackRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationByProviderCallback(requestParameters: IntegrationApiGetIntegrationByProviderCallbackRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationByProviderCallback(requestParameters: IntegrationApiGetIntegrationByProviderCallbackRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationByProviderCallback(requestParameters: IntegrationApiGetIntegrationByProviderCallbackRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationByProviderCallback(requestParameters: IntegrationApiGetIntegrationByProviderCallbackRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const provider = requestParameters?.provider;
         if (provider === null || provider === undefined) {
-            throw new Error('Required parameter provider was null or undefined when calling getIntegrationsByProviderCallback.');
+            throw new Error('Required parameter provider was null or undefined when calling getIntegrationByProviderCallback.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -511,7 +521,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/callback`;
+        let localVarPath = `/v1/integration/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/callback`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -532,10 +542,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsConnectors(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorsOut>;
-    public getIntegrationsConnectors(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorsOut>>;
-    public getIntegrationsConnectors(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorsOut>>;
-    public getIntegrationsConnectors(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationConnectors(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorsOut>;
+    public getIntegrationConnectors(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorsOut>>;
+    public getIntegrationConnectors(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorsOut>>;
+    public getIntegrationConnectors(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -565,7 +575,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/connectors`;
+        let localVarPath = `/v1/integration/connectors`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ConnectorsOut>('get', `${basePath}${localVarPath}`,
             {
@@ -587,13 +597,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorTokenOut>;
-    public getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorTokenOut>>;
-    public getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorTokenOut>>;
-    public getIntegrationsConnectorsByIdToken(requestParameters: IntegrationsApiGetIntegrationsConnectorsByIdTokenRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationConnectorsByIdToken(requestParameters: IntegrationApiGetIntegrationConnectorsByIdTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorTokenOut>;
+    public getIntegrationConnectorsByIdToken(requestParameters: IntegrationApiGetIntegrationConnectorsByIdTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorTokenOut>>;
+    public getIntegrationConnectorsByIdToken(requestParameters: IntegrationApiGetIntegrationConnectorsByIdTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorTokenOut>>;
+    public getIntegrationConnectorsByIdToken(requestParameters: IntegrationApiGetIntegrationConnectorsByIdTokenRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getIntegrationsConnectorsByIdToken.');
+            throw new Error('Required parameter id was null or undefined when calling getIntegrationConnectorsByIdToken.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -624,7 +634,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/token`;
+        let localVarPath = `/v1/integration/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/token`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ConnectorTokenOut>('get', `${basePath}${localVarPath}`,
             {
@@ -645,10 +655,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsConnectorsProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorProvidersOut>;
-    public getIntegrationsConnectorsProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorProvidersOut>>;
-    public getIntegrationsConnectorsProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorProvidersOut>>;
-    public getIntegrationsConnectorsProviders(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationConnectorsProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectorProvidersOut>;
+    public getIntegrationConnectorsProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectorProvidersOut>>;
+    public getIntegrationConnectorsProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectorProvidersOut>>;
+    public getIntegrationConnectorsProviders(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -678,7 +688,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/connectors/providers`;
+        let localVarPath = `/v1/integration/connectors/providers`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ConnectorProvidersOut>('get', `${basePath}${localVarPath}`,
             {
@@ -699,10 +709,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsDiscordLink(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsDiscordLink(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsDiscordLink(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsDiscordLink(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationDiscordLink(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationDiscordLink(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationDiscordLink(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationDiscordLink(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -731,7 +741,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/discord/link`;
+        let localVarPath = `/v1/integration/discord/link`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -752,10 +762,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsDiscordLinkCallback(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsDiscordLinkCallback(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsDiscordLinkCallback(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsDiscordLinkCallback(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationDiscordLinkCallback(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationDiscordLinkCallback(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationDiscordLinkCallback(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationDiscordLinkCallback(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -784,7 +794,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/discord/link/callback`;
+        let localVarPath = `/v1/integration/discord/link/callback`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -805,10 +815,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsDiscordLinkDiscord(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsDiscordLinkDiscord(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsDiscordLinkDiscord(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsDiscordLinkDiscord(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationDiscordLinkDiscord(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationDiscordLinkDiscord(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationDiscordLinkDiscord(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationDiscordLinkDiscord(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -837,7 +847,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/discord/link/discord`;
+        let localVarPath = `/v1/integration/discord/link/discord`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -858,10 +868,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsGithubInstallations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubInstallationsOut>;
-    public getIntegrationsGithubInstallations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubInstallationsOut>>;
-    public getIntegrationsGithubInstallations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubInstallationsOut>>;
-    public getIntegrationsGithubInstallations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationGithubInstallations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubInstallationsOut>;
+    public getIntegrationGithubInstallations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubInstallationsOut>>;
+    public getIntegrationGithubInstallations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubInstallationsOut>>;
+    public getIntegrationGithubInstallations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -891,7 +901,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/installations`;
+        let localVarPath = `/v1/integration/github/installations`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubInstallationsOut>('get', `${basePath}${localVarPath}`,
             {
@@ -912,10 +922,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsGithubRepos(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubReposOut>;
-    public getIntegrationsGithubRepos(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubReposOut>>;
-    public getIntegrationsGithubRepos(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubReposOut>>;
-    public getIntegrationsGithubRepos(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationGithubRepos(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubReposOut>;
+    public getIntegrationGithubRepos(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubReposOut>>;
+    public getIntegrationGithubRepos(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubReposOut>>;
+    public getIntegrationGithubRepos(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -945,7 +955,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/repos`;
+        let localVarPath = `/v1/integration/github/repos`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubReposOut>('get', `${basePath}${localVarPath}`,
             {
@@ -967,13 +977,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiGetIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesView>;
-    public getIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiGetIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesView>>;
-    public getIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiGetIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesView>>;
-    public getIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiGetIntegrationsGithubReposByRepoPagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiGetIntegrationGithubReposByRepoPagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesView>;
+    public getIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiGetIntegrationGithubReposByRepoPagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesView>>;
+    public getIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiGetIntegrationGithubReposByRepoPagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesView>>;
+    public getIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiGetIntegrationGithubReposByRepoPagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const repo = requestParameters?.repo;
         if (repo === null || repo === undefined) {
-            throw new Error('Required parameter repo was null or undefined when calling getIntegrationsGithubReposByRepoPages.');
+            throw new Error('Required parameter repo was null or undefined when calling getIntegrationGithubReposByRepoPages.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1004,7 +1014,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
+        let localVarPath = `/v1/integration/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubPagesView>('get', `${basePath}${localVarPath}`,
             {
@@ -1025,10 +1035,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsGitlabProjects(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GitlabProjectsOut>;
-    public getIntegrationsGitlabProjects(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GitlabProjectsOut>>;
-    public getIntegrationsGitlabProjects(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GitlabProjectsOut>>;
-    public getIntegrationsGitlabProjects(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationGitlabProjects(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GitlabProjectsOut>;
+    public getIntegrationGitlabProjects(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GitlabProjectsOut>>;
+    public getIntegrationGitlabProjects(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GitlabProjectsOut>>;
+    public getIntegrationGitlabProjects(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1058,7 +1068,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/gitlab/projects`;
+        let localVarPath = `/v1/integration/gitlab/projects`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GitlabProjectsOut>('get', `${basePath}${localVarPath}`,
             {
@@ -1079,10 +1089,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsSlackInstall(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsSlackInstall(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsSlackInstall(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsSlackInstall(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationSlackInstall(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationSlackInstall(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationSlackInstall(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationSlackInstall(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1111,7 +1121,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/slack/install`;
+        let localVarPath = `/v1/integration/slack/install`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1132,10 +1142,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsSlackLink(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsSlackLink(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsSlackLink(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsSlackLink(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationSlackLink(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationSlackLink(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationSlackLink(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationSlackLink(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1164,7 +1174,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/slack/link`;
+        let localVarPath = `/v1/integration/slack/link`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1185,10 +1195,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsSlackLinkCallback(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsSlackLinkCallback(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsSlackLinkCallback(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsSlackLinkCallback(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationSlackLinkCallback(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationSlackLinkCallback(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationSlackLinkCallback(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationSlackLinkCallback(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1217,7 +1227,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/slack/link/callback`;
+        let localVarPath = `/v1/integration/slack/link/callback`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1238,10 +1248,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsSlackLinkSlack(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsSlackLinkSlack(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsSlackLinkSlack(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsSlackLinkSlack(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationSlackLinkSlack(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationSlackLinkSlack(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationSlackLinkSlack(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationSlackLinkSlack(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1270,7 +1280,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/slack/link/slack`;
+        let localVarPath = `/v1/integration/slack/link/slack`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1291,10 +1301,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsTeamsLink(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsTeamsLink(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsTeamsLink(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsTeamsLink(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationTeamsLink(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationTeamsLink(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationTeamsLink(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationTeamsLink(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1323,7 +1333,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/teams/link`;
+        let localVarPath = `/v1/integration/teams/link`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1344,10 +1354,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsTeamsLinkAad(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsTeamsLinkAad(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsTeamsLinkAad(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsTeamsLinkAad(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationTeamsLinkAad(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationTeamsLinkAad(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationTeamsLinkAad(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationTeamsLinkAad(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1376,7 +1386,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/teams/link/aad`;
+        let localVarPath = `/v1/integration/teams/link/aad`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1397,10 +1407,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsTeamsLinkCallback(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsTeamsLinkCallback(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsTeamsLinkCallback(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsTeamsLinkCallback(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationTeamsLinkCallback(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationTeamsLinkCallback(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationTeamsLinkCallback(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationTeamsLinkCallback(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1429,7 +1439,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/teams/link/callback`;
+        let localVarPath = `/v1/integration/teams/link/callback`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1450,10 +1460,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsTelegramLink(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsTelegramLink(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsTelegramLink(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsTelegramLink(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationTelegramLink(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationTelegramLink(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationTelegramLink(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationTelegramLink(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1482,7 +1492,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/telegram/link`;
+        let localVarPath = `/v1/integration/telegram/link`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1503,10 +1513,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsTelegramLinkAuth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsTelegramLinkAuth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsTelegramLinkAuth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsTelegramLinkAuth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationTelegramLinkAuth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationTelegramLinkAuth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationTelegramLinkAuth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationTelegramLinkAuth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1535,7 +1545,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/telegram/link/auth`;
+        let localVarPath = `/v1/integration/telegram/link/auth`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1556,10 +1566,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsTelegramLinkCallback(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsTelegramLinkCallback(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsTelegramLinkCallback(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsTelegramLinkCallback(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationTelegramLinkCallback(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationTelegramLinkCallback(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationTelegramLinkCallback(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationTelegramLinkCallback(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1588,7 +1598,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/telegram/link/callback`;
+        let localVarPath = `/v1/integration/telegram/link/callback`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1609,10 +1619,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getIntegrationsWhatsappWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getIntegrationsWhatsappWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getIntegrationsWhatsappWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getIntegrationsWhatsappWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getIntegrationWhatsappWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getIntegrationWhatsappWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getIntegrationWhatsappWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getIntegrationWhatsappWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1641,7 +1651,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/whatsapp/webhook`;
+        let localVarPath = `/v1/integration/whatsapp/webhook`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1663,17 +1673,17 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsByProviderConnect(requestParameters: IntegrationsApiPostIntegrationsByProviderConnectRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectOut>;
-    public postIntegrationsByProviderConnect(requestParameters: IntegrationsApiPostIntegrationsByProviderConnectRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectOut>>;
-    public postIntegrationsByProviderConnect(requestParameters: IntegrationsApiPostIntegrationsByProviderConnectRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectOut>>;
-    public postIntegrationsByProviderConnect(requestParameters: IntegrationsApiPostIntegrationsByProviderConnectRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationByProviderConnect(requestParameters: IntegrationApiPostIntegrationByProviderConnectRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConnectOut>;
+    public postIntegrationByProviderConnect(requestParameters: IntegrationApiPostIntegrationByProviderConnectRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConnectOut>>;
+    public postIntegrationByProviderConnect(requestParameters: IntegrationApiPostIntegrationByProviderConnectRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConnectOut>>;
+    public postIntegrationByProviderConnect(requestParameters: IntegrationApiPostIntegrationByProviderConnectRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const provider = requestParameters?.provider;
         if (provider === null || provider === undefined) {
-            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsByProviderConnect.');
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationByProviderConnect.');
         }
         const connectIn = requestParameters?.connectIn;
         if (connectIn === null || connectIn === undefined) {
-            throw new Error('Required parameter connectIn was null or undefined when calling postIntegrationsByProviderConnect.');
+            throw new Error('Required parameter connectIn was null or undefined when calling postIntegrationByProviderConnect.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1713,7 +1723,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/connect`;
+        let localVarPath = `/v1/integration/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/connect`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ConnectOut>('post', `${basePath}${localVarPath}`,
             {
@@ -1736,13 +1746,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsByProviderDisconnect(requestParameters: IntegrationsApiPostIntegrationsByProviderDisconnectRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DisconnectOut>;
-    public postIntegrationsByProviderDisconnect(requestParameters: IntegrationsApiPostIntegrationsByProviderDisconnectRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DisconnectOut>>;
-    public postIntegrationsByProviderDisconnect(requestParameters: IntegrationsApiPostIntegrationsByProviderDisconnectRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DisconnectOut>>;
-    public postIntegrationsByProviderDisconnect(requestParameters: IntegrationsApiPostIntegrationsByProviderDisconnectRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationByProviderDisconnect(requestParameters: IntegrationApiPostIntegrationByProviderDisconnectRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DisconnectOut>;
+    public postIntegrationByProviderDisconnect(requestParameters: IntegrationApiPostIntegrationByProviderDisconnectRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DisconnectOut>>;
+    public postIntegrationByProviderDisconnect(requestParameters: IntegrationApiPostIntegrationByProviderDisconnectRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DisconnectOut>>;
+    public postIntegrationByProviderDisconnect(requestParameters: IntegrationApiPostIntegrationByProviderDisconnectRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const provider = requestParameters?.provider;
         if (provider === null || provider === undefined) {
-            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsByProviderDisconnect.');
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationByProviderDisconnect.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1773,7 +1783,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/disconnect`;
+        let localVarPath = `/v1/integration/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/disconnect`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<DisconnectOut>('post', `${basePath}${localVarPath}`,
             {
@@ -1795,13 +1805,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsByProviderVerify(requestParameters: IntegrationsApiPostIntegrationsByProviderVerifyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VerifyOut>;
-    public postIntegrationsByProviderVerify(requestParameters: IntegrationsApiPostIntegrationsByProviderVerifyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VerifyOut>>;
-    public postIntegrationsByProviderVerify(requestParameters: IntegrationsApiPostIntegrationsByProviderVerifyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VerifyOut>>;
-    public postIntegrationsByProviderVerify(requestParameters: IntegrationsApiPostIntegrationsByProviderVerifyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationByProviderVerify(requestParameters: IntegrationApiPostIntegrationByProviderVerifyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VerifyOut>;
+    public postIntegrationByProviderVerify(requestParameters: IntegrationApiPostIntegrationByProviderVerifyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VerifyOut>>;
+    public postIntegrationByProviderVerify(requestParameters: IntegrationApiPostIntegrationByProviderVerifyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VerifyOut>>;
+    public postIntegrationByProviderVerify(requestParameters: IntegrationApiPostIntegrationByProviderVerifyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const provider = requestParameters?.provider;
         if (provider === null || provider === undefined) {
-            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsByProviderVerify.');
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationByProviderVerify.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1832,7 +1842,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/verify`;
+        let localVarPath = `/v1/integration/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/verify`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<VerifyOut>('post', `${basePath}${localVarPath}`,
             {
@@ -1854,13 +1864,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RefreshOut>;
-    public postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RefreshOut>>;
-    public postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RefreshOut>>;
-    public postIntegrationsConnectorsByIdRefresh(requestParameters: IntegrationsApiPostIntegrationsConnectorsByIdRefreshRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationConnectorsByIdRefresh(requestParameters: IntegrationApiPostIntegrationConnectorsByIdRefreshRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RefreshOut>;
+    public postIntegrationConnectorsByIdRefresh(requestParameters: IntegrationApiPostIntegrationConnectorsByIdRefreshRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RefreshOut>>;
+    public postIntegrationConnectorsByIdRefresh(requestParameters: IntegrationApiPostIntegrationConnectorsByIdRefreshRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RefreshOut>>;
+    public postIntegrationConnectorsByIdRefresh(requestParameters: IntegrationApiPostIntegrationConnectorsByIdRefreshRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postIntegrationsConnectorsByIdRefresh.');
+            throw new Error('Required parameter id was null or undefined when calling postIntegrationConnectorsByIdRefresh.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1891,7 +1901,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/refresh`;
+        let localVarPath = `/v1/integration/connectors/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/refresh`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<RefreshOut>('post', `${basePath}${localVarPath}`,
             {
@@ -1913,17 +1923,17 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CredentialOut>;
-    public postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CredentialOut>>;
-    public postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CredentialOut>>;
-    public postIntegrationsConnectorsByProviderCredential(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderCredentialRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationConnectorsByProviderCredential(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderCredentialRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CredentialOut>;
+    public postIntegrationConnectorsByProviderCredential(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderCredentialRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CredentialOut>>;
+    public postIntegrationConnectorsByProviderCredential(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderCredentialRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CredentialOut>>;
+    public postIntegrationConnectorsByProviderCredential(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderCredentialRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const provider = requestParameters?.provider;
         if (provider === null || provider === undefined) {
-            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsConnectorsByProviderCredential.');
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationConnectorsByProviderCredential.');
         }
         const credentialIn = requestParameters?.credentialIn;
         if (credentialIn === null || credentialIn === undefined) {
-            throw new Error('Required parameter credentialIn was null or undefined when calling postIntegrationsConnectorsByProviderCredential.');
+            throw new Error('Required parameter credentialIn was null or undefined when calling postIntegrationConnectorsByProviderCredential.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1963,7 +1973,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/credential`;
+        let localVarPath = `/v1/integration/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/credential`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CredentialOut>('post', `${basePath}${localVarPath}`,
             {
@@ -1986,17 +1996,17 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DeviceStartOut>;
-    public postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DeviceStartOut>>;
-    public postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DeviceStartOut>>;
-    public postIntegrationsConnectorsByProviderDevice(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationConnectorsByProviderDevice(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderDeviceRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DeviceStartOut>;
+    public postIntegrationConnectorsByProviderDevice(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderDeviceRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DeviceStartOut>>;
+    public postIntegrationConnectorsByProviderDevice(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderDeviceRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DeviceStartOut>>;
+    public postIntegrationConnectorsByProviderDevice(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderDeviceRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const provider = requestParameters?.provider;
         if (provider === null || provider === undefined) {
-            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsConnectorsByProviderDevice.');
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationConnectorsByProviderDevice.');
         }
         const deviceStartIn = requestParameters?.deviceStartIn;
         if (deviceStartIn === null || deviceStartIn === undefined) {
-            throw new Error('Required parameter deviceStartIn was null or undefined when calling postIntegrationsConnectorsByProviderDevice.');
+            throw new Error('Required parameter deviceStartIn was null or undefined when calling postIntegrationConnectorsByProviderDevice.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2036,7 +2046,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/device`;
+        let localVarPath = `/v1/integration/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/device`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<DeviceStartOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2059,17 +2069,17 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DevicePollOut>;
-    public postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DevicePollOut>>;
-    public postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DevicePollOut>>;
-    public postIntegrationsConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationsApiPostIntegrationsConnectorsByProviderDeviceByFlowPollRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DevicePollOut>;
+    public postIntegrationConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DevicePollOut>>;
+    public postIntegrationConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderDeviceByFlowPollRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DevicePollOut>>;
+    public postIntegrationConnectorsByProviderDeviceByFlowPoll(requestParameters: IntegrationApiPostIntegrationConnectorsByProviderDeviceByFlowPollRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const provider = requestParameters?.provider;
         if (provider === null || provider === undefined) {
-            throw new Error('Required parameter provider was null or undefined when calling postIntegrationsConnectorsByProviderDeviceByFlowPoll.');
+            throw new Error('Required parameter provider was null or undefined when calling postIntegrationConnectorsByProviderDeviceByFlowPoll.');
         }
         const flow = requestParameters?.flow;
         if (flow === null || flow === undefined) {
-            throw new Error('Required parameter flow was null or undefined when calling postIntegrationsConnectorsByProviderDeviceByFlowPoll.');
+            throw new Error('Required parameter flow was null or undefined when calling postIntegrationConnectorsByProviderDeviceByFlowPoll.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2100,7 +2110,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/device/${this.configuration.encodeParam({name: "flow", value: flow, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/poll`;
+        let localVarPath = `/v1/integration/connectors/${this.configuration.encodeParam({name: "provider", value: provider, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/device/${this.configuration.encodeParam({name: "flow", value: flow, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/poll`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<DevicePollOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2121,10 +2131,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsDiscordInteractions(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIntegrationsDiscordInteractions(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIntegrationsDiscordInteractions(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIntegrationsDiscordInteractions(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationDiscordInteractions(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationDiscordInteractions(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationDiscordInteractions(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationDiscordInteractions(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -2153,11 +2163,77 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/discord/interactions`;
+        let localVarPath = `/v1/integration/discord/interactions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Forge workflow_job webhook
+     * Receives the forge\&#39;s workflow_job delivery. The signature over the raw body is checked against the secret at KMS forge.WebhookRef before anything is decoded; a queued job becomes one ephemeral runner Job on the cluster, minted a registration token for exactly that job. Every other action is answered 200 and ignored.
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationForgeWebhook(requestParameters?: IntegrationApiPostIntegrationForgeWebhookRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ForgeLaunched>;
+    public postIntegrationForgeWebhook(requestParameters?: IntegrationApiPostIntegrationForgeWebhookRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ForgeLaunched>>;
+    public postIntegrationForgeWebhook(requestParameters?: IntegrationApiPostIntegrationForgeWebhookRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ForgeLaunched>>;
+    public postIntegrationForgeWebhook(requestParameters?: IntegrationApiPostIntegrationForgeWebhookRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const forgeJob = requestParameters?.forgeJob;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integration/forge/webhook`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ForgeLaunched>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: forgeJob,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -2175,13 +2251,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsGithubClaim(requestParameters: IntegrationsApiPostIntegrationsGithubClaimRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubClaimOut>;
-    public postIntegrationsGithubClaim(requestParameters: IntegrationsApiPostIntegrationsGithubClaimRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubClaimOut>>;
-    public postIntegrationsGithubClaim(requestParameters: IntegrationsApiPostIntegrationsGithubClaimRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubClaimOut>>;
-    public postIntegrationsGithubClaim(requestParameters: IntegrationsApiPostIntegrationsGithubClaimRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationGithubClaim(requestParameters: IntegrationApiPostIntegrationGithubClaimRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubClaimOut>;
+    public postIntegrationGithubClaim(requestParameters: IntegrationApiPostIntegrationGithubClaimRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubClaimOut>>;
+    public postIntegrationGithubClaim(requestParameters: IntegrationApiPostIntegrationGithubClaimRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubClaimOut>>;
+    public postIntegrationGithubClaim(requestParameters: IntegrationApiPostIntegrationGithubClaimRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const githubClaimIn = requestParameters?.githubClaimIn;
         if (githubClaimIn === null || githubClaimIn === undefined) {
-            throw new Error('Required parameter githubClaimIn was null or undefined when calling postIntegrationsGithubClaim.');
+            throw new Error('Required parameter githubClaimIn was null or undefined when calling postIntegrationGithubClaim.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2221,7 +2297,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/claim`;
+        let localVarPath = `/v1/integration/github/claim`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubClaimOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2244,13 +2320,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsGithubFork(requestParameters: IntegrationsApiPostIntegrationsGithubForkRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubForkOut>;
-    public postIntegrationsGithubFork(requestParameters: IntegrationsApiPostIntegrationsGithubForkRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubForkOut>>;
-    public postIntegrationsGithubFork(requestParameters: IntegrationsApiPostIntegrationsGithubForkRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubForkOut>>;
-    public postIntegrationsGithubFork(requestParameters: IntegrationsApiPostIntegrationsGithubForkRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationGithubFork(requestParameters: IntegrationApiPostIntegrationGithubForkRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubForkOut>;
+    public postIntegrationGithubFork(requestParameters: IntegrationApiPostIntegrationGithubForkRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubForkOut>>;
+    public postIntegrationGithubFork(requestParameters: IntegrationApiPostIntegrationGithubForkRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubForkOut>>;
+    public postIntegrationGithubFork(requestParameters: IntegrationApiPostIntegrationGithubForkRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const githubForkReq = requestParameters?.githubForkReq;
         if (githubForkReq === null || githubForkReq === undefined) {
-            throw new Error('Required parameter githubForkReq was null or undefined when calling postIntegrationsGithubFork.');
+            throw new Error('Required parameter githubForkReq was null or undefined when calling postIntegrationGithubFork.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2290,7 +2366,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/fork`;
+        let localVarPath = `/v1/integration/github/fork`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubForkOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2313,13 +2389,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsGithubIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsGithubIssuesBackfillRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubBackfillResult>;
-    public postIntegrationsGithubIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsGithubIssuesBackfillRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubBackfillResult>>;
-    public postIntegrationsGithubIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsGithubIssuesBackfillRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubBackfillResult>>;
-    public postIntegrationsGithubIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsGithubIssuesBackfillRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationGithubIssuesBackfill(requestParameters: IntegrationApiPostIntegrationGithubIssuesBackfillRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubBackfillResult>;
+    public postIntegrationGithubIssuesBackfill(requestParameters: IntegrationApiPostIntegrationGithubIssuesBackfillRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubBackfillResult>>;
+    public postIntegrationGithubIssuesBackfill(requestParameters: IntegrationApiPostIntegrationGithubIssuesBackfillRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubBackfillResult>>;
+    public postIntegrationGithubIssuesBackfill(requestParameters: IntegrationApiPostIntegrationGithubIssuesBackfillRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const githubBackfillIn = requestParameters?.githubBackfillIn;
         if (githubBackfillIn === null || githubBackfillIn === undefined) {
-            throw new Error('Required parameter githubBackfillIn was null or undefined when calling postIntegrationsGithubIssuesBackfill.');
+            throw new Error('Required parameter githubBackfillIn was null or undefined when calling postIntegrationGithubIssuesBackfill.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2359,7 +2435,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/issues/backfill`;
+        let localVarPath = `/v1/integration/github/issues/backfill`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubBackfillResult>('post', `${basePath}${localVarPath}`,
             {
@@ -2382,17 +2458,17 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiPostIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesView>;
-    public postIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiPostIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesView>>;
-    public postIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiPostIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesView>>;
-    public postIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiPostIntegrationsGithubReposByRepoPagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiPostIntegrationGithubReposByRepoPagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesView>;
+    public postIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiPostIntegrationGithubReposByRepoPagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesView>>;
+    public postIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiPostIntegrationGithubReposByRepoPagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesView>>;
+    public postIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiPostIntegrationGithubReposByRepoPagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const repo = requestParameters?.repo;
         if (repo === null || repo === undefined) {
-            throw new Error('Required parameter repo was null or undefined when calling postIntegrationsGithubReposByRepoPages.');
+            throw new Error('Required parameter repo was null or undefined when calling postIntegrationGithubReposByRepoPages.');
         }
         const githubPagesEnableReq = requestParameters?.githubPagesEnableReq;
         if (githubPagesEnableReq === null || githubPagesEnableReq === undefined) {
-            throw new Error('Required parameter githubPagesEnableReq was null or undefined when calling postIntegrationsGithubReposByRepoPages.');
+            throw new Error('Required parameter githubPagesEnableReq was null or undefined when calling postIntegrationGithubReposByRepoPages.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2432,7 +2508,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
+        let localVarPath = `/v1/integration/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubPagesView>('post', `${basePath}${localVarPath}`,
             {
@@ -2455,13 +2531,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsGithubReposByRepoPagesBuilds(requestParameters: IntegrationsApiPostIntegrationsGithubReposByRepoPagesBuildsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesBuildOut>;
-    public postIntegrationsGithubReposByRepoPagesBuilds(requestParameters: IntegrationsApiPostIntegrationsGithubReposByRepoPagesBuildsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesBuildOut>>;
-    public postIntegrationsGithubReposByRepoPagesBuilds(requestParameters: IntegrationsApiPostIntegrationsGithubReposByRepoPagesBuildsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesBuildOut>>;
-    public postIntegrationsGithubReposByRepoPagesBuilds(requestParameters: IntegrationsApiPostIntegrationsGithubReposByRepoPagesBuildsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationGithubReposByRepoPagesBuilds(requestParameters: IntegrationApiPostIntegrationGithubReposByRepoPagesBuildsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesBuildOut>;
+    public postIntegrationGithubReposByRepoPagesBuilds(requestParameters: IntegrationApiPostIntegrationGithubReposByRepoPagesBuildsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesBuildOut>>;
+    public postIntegrationGithubReposByRepoPagesBuilds(requestParameters: IntegrationApiPostIntegrationGithubReposByRepoPagesBuildsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesBuildOut>>;
+    public postIntegrationGithubReposByRepoPagesBuilds(requestParameters: IntegrationApiPostIntegrationGithubReposByRepoPagesBuildsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const repo = requestParameters?.repo;
         if (repo === null || repo === undefined) {
-            throw new Error('Required parameter repo was null or undefined when calling postIntegrationsGithubReposByRepoPagesBuilds.');
+            throw new Error('Required parameter repo was null or undefined when calling postIntegrationGithubReposByRepoPagesBuilds.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2492,7 +2568,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages/builds`;
+        let localVarPath = `/v1/integration/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages/builds`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubPagesBuildOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2509,18 +2585,18 @@ export class IntegrationsApi extends BaseService {
 
     /**
      * Imports the selected (or all) granted repos into git.hanzo.ai.
-     * Imports the selected (or all) granted repos into git.hanzo.ai. The selection is intersected with the installation\&#39;s GRANTED set, so a client can never import a repo the App was not granted (org isolation + a grant check). The import runs in a bounded background worker (don\&#39;t block the request), so the answer is 202 Accepted; poll GET /v1/integrations/github/repos for the per-repo status to flip to imported.
+     * Imports the selected (or all) granted repos into git.hanzo.ai. The selection is intersected with the installation\&#39;s GRANTED set, so a client can never import a repo the App was not granted (org isolation + a grant check). The import runs in a bounded background worker (don\&#39;t block the request), so the answer is 202 Accepted; poll GET /v1/integration/github/repos for the per-repo status to flip to imported.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsGithubReposImport(requestParameters: IntegrationsApiPostIntegrationsGithubReposImportRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubImportOut>;
-    public postIntegrationsGithubReposImport(requestParameters: IntegrationsApiPostIntegrationsGithubReposImportRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubImportOut>>;
-    public postIntegrationsGithubReposImport(requestParameters: IntegrationsApiPostIntegrationsGithubReposImportRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubImportOut>>;
-    public postIntegrationsGithubReposImport(requestParameters: IntegrationsApiPostIntegrationsGithubReposImportRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationGithubReposImport(requestParameters: IntegrationApiPostIntegrationGithubReposImportRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubImportOut>;
+    public postIntegrationGithubReposImport(requestParameters: IntegrationApiPostIntegrationGithubReposImportRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubImportOut>>;
+    public postIntegrationGithubReposImport(requestParameters: IntegrationApiPostIntegrationGithubReposImportRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubImportOut>>;
+    public postIntegrationGithubReposImport(requestParameters: IntegrationApiPostIntegrationGithubReposImportRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const githubImportIn = requestParameters?.githubImportIn;
         if (githubImportIn === null || githubImportIn === undefined) {
-            throw new Error('Required parameter githubImportIn was null or undefined when calling postIntegrationsGithubReposImport.');
+            throw new Error('Required parameter githubImportIn was null or undefined when calling postIntegrationGithubReposImport.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2560,7 +2636,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/repos/import`;
+        let localVarPath = `/v1/integration/github/repos/import`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubImportOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2583,13 +2659,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsGithubSearch(requestParameters: IntegrationsApiPostIntegrationsGithubSearchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubSearchOut>;
-    public postIntegrationsGithubSearch(requestParameters: IntegrationsApiPostIntegrationsGithubSearchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubSearchOut>>;
-    public postIntegrationsGithubSearch(requestParameters: IntegrationsApiPostIntegrationsGithubSearchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubSearchOut>>;
-    public postIntegrationsGithubSearch(requestParameters: IntegrationsApiPostIntegrationsGithubSearchRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationGithubSearch(requestParameters: IntegrationApiPostIntegrationGithubSearchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubSearchOut>;
+    public postIntegrationGithubSearch(requestParameters: IntegrationApiPostIntegrationGithubSearchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubSearchOut>>;
+    public postIntegrationGithubSearch(requestParameters: IntegrationApiPostIntegrationGithubSearchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubSearchOut>>;
+    public postIntegrationGithubSearch(requestParameters: IntegrationApiPostIntegrationGithubSearchRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const githubSearchReq = requestParameters?.githubSearchReq;
         if (githubSearchReq === null || githubSearchReq === undefined) {
-            throw new Error('Required parameter githubSearchReq was null or undefined when calling postIntegrationsGithubSearch.');
+            throw new Error('Required parameter githubSearchReq was null or undefined when calling postIntegrationGithubSearch.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2629,7 +2705,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/search`;
+        let localVarPath = `/v1/integration/github/search`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubSearchOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2647,14 +2723,14 @@ export class IntegrationsApi extends BaseService {
 
     /**
      * GitHub App webhook
-     * The address the GitHub App delivers events to. A push is handed to the repository sync engine, and an issue or issue-comment event is mirrored into the native todo — idempotently, so the same issue re-syncs to one row however many times it is edited, closed or reopened. A repository event that puts a repo INTO the granted set (created, transferred, unarchived) raises one todo offering to import it; accepting means POSTing that repo to /v1/integrations/github/import. It never imports on its own.  It answers a benign 200 for everything it does not act on — the ping, other event types, an unknown installation — deliberately, so GitHub does not enter a retry storm over events that were never going to do anything. Only a bad signature and a genuine sync failure are non-200, and an oversized payload is refused outright.  Two sync rules are worth stating because neither is guessable. EVERY ref syncs, tags as well as branches, because releases are cut by tag and filtering them would stop publishing with nothing reporting a failure. And a delete is NEVER propagated: the native side is canonical, so an inbound delete never removes a native ref.  The payload is verified by HMAC against the webhook secret before it is parsed.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.
+     * The address the GitHub App delivers events to. A push is handed to the repository sync engine, and an issue or issue-comment event is mirrored into the native todo — idempotently, so the same issue re-syncs to one row however many times it is edited, closed or reopened. A repository event that puts a repo INTO the granted set (created, transferred, unarchived) raises one todo offering to import it; accepting means POSTing that repo to /v1/integration/github/import. It never imports on its own.  It answers a benign 200 for everything it does not act on — the ping, other event types, an unknown installation — deliberately, so GitHub does not enter a retry storm over events that were never going to do anything. Only a bad signature and a genuine sync failure are non-200, and an oversized payload is refused outright.  Two sync rules are worth stating because neither is guessable. EVERY ref syncs, tags as well as branches, because releases are cut by tag and filtering them would stop publishing with nothing reporting a failure. And a delete is NEVER propagated: the native side is canonical, so an inbound delete never removes a native ref.  The payload is verified by HMAC against the webhook secret before it is parsed.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsGithubWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIntegrationsGithubWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIntegrationsGithubWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIntegrationsGithubWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationGithubWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationGithubWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationGithubWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationGithubWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -2683,7 +2759,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/webhook`;
+        let localVarPath = `/v1/integration/github/webhook`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -2705,13 +2781,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearClaimOut>;
-    public postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearClaimOut>>;
-    public postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearClaimOut>>;
-    public postIntegrationsLinearClaim(requestParameters: IntegrationsApiPostIntegrationsLinearClaimRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationLinearClaim(requestParameters: IntegrationApiPostIntegrationLinearClaimRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearClaimOut>;
+    public postIntegrationLinearClaim(requestParameters: IntegrationApiPostIntegrationLinearClaimRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearClaimOut>>;
+    public postIntegrationLinearClaim(requestParameters: IntegrationApiPostIntegrationLinearClaimRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearClaimOut>>;
+    public postIntegrationLinearClaim(requestParameters: IntegrationApiPostIntegrationLinearClaimRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const linearClaimIn = requestParameters?.linearClaimIn;
         if (linearClaimIn === null || linearClaimIn === undefined) {
-            throw new Error('Required parameter linearClaimIn was null or undefined when calling postIntegrationsLinearClaim.');
+            throw new Error('Required parameter linearClaimIn was null or undefined when calling postIntegrationLinearClaim.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2751,7 +2827,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/linear/claim`;
+        let localVarPath = `/v1/integration/linear/claim`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<LinearClaimOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2774,13 +2850,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearCommentOut>;
-    public postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearCommentOut>>;
-    public postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearCommentOut>>;
-    public postIntegrationsLinearComments(requestParameters: IntegrationsApiPostIntegrationsLinearCommentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationLinearComments(requestParameters: IntegrationApiPostIntegrationLinearCommentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearCommentOut>;
+    public postIntegrationLinearComments(requestParameters: IntegrationApiPostIntegrationLinearCommentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearCommentOut>>;
+    public postIntegrationLinearComments(requestParameters: IntegrationApiPostIntegrationLinearCommentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearCommentOut>>;
+    public postIntegrationLinearComments(requestParameters: IntegrationApiPostIntegrationLinearCommentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const linearCommentIn = requestParameters?.linearCommentIn;
         if (linearCommentIn === null || linearCommentIn === undefined) {
-            throw new Error('Required parameter linearCommentIn was null or undefined when calling postIntegrationsLinearComments.');
+            throw new Error('Required parameter linearCommentIn was null or undefined when calling postIntegrationLinearComments.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2820,7 +2896,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/linear/comments`;
+        let localVarPath = `/v1/integration/linear/comments`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<LinearCommentOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2843,13 +2919,13 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearBackfillResult>;
-    public postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearBackfillResult>>;
-    public postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearBackfillResult>>;
-    public postIntegrationsLinearIssuesBackfill(requestParameters: IntegrationsApiPostIntegrationsLinearIssuesBackfillRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationLinearIssuesBackfill(requestParameters: IntegrationApiPostIntegrationLinearIssuesBackfillRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LinearBackfillResult>;
+    public postIntegrationLinearIssuesBackfill(requestParameters: IntegrationApiPostIntegrationLinearIssuesBackfillRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LinearBackfillResult>>;
+    public postIntegrationLinearIssuesBackfill(requestParameters: IntegrationApiPostIntegrationLinearIssuesBackfillRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LinearBackfillResult>>;
+    public postIntegrationLinearIssuesBackfill(requestParameters: IntegrationApiPostIntegrationLinearIssuesBackfillRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const linearBackfillIn = requestParameters?.linearBackfillIn;
         if (linearBackfillIn === null || linearBackfillIn === undefined) {
-            throw new Error('Required parameter linearBackfillIn was null or undefined when calling postIntegrationsLinearIssuesBackfill.');
+            throw new Error('Required parameter linearBackfillIn was null or undefined when calling postIntegrationLinearIssuesBackfill.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2889,7 +2965,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/linear/issues/backfill`;
+        let localVarPath = `/v1/integration/linear/issues/backfill`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<LinearBackfillResult>('post', `${basePath}${localVarPath}`,
             {
@@ -2907,14 +2983,14 @@ export class IntegrationsApi extends BaseService {
 
     /**
      * Linear webhook
-     * The address Linear delivers Issue and Comment events to. An issue event is mirrored into the native todo — idempotently by identifier, so ENG-123 is one row however many times it is edited, moved or closed — and every issue and comment event is handed to the automations engine as a verified trigger, which is how an org runs an agent when an issue is assigned to it or a comment mentions it. A remove is never propagated: the native side is canonical.  It answers a benign 200 for what it does not act on — an unknown organization, other event types — so Linear does not retry-storm. A bad signature and a delivery older than a minute are 401; only a sink failure is 502.  The delivery names its Linear organization; that organization\&#39;s own webhook secret — sealed at /v1/integrations/linear/claim — verifies the HMAC over the raw body, so the tenant is the organization the signature proves, never a header.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.
+     * The address Linear delivers Issue and Comment events to. An issue event is mirrored into the native todo — idempotently by identifier, so ENG-123 is one row however many times it is edited, moved or closed — and every issue and comment event is handed to the automations engine as a verified trigger, which is how an org runs an agent when an issue is assigned to it or a comment mentions it. A remove is never propagated: the native side is canonical.  It answers a benign 200 for what it does not act on — an unknown organization, other event types — so Linear does not retry-storm. A bad signature and a delivery older than a minute are 401; only a sink failure is 502.  The delivery names its Linear organization; that organization\&#39;s own webhook secret — sealed at /v1/integration/linear/claim — verifies the HMAC over the raw body, so the tenant is the organization the signature proves, never a header.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsLinearWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIntegrationsLinearWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIntegrationsLinearWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIntegrationsLinearWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationLinearWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationLinearWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationLinearWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationLinearWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -2943,7 +3019,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/linear/webhook`;
+        let localVarPath = `/v1/integration/linear/webhook`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -2965,10 +3041,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsOpenrouterWebhook(requestParameters?: IntegrationsApiPostIntegrationsOpenrouterWebhookRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<{ [key: string]: any; }>;
-    public postIntegrationsOpenrouterWebhook(requestParameters?: IntegrationsApiPostIntegrationsOpenrouterWebhookRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<{ [key: string]: any; }>>;
-    public postIntegrationsOpenrouterWebhook(requestParameters?: IntegrationsApiPostIntegrationsOpenrouterWebhookRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<{ [key: string]: any; }>>;
-    public postIntegrationsOpenrouterWebhook(requestParameters?: IntegrationsApiPostIntegrationsOpenrouterWebhookRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationOpenrouterWebhook(requestParameters?: IntegrationApiPostIntegrationOpenrouterWebhookRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<{ [key: string]: any; }>;
+    public postIntegrationOpenrouterWebhook(requestParameters?: IntegrationApiPostIntegrationOpenrouterWebhookRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<{ [key: string]: any; }>>;
+    public postIntegrationOpenrouterWebhook(requestParameters?: IntegrationApiPostIntegrationOpenrouterWebhookRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<{ [key: string]: any; }>>;
+    public postIntegrationOpenrouterWebhook(requestParameters?: IntegrationApiPostIntegrationOpenrouterWebhookRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const requestBody = requestParameters?.requestBody;
 
         let localVarHeaders = this.defaultHeaders;
@@ -3008,7 +3084,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/openrouter/webhook`;
+        let localVarPath = `/v1/integration/openrouter/webhook`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<{ [key: string]: any; }>('post', `${basePath}${localVarPath}`,
             {
@@ -3030,10 +3106,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsSlackCommands(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIntegrationsSlackCommands(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIntegrationsSlackCommands(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIntegrationsSlackCommands(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationSlackCommands(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationSlackCommands(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationSlackCommands(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationSlackCommands(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -3062,7 +3138,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/slack/commands`;
+        let localVarPath = `/v1/integration/slack/commands`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -3083,10 +3159,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsSlackEvents(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIntegrationsSlackEvents(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIntegrationsSlackEvents(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIntegrationsSlackEvents(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationSlackEvents(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationSlackEvents(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationSlackEvents(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationSlackEvents(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -3115,7 +3191,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/slack/events`;
+        let localVarPath = `/v1/integration/slack/events`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -3131,68 +3207,15 @@ export class IntegrationsApi extends BaseService {
     }
 
     /**
-     * Microsoft Teams Bot Framework webhook
-     * The messaging endpoint for the Teams bot. A message activity is routed to an agent turn and answered proactively through the Bot Connection; anything that is not a message with text is acknowledged and ignored.  Authentication is the Bot Framework\&#39;s RS256 JWT, verified against its published keys and bound BOTH to this deployment\&#39;s app id and to the activity\&#39;s own service URL. The service-URL binding is the part that matters: without it a token valid for one activity could point the outbound reply somewhere else.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.  The answer is acknowledged immediately and the work happens afterwards, because every one of these platforms times out a slow webhook. Duplicate deliveries are absorbed durably, so a platform retry of an event that already ran never runs it a second time or bills for it twice. When the agent pool is full nothing at all is recorded and the delivery is refused as retriable, so the message is re-delivered later rather than being lost or half-processed.
+     * Joins every public channel in the caller org\&#39;s workspace.
+     * Joins every public channel in the caller org\&#39;s workspace.  Org admin, because it changes what the whole workspace sees: after it the agent is a member of every public room and answers in all of them.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsTeamsEvents(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIntegrationsTeamsEvents(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIntegrationsTeamsEvents(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIntegrationsTeamsEvents(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/integrations/teams/events`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Mints a short, single-use deep-link code bound to the caller\&#39;s org and returns the t.me link the console navigates to.
-     * Mints a short, single-use deep-link code bound to the caller\&#39;s org and returns the t.me link the console navigates to. Org-authed: a caller with no validated principal is 403 (same gate as the framework connect). The code is stored as an oauth_nonce (org,telegram); the webhook\&#39;s /start handler claims it to bind chat→org. It is short (128-bit hex) so it fits Telegram\&#39;s 64-char &#x60;start&#x60; payload limit.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postIntegrationsTelegramConnect(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthorizeOut>;
-    public postIntegrationsTelegramConnect(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthorizeOut>>;
-    public postIntegrationsTelegramConnect(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthorizeOut>>;
-    public postIntegrationsTelegramConnect(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationSlackJoin(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SlackJoinOut>;
+    public postIntegrationSlackJoin(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SlackJoinOut>>;
+    public postIntegrationSlackJoin(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SlackJoinOut>>;
+    public postIntegrationSlackJoin(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -3222,7 +3245,114 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/telegram/connect`;
+        let localVarPath = `/v1/integration/slack/join`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<SlackJoinOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Microsoft Teams Bot Framework webhook
+     * The messaging endpoint for the Teams bot. A message activity is routed to an agent turn and answered proactively through the Bot Connection; anything that is not a message with text is acknowledged and ignored.  Authentication is the Bot Framework\&#39;s RS256 JWT, verified against its published keys and bound BOTH to this deployment\&#39;s app id and to the activity\&#39;s own service URL. The service-URL binding is the part that matters: without it a token valid for one activity could point the outbound reply somewhere else.  The caller here is the PLATFORM, not a Hanzo tenant, so there is no bearer and no principal. The signature check IS the authentication, and it fails closed. The tenant is never read from the payload either: it is resolved from the verified platform identifier through the connection map, so an event from a workspace nobody connected does nothing. Refusals are written with their own status rather than being flattened to a 500, so a rejected signature reads as 401 and a malformed body as 400.  The answer is acknowledged immediately and the work happens afterwards, because every one of these platforms times out a slow webhook. Duplicate deliveries are absorbed durably, so a platform retry of an event that already ran never runs it a second time or bills for it twice. When the agent pool is full nothing at all is recorded and the delivery is refused as retriable, so the message is re-delivered later rather than being lost or half-processed.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationTeamsEvents(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationTeamsEvents(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationTeamsEvents(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationTeamsEvents(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integration/teams/events`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Mints a short, single-use deep-link code bound to the caller\&#39;s org and returns the t.me link the console navigates to.
+     * Mints a short, single-use deep-link code bound to the caller\&#39;s org and returns the t.me link the console navigates to. Org-authed: a caller with no validated principal is 403 (same gate as the framework connect). The code is stored as an oauth_nonce (org,telegram); the webhook\&#39;s /start handler claims it to bind chat→org. It is short (128-bit hex) so it fits Telegram\&#39;s 64-char &#x60;start&#x60; payload limit.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postIntegrationTelegramConnect(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthorizeOut>;
+    public postIntegrationTelegramConnect(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthorizeOut>>;
+    public postIntegrationTelegramConnect(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthorizeOut>>;
+    public postIntegrationTelegramConnect(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/integration/telegram/connect`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AuthorizeOut>('post', `${basePath}${localVarPath}`,
             {
@@ -3243,10 +3373,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsTelegramWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIntegrationsTelegramWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIntegrationsTelegramWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIntegrationsTelegramWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationTelegramWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationTelegramWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationTelegramWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationTelegramWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -3275,7 +3405,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/telegram/webhook`;
+        let localVarPath = `/v1/integration/telegram/webhook`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -3296,10 +3426,10 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postIntegrationsWhatsappWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postIntegrationsWhatsappWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postIntegrationsWhatsappWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postIntegrationsWhatsappWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postIntegrationWhatsappWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postIntegrationWhatsappWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postIntegrationWhatsappWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postIntegrationWhatsappWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -3328,7 +3458,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/whatsapp/webhook`;
+        let localVarPath = `/v1/integration/whatsapp/webhook`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -3350,17 +3480,17 @@ export class IntegrationsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiPutIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesUpdatedOut>;
-    public putIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiPutIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesUpdatedOut>>;
-    public putIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiPutIntegrationsGithubReposByRepoPagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesUpdatedOut>>;
-    public putIntegrationsGithubReposByRepoPages(requestParameters: IntegrationsApiPutIntegrationsGithubReposByRepoPagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiPutIntegrationGithubReposByRepoPagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GithubPagesUpdatedOut>;
+    public putIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiPutIntegrationGithubReposByRepoPagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GithubPagesUpdatedOut>>;
+    public putIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiPutIntegrationGithubReposByRepoPagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GithubPagesUpdatedOut>>;
+    public putIntegrationGithubReposByRepoPages(requestParameters: IntegrationApiPutIntegrationGithubReposByRepoPagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const repo = requestParameters?.repo;
         if (repo === null || repo === undefined) {
-            throw new Error('Required parameter repo was null or undefined when calling putIntegrationsGithubReposByRepoPages.');
+            throw new Error('Required parameter repo was null or undefined when calling putIntegrationGithubReposByRepoPages.');
         }
         const githubPagesUpdateReq = requestParameters?.githubPagesUpdateReq;
         if (githubPagesUpdateReq === null || githubPagesUpdateReq === undefined) {
-            throw new Error('Required parameter githubPagesUpdateReq was null or undefined when calling putIntegrationsGithubReposByRepoPages.');
+            throw new Error('Required parameter githubPagesUpdateReq was null or undefined when calling putIntegrationGithubReposByRepoPages.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -3400,7 +3530,7 @@ export class IntegrationsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/integrations/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
+        let localVarPath = `/v1/integration/github/repos/${this.configuration.encodeParam({name: "repo", value: repo, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pages`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<GithubPagesUpdatedOut>('put', `${basePath}${localVarPath}`,
             {

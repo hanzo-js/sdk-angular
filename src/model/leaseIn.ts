@@ -15,6 +15,10 @@ export interface LeaseIn {
      */
     'class'?: string;
     /**
+     * Cluster names one of the org\'s attached clusters to run the sandbox on — the fleet-local name it was registered under. Empty runs on the home cluster. The named cluster must carry the sandbox namespace and the gvisor runtime class; a name the org has not attached is 404.
+     */
+    cluster?: string;
+    /**
      * Image overrides the image the class would pick. Honoured only for a caller the policy admits, and the sandbox that comes back names the image it GOT.
      */
     image?: string;

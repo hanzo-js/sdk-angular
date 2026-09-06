@@ -89,57 +89,57 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface AgentsApiDeleteAgentsByRefRequestParams {
+export interface AgentApiDeleteAgentByRefRequestParams {
     /** Ref is the agent\&#39;s public id (the agent_… handle create and list return) or its org-unique name, from the path. Either resolves the same agent. */
     ref: string;
 }
 
-export interface AgentsApiDeleteAgentsTargetsByIdRequestParams {
+export interface AgentApiDeleteAgentTargetsByIdRequestParams {
     /** ID is the target to act on, from the path. */
     id: string;
 }
 
-export interface AgentsApiGetAgentsBuildsRequestParams {
+export interface AgentApiGetAgentBuildsRequestParams {
     /** Limit caps the page. Absent, zero or over 500 reads as 100. */
     limit?: number;
 }
 
-export interface AgentsApiGetAgentsBuildsByOrgByProjectRequestParams {
+export interface AgentApiGetAgentBuildsByOrgByProjectRequestParams {
     /** Org is the org that published the build, from the path. */
     org: string;
     /** Project is the product\&#39;s slug, from the path. */
     project: string;
 }
 
-export interface AgentsApiGetAgentsByRefRequestParams {
+export interface AgentApiGetAgentByRefRequestParams {
     /** Ref is the agent\&#39;s public id (the agent_… handle create and list return) or its org-unique name, from the path. Either resolves the same agent. */
     ref: string;
 }
 
-export interface AgentsApiGetAgentsByRefRunsRequestParams {
+export interface AgentApiGetAgentByRefRunsRequestParams {
     /** Ref is the agent\&#39;s public id or its org-unique name, from the path. */
     ref: string;
     /** Limit caps how many runs come back, newest first. Absent, zero or out of range (1..200) reads as 50. */
     limit?: number;
 }
 
-export interface AgentsApiGetAgentsChatConversationsByIdRequestParams {
+export interface AgentApiGetAgentChatConversationsByIdRequestParams {
     id: string;
 }
 
-export interface AgentsApiGetAgentsMetricsRequestParams {
+export interface AgentApiGetAgentMetricsRequestParams {
     /** Range is the window to bucket: 24H, 7D or 30D. Anything else reads as 30D. */
     range?: string;
 }
 
-export interface AgentsApiGetAgentsRunsRequestParams {
+export interface AgentApiGetAgentRunsRequestParams {
     /** Limit caps how many runs come back, newest first. Absent, zero or out of range (1..200) reads as 50. */
     limit?: number;
     /** Status keeps only runs with this outcome (\&quot;ok\&quot; or \&quot;error\&quot;). Empty keeps both. It is the filter an operator reaches for first — \&quot;show me what broke\&quot; — and answering it here rather than by paging the whole history client-side is the difference between a usable feed and a download. */
     status?: string;
 }
 
-export interface AgentsApiGetAgentsSessionsRequestParams {
+export interface AgentApiGetAgentSessionsRequestParams {
     /** Root scopes the page to one subagent tree (its root session id). */
     root?: string;
     /** Parent scopes the page to the direct children of one session. Ignored when root is set; with neither, only ROOT sessions come back. */
@@ -154,112 +154,112 @@ export interface AgentsApiGetAgentsSessionsRequestParams {
     limit?: number;
 }
 
-export interface AgentsApiGetAgentsSessionsByIdRequestParams {
+export interface AgentApiGetAgentSessionsByIdRequestParams {
     /** ID is the session to act on, from the path. */
     id: string;
 }
 
-export interface AgentsApiGetAgentsSessionsByIdControlRequestParams {
+export interface AgentApiGetAgentSessionsByIdControlRequestParams {
     /** ID is the session whose commands are being drained, from the path. */
     id: string;
     /** After is the last seq this poller applied; only commands newer than it come back. Absent or negative reads as 0, which drains from the beginning. */
     after?: number;
 }
 
-export interface AgentsApiGetAgentsSessionsByIdProgressRequestParams {
+export interface AgentApiGetAgentSessionsByIdProgressRequestParams {
     /** ID is the session to act on, from the path. */
     id: string;
 }
 
-export interface AgentsApiGetAgentsSessionsByIdTreeRequestParams {
+export interface AgentApiGetAgentSessionsByIdTreeRequestParams {
     /** ID is the session to act on, from the path. */
     id: string;
 }
 
-export interface AgentsApiGetAgentsTargetsByIdRequestParams {
+export interface AgentApiGetAgentTargetsByIdRequestParams {
     /** ID is the target to act on, from the path. */
     id: string;
 }
 
-export interface AgentsApiPatchAgentsByRefRequestParams {
+export interface AgentApiPatchAgentByRefRequestParams {
     /** Ref is the agent to update — its public id or org-unique name, from the path. */
     ref: string;
     updateAgentIn: UpdateAgentIn;
 }
 
-export interface AgentsApiPatchAgentsSessionsByIdRequestParams {
+export interface AgentApiPatchAgentSessionsByIdRequestParams {
     /** ID is the session to update, from the path. */
     id: string;
     patchSessionIn: PatchSessionIn;
 }
 
-export interface AgentsApiPatchAgentsTargetsByIdRequestParams {
+export interface AgentApiPatchAgentTargetsByIdRequestParams {
     /** ID is the target to update, from the path. */
     id: string;
     patchTargetIn: PatchTargetIn;
 }
 
-export interface AgentsApiPostAgentsRequestParams {
+export interface AgentApiPostAgentRequestParams {
     createAgentIn: CreateAgentIn;
 }
 
-export interface AgentsApiPostAgentsByRefRunRequestParams {
+export interface AgentApiPostAgentByRefRunRequestParams {
     ref: string;
 }
 
-export interface AgentsApiPostAgentsCodingRequestParams {
+export interface AgentApiPostAgentCodingRequestParams {
     codingStartIn: CodingStartIn;
 }
 
-export interface AgentsApiPostAgentsSessionsRequestParams {
+export interface AgentApiPostAgentSessionsRequestParams {
     registerReq: RegisterReq;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdEventsRequestParams {
+export interface AgentApiPostAgentSessionsByIdEventsRequestParams {
     /** ID is the session to append to, from the path. */
     id: string;
     eventIn: EventIn;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdMessageRequestParams {
+export interface AgentApiPostAgentSessionsByIdMessageRequestParams {
     /** ID is the session to steer, from the path. */
     id: string;
     controlIn: ControlIn;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdPauseRequestParams {
+export interface AgentApiPostAgentSessionsByIdPauseRequestParams {
     /** ID is the session to steer, from the path. */
     id: string;
     controlIn: ControlIn;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdResumeRequestParams {
+export interface AgentApiPostAgentSessionsByIdResumeRequestParams {
     /** ID is the session to steer, from the path. */
     id: string;
     controlIn: ControlIn;
 }
 
-export interface AgentsApiPostAgentsSessionsByIdStopRequestParams {
+export interface AgentApiPostAgentSessionsByIdStopRequestParams {
     /** ID is the session to steer, from the path. */
     id: string;
     controlIn: ControlIn;
 }
 
-export interface AgentsApiPostAgentsTargetsRequestParams {
+export interface AgentApiPostAgentTargetsRequestParams {
     targetReq: TargetReq;
 }
 
-export interface AgentsApiPostAgentsTargetsByIdClaimRequestParams {
+export interface AgentApiPostAgentTargetsByIdClaimRequestParams {
     /** ID is the target to act on, from the path. */
     id: string;
 }
 
-export interface AgentsApiPostAgentsTargetsByIdKeyRequestParams {
+export interface AgentApiPostAgentTargetsByIdKeyRequestParams {
     /** ID is the target to act on, from the path. */
     id: string;
 }
 
-export interface AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequestParams {
+export interface AgentApiPostAgentTargetsByIdRunsByRunidReportRequestParams {
     /** ID is the machine reporting, from the path. */
     id: string;
     /** RunID is the routed run being completed, from the path. */
@@ -271,7 +271,7 @@ export interface AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequestParams {
 @Injectable({
   providedIn: 'root'
 })
-export class AgentsApi extends BaseService {
+export class AgentApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -284,13 +284,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteAgentsByRef(requestParameters: AgentsApiDeleteAgentsByRefRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteAgentsByRef(requestParameters: AgentsApiDeleteAgentsByRefRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteAgentsByRef(requestParameters: AgentsApiDeleteAgentsByRefRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteAgentsByRef(requestParameters: AgentsApiDeleteAgentsByRefRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteAgentByRef(requestParameters: AgentApiDeleteAgentByRefRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteAgentByRef(requestParameters: AgentApiDeleteAgentByRefRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteAgentByRef(requestParameters: AgentApiDeleteAgentByRefRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteAgentByRef(requestParameters: AgentApiDeleteAgentByRefRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const ref = requestParameters?.ref;
         if (ref === null || ref === undefined) {
-            throw new Error('Required parameter ref was null or undefined when calling deleteAgentsByRef.');
+            throw new Error('Required parameter ref was null or undefined when calling deleteAgentByRef.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -320,7 +320,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -342,13 +342,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteAgentsTargetsById(requestParameters: AgentsApiDeleteAgentsTargetsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetDeleted>;
-    public deleteAgentsTargetsById(requestParameters: AgentsApiDeleteAgentsTargetsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetDeleted>>;
-    public deleteAgentsTargetsById(requestParameters: AgentsApiDeleteAgentsTargetsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetDeleted>>;
-    public deleteAgentsTargetsById(requestParameters: AgentsApiDeleteAgentsTargetsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteAgentTargetsById(requestParameters: AgentApiDeleteAgentTargetsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetDeleted>;
+    public deleteAgentTargetsById(requestParameters: AgentApiDeleteAgentTargetsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetDeleted>>;
+    public deleteAgentTargetsById(requestParameters: AgentApiDeleteAgentTargetsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetDeleted>>;
+    public deleteAgentTargetsById(requestParameters: AgentApiDeleteAgentTargetsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteAgentsTargetsById.');
+            throw new Error('Required parameter id was null or undefined when calling deleteAgentTargetsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -379,7 +379,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TargetDeleted>('delete', `${basePath}${localVarPath}`,
             {
@@ -400,10 +400,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgents(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentList>;
-    public getAgents(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentList>>;
-    public getAgents(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentList>>;
-    public getAgents(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgent(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentList>;
+    public getAgent(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentList>>;
+    public getAgent(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentList>>;
+    public getAgent(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -433,7 +433,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents`;
+        let localVarPath = `/v1/agent`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AgentList>('get', `${basePath}${localVarPath}`,
             {
@@ -454,10 +454,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsActivity(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivityFeed>;
-    public getAgentsActivity(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivityFeed>>;
-    public getAgentsActivity(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivityFeed>>;
-    public getAgentsActivity(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentActivity(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivityFeed>;
+    public getAgentActivity(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivityFeed>>;
+    public getAgentActivity(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivityFeed>>;
+    public getAgentActivity(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -487,7 +487,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/activity`;
+        let localVarPath = `/v1/agent/activity`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ActivityFeed>('get', `${basePath}${localVarPath}`,
             {
@@ -509,10 +509,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsBuilds(requestParameters?: AgentsApiGetAgentsBuildsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BuildList>;
-    public getAgentsBuilds(requestParameters?: AgentsApiGetAgentsBuildsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BuildList>>;
-    public getAgentsBuilds(requestParameters?: AgentsApiGetAgentsBuildsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BuildList>>;
-    public getAgentsBuilds(requestParameters?: AgentsApiGetAgentsBuildsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentBuilds(requestParameters?: AgentApiGetAgentBuildsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BuildList>;
+    public getAgentBuilds(requestParameters?: AgentApiGetAgentBuildsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BuildList>>;
+    public getAgentBuilds(requestParameters?: AgentApiGetAgentBuildsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BuildList>>;
+    public getAgentBuilds(requestParameters?: AgentApiGetAgentBuildsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const limit = requestParameters?.limit;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -547,7 +547,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/builds`;
+        let localVarPath = `/v1/agent/builds`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BuildList>('get', `${basePath}${localVarPath}`,
             {
@@ -565,22 +565,22 @@ export class AgentsApi extends BaseService {
 
     /**
      * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact &#x60;git log&#x60; that re-derives every commit binding from git itself, so nothing here has to be taken on trust.
-     * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact &#x60;git log&#x60; that re-derives every commit binding from git itself, so nothing here has to be taken on trust.  PUBLIC, no tenancy: it answers only for a session its author explicitly published, which is what makes it safe to be anonymous. An unpublished session is invisible here no matter who asks; its owner reads it through the org-scoped /v1/agents/sessions routes, which need a validated principal.
+     * Returns the readable build of one product: the agent session that produced it, turn by turn — the prompts, the reasoning, the commits each turn produced — plus the exact &#x60;git log&#x60; that re-derives every commit binding from git itself, so nothing here has to be taken on trust.  PUBLIC, no tenancy: it answers only for a session its author explicitly published, which is what makes it safe to be anonymous. An unpublished session is invisible here no matter who asks; its owner reads it through the org-scoped /v1/agent/sessions routes, which need a validated principal.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsBuildsByOrgByProject(requestParameters: AgentsApiGetAgentsBuildsByOrgByProjectRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BuildView>;
-    public getAgentsBuildsByOrgByProject(requestParameters: AgentsApiGetAgentsBuildsByOrgByProjectRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BuildView>>;
-    public getAgentsBuildsByOrgByProject(requestParameters: AgentsApiGetAgentsBuildsByOrgByProjectRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BuildView>>;
-    public getAgentsBuildsByOrgByProject(requestParameters: AgentsApiGetAgentsBuildsByOrgByProjectRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentBuildsByOrgByProject(requestParameters: AgentApiGetAgentBuildsByOrgByProjectRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BuildView>;
+    public getAgentBuildsByOrgByProject(requestParameters: AgentApiGetAgentBuildsByOrgByProjectRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BuildView>>;
+    public getAgentBuildsByOrgByProject(requestParameters: AgentApiGetAgentBuildsByOrgByProjectRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BuildView>>;
+    public getAgentBuildsByOrgByProject(requestParameters: AgentApiGetAgentBuildsByOrgByProjectRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const org = requestParameters?.org;
         if (org === null || org === undefined) {
-            throw new Error('Required parameter org was null or undefined when calling getAgentsBuildsByOrgByProject.');
+            throw new Error('Required parameter org was null or undefined when calling getAgentBuildsByOrgByProject.');
         }
         const project = requestParameters?.project;
         if (project === null || project === undefined) {
-            throw new Error('Required parameter project was null or undefined when calling getAgentsBuildsByOrgByProject.');
+            throw new Error('Required parameter project was null or undefined when calling getAgentBuildsByOrgByProject.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -611,7 +611,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/builds/${this.configuration.encodeParam({name: "org", value: org, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "project", value: project, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/builds/${this.configuration.encodeParam({name: "org", value: org, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "project", value: project, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BuildView>('get', `${basePath}${localVarPath}`,
             {
@@ -633,13 +633,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsByRef(requestParameters: AgentsApiGetAgentsByRefRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentDetail>;
-    public getAgentsByRef(requestParameters: AgentsApiGetAgentsByRefRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentDetail>>;
-    public getAgentsByRef(requestParameters: AgentsApiGetAgentsByRefRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentDetail>>;
-    public getAgentsByRef(requestParameters: AgentsApiGetAgentsByRefRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentByRef(requestParameters: AgentApiGetAgentByRefRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentDetail>;
+    public getAgentByRef(requestParameters: AgentApiGetAgentByRefRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentDetail>>;
+    public getAgentByRef(requestParameters: AgentApiGetAgentByRefRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentDetail>>;
+    public getAgentByRef(requestParameters: AgentApiGetAgentByRefRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const ref = requestParameters?.ref;
         if (ref === null || ref === undefined) {
-            throw new Error('Required parameter ref was null or undefined when calling getAgentsByRef.');
+            throw new Error('Required parameter ref was null or undefined when calling getAgentByRef.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -670,7 +670,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AgentDetail>('get', `${basePath}${localVarPath}`,
             {
@@ -692,13 +692,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsByRefRuns(requestParameters: AgentsApiGetAgentsByRefRunsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RunList>;
-    public getAgentsByRefRuns(requestParameters: AgentsApiGetAgentsByRefRunsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RunList>>;
-    public getAgentsByRefRuns(requestParameters: AgentsApiGetAgentsByRefRunsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RunList>>;
-    public getAgentsByRefRuns(requestParameters: AgentsApiGetAgentsByRefRunsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentByRefRuns(requestParameters: AgentApiGetAgentByRefRunsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RunList>;
+    public getAgentByRefRuns(requestParameters: AgentApiGetAgentByRefRunsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RunList>>;
+    public getAgentByRefRuns(requestParameters: AgentApiGetAgentByRefRunsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RunList>>;
+    public getAgentByRefRuns(requestParameters: AgentApiGetAgentByRefRunsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const ref = requestParameters?.ref;
         if (ref === null || ref === undefined) {
-            throw new Error('Required parameter ref was null or undefined when calling getAgentsByRefRuns.');
+            throw new Error('Required parameter ref was null or undefined when calling getAgentByRefRuns.');
         }
         const limit = requestParameters?.limit;
 
@@ -734,7 +734,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/runs`;
+        let localVarPath = `/v1/agent/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/runs`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<RunList>('get', `${basePath}${localVarPath}`,
             {
@@ -756,10 +756,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsChatConversations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAgentsChatConversations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAgentsChatConversations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAgentsChatConversations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentChatConversations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getAgentChatConversations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getAgentChatConversations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getAgentChatConversations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -788,7 +788,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/chat/conversations`;
+        let localVarPath = `/v1/agent/chat/conversations`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -810,13 +810,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsChatConversationsById(requestParameters: AgentsApiGetAgentsChatConversationsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAgentsChatConversationsById(requestParameters: AgentsApiGetAgentsChatConversationsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAgentsChatConversationsById(requestParameters: AgentsApiGetAgentsChatConversationsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAgentsChatConversationsById(requestParameters: AgentsApiGetAgentsChatConversationsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentChatConversationsById(requestParameters: AgentApiGetAgentChatConversationsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getAgentChatConversationsById(requestParameters: AgentApiGetAgentChatConversationsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getAgentChatConversationsById(requestParameters: AgentApiGetAgentChatConversationsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getAgentChatConversationsById(requestParameters: AgentApiGetAgentChatConversationsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getAgentsChatConversationsById.');
+            throw new Error('Required parameter id was null or undefined when calling getAgentChatConversationsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -846,7 +846,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/chat/conversations/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/chat/conversations/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -867,10 +867,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsChatPresets(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAgentsChatPresets(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAgentsChatPresets(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAgentsChatPresets(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentChatPresets(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getAgentChatPresets(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getAgentChatPresets(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getAgentChatPresets(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -899,7 +899,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/chat/presets`;
+        let localVarPath = `/v1/agent/chat/presets`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -921,10 +921,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsMetrics(requestParameters?: AgentsApiGetAgentsMetricsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MetricsView>;
-    public getAgentsMetrics(requestParameters?: AgentsApiGetAgentsMetricsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MetricsView>>;
-    public getAgentsMetrics(requestParameters?: AgentsApiGetAgentsMetricsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MetricsView>>;
-    public getAgentsMetrics(requestParameters?: AgentsApiGetAgentsMetricsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentMetrics(requestParameters?: AgentApiGetAgentMetricsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MetricsView>;
+    public getAgentMetrics(requestParameters?: AgentApiGetAgentMetricsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MetricsView>>;
+    public getAgentMetrics(requestParameters?: AgentApiGetAgentMetricsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MetricsView>>;
+    public getAgentMetrics(requestParameters?: AgentApiGetAgentMetricsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const range = requestParameters?.range;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -959,7 +959,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/metrics`;
+        let localVarPath = `/v1/agent/metrics`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<MetricsView>('get', `${basePath}${localVarPath}`,
             {
@@ -982,10 +982,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsRuns(requestParameters?: AgentsApiGetAgentsRunsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RunList>;
-    public getAgentsRuns(requestParameters?: AgentsApiGetAgentsRunsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RunList>>;
-    public getAgentsRuns(requestParameters?: AgentsApiGetAgentsRunsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RunList>>;
-    public getAgentsRuns(requestParameters?: AgentsApiGetAgentsRunsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentRuns(requestParameters?: AgentApiGetAgentRunsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RunList>;
+    public getAgentRuns(requestParameters?: AgentApiGetAgentRunsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RunList>>;
+    public getAgentRuns(requestParameters?: AgentApiGetAgentRunsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RunList>>;
+    public getAgentRuns(requestParameters?: AgentApiGetAgentRunsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const limit = requestParameters?.limit;
         const status = requestParameters?.status;
 
@@ -1023,7 +1023,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/runs`;
+        let localVarPath = `/v1/agent/runs`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<RunList>('get', `${basePath}${localVarPath}`,
             {
@@ -1046,10 +1046,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsSessions(requestParameters?: AgentsApiGetAgentsSessionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionList>;
-    public getAgentsSessions(requestParameters?: AgentsApiGetAgentsSessionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionList>>;
-    public getAgentsSessions(requestParameters?: AgentsApiGetAgentsSessionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionList>>;
-    public getAgentsSessions(requestParameters?: AgentsApiGetAgentsSessionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentSessions(requestParameters?: AgentApiGetAgentSessionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionList>;
+    public getAgentSessions(requestParameters?: AgentApiGetAgentSessionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionList>>;
+    public getAgentSessions(requestParameters?: AgentApiGetAgentSessionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionList>>;
+    public getAgentSessions(requestParameters?: AgentApiGetAgentSessionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const root = requestParameters?.root;
         const parent = requestParameters?.parent;
         const status = requestParameters?.status;
@@ -1099,7 +1099,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions`;
+        let localVarPath = `/v1/agent/sessions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SessionList>('get', `${basePath}${localVarPath}`,
             {
@@ -1122,13 +1122,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsSessionsById(requestParameters: AgentsApiGetAgentsSessionsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionDetail>;
-    public getAgentsSessionsById(requestParameters: AgentsApiGetAgentsSessionsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionDetail>>;
-    public getAgentsSessionsById(requestParameters: AgentsApiGetAgentsSessionsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionDetail>>;
-    public getAgentsSessionsById(requestParameters: AgentsApiGetAgentsSessionsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentSessionsById(requestParameters: AgentApiGetAgentSessionsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionDetail>;
+    public getAgentSessionsById(requestParameters: AgentApiGetAgentSessionsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionDetail>>;
+    public getAgentSessionsById(requestParameters: AgentApiGetAgentSessionsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionDetail>>;
+    public getAgentSessionsById(requestParameters: AgentApiGetAgentSessionsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getAgentsSessionsById.');
+            throw new Error('Required parameter id was null or undefined when calling getAgentSessionsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1159,7 +1159,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SessionDetail>('get', `${basePath}${localVarPath}`,
             {
@@ -1181,13 +1181,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsSessionsByIdControl(requestParameters: AgentsApiGetAgentsSessionsByIdControlRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlDrain>;
-    public getAgentsSessionsByIdControl(requestParameters: AgentsApiGetAgentsSessionsByIdControlRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlDrain>>;
-    public getAgentsSessionsByIdControl(requestParameters: AgentsApiGetAgentsSessionsByIdControlRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlDrain>>;
-    public getAgentsSessionsByIdControl(requestParameters: AgentsApiGetAgentsSessionsByIdControlRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentSessionsByIdControl(requestParameters: AgentApiGetAgentSessionsByIdControlRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlDrain>;
+    public getAgentSessionsByIdControl(requestParameters: AgentApiGetAgentSessionsByIdControlRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlDrain>>;
+    public getAgentSessionsByIdControl(requestParameters: AgentApiGetAgentSessionsByIdControlRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlDrain>>;
+    public getAgentSessionsByIdControl(requestParameters: AgentApiGetAgentSessionsByIdControlRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getAgentsSessionsByIdControl.');
+            throw new Error('Required parameter id was null or undefined when calling getAgentSessionsByIdControl.');
         }
         const after = requestParameters?.after;
 
@@ -1223,7 +1223,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/control`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/control`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ControlDrain>('get', `${basePath}${localVarPath}`,
             {
@@ -1246,13 +1246,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsSessionsByIdProgress(requestParameters: AgentsApiGetAgentsSessionsByIdProgressRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionProgress>;
-    public getAgentsSessionsByIdProgress(requestParameters: AgentsApiGetAgentsSessionsByIdProgressRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionProgress>>;
-    public getAgentsSessionsByIdProgress(requestParameters: AgentsApiGetAgentsSessionsByIdProgressRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionProgress>>;
-    public getAgentsSessionsByIdProgress(requestParameters: AgentsApiGetAgentsSessionsByIdProgressRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentSessionsByIdProgress(requestParameters: AgentApiGetAgentSessionsByIdProgressRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionProgress>;
+    public getAgentSessionsByIdProgress(requestParameters: AgentApiGetAgentSessionsByIdProgressRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionProgress>>;
+    public getAgentSessionsByIdProgress(requestParameters: AgentApiGetAgentSessionsByIdProgressRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionProgress>>;
+    public getAgentSessionsByIdProgress(requestParameters: AgentApiGetAgentSessionsByIdProgressRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getAgentsSessionsByIdProgress.');
+            throw new Error('Required parameter id was null or undefined when calling getAgentSessionsByIdProgress.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1283,7 +1283,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/progress`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/progress`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SessionProgress>('get', `${basePath}${localVarPath}`,
             {
@@ -1305,13 +1305,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsSessionsByIdTree(requestParameters: AgentsApiGetAgentsSessionsByIdTreeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TreeNode>;
-    public getAgentsSessionsByIdTree(requestParameters: AgentsApiGetAgentsSessionsByIdTreeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreeNode>>;
-    public getAgentsSessionsByIdTree(requestParameters: AgentsApiGetAgentsSessionsByIdTreeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreeNode>>;
-    public getAgentsSessionsByIdTree(requestParameters: AgentsApiGetAgentsSessionsByIdTreeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentSessionsByIdTree(requestParameters: AgentApiGetAgentSessionsByIdTreeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TreeNode>;
+    public getAgentSessionsByIdTree(requestParameters: AgentApiGetAgentSessionsByIdTreeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreeNode>>;
+    public getAgentSessionsByIdTree(requestParameters: AgentApiGetAgentSessionsByIdTreeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreeNode>>;
+    public getAgentSessionsByIdTree(requestParameters: AgentApiGetAgentSessionsByIdTreeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getAgentsSessionsByIdTree.');
+            throw new Error('Required parameter id was null or undefined when calling getAgentSessionsByIdTree.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1342,7 +1342,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/tree`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/tree`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TreeNode>('get', `${basePath}${localVarPath}`,
             {
@@ -1363,10 +1363,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsSessionsStream(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getAgentsSessionsStream(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getAgentsSessionsStream(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getAgentsSessionsStream(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentSessionsStream(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getAgentSessionsStream(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getAgentSessionsStream(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getAgentSessionsStream(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1395,7 +1395,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/stream`;
+        let localVarPath = `/v1/agent/sessions/stream`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -1416,10 +1416,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsTargets(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetList>;
-    public getAgentsTargets(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetList>>;
-    public getAgentsTargets(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetList>>;
-    public getAgentsTargets(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentTargets(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetList>;
+    public getAgentTargets(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetList>>;
+    public getAgentTargets(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetList>>;
+    public getAgentTargets(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1449,7 +1449,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/targets`;
+        let localVarPath = `/v1/agent/targets`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TargetList>('get', `${basePath}${localVarPath}`,
             {
@@ -1471,13 +1471,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentsTargetsById(requestParameters: AgentsApiGetAgentsTargetsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetView>;
-    public getAgentsTargetsById(requestParameters: AgentsApiGetAgentsTargetsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetView>>;
-    public getAgentsTargetsById(requestParameters: AgentsApiGetAgentsTargetsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetView>>;
-    public getAgentsTargetsById(requestParameters: AgentsApiGetAgentsTargetsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAgentTargetsById(requestParameters: AgentApiGetAgentTargetsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetView>;
+    public getAgentTargetsById(requestParameters: AgentApiGetAgentTargetsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetView>>;
+    public getAgentTargetsById(requestParameters: AgentApiGetAgentTargetsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetView>>;
+    public getAgentTargetsById(requestParameters: AgentApiGetAgentTargetsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getAgentsTargetsById.');
+            throw new Error('Required parameter id was null or undefined when calling getAgentTargetsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1508,7 +1508,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TargetView>('get', `${basePath}${localVarPath}`,
             {
@@ -1530,17 +1530,17 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchAgentsByRef(requestParameters: AgentsApiPatchAgentsByRefRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentView>;
-    public patchAgentsByRef(requestParameters: AgentsApiPatchAgentsByRefRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentView>>;
-    public patchAgentsByRef(requestParameters: AgentsApiPatchAgentsByRefRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentView>>;
-    public patchAgentsByRef(requestParameters: AgentsApiPatchAgentsByRefRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchAgentByRef(requestParameters: AgentApiPatchAgentByRefRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentView>;
+    public patchAgentByRef(requestParameters: AgentApiPatchAgentByRefRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentView>>;
+    public patchAgentByRef(requestParameters: AgentApiPatchAgentByRefRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentView>>;
+    public patchAgentByRef(requestParameters: AgentApiPatchAgentByRefRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const ref = requestParameters?.ref;
         if (ref === null || ref === undefined) {
-            throw new Error('Required parameter ref was null or undefined when calling patchAgentsByRef.');
+            throw new Error('Required parameter ref was null or undefined when calling patchAgentByRef.');
         }
         const updateAgentIn = requestParameters?.updateAgentIn;
         if (updateAgentIn === null || updateAgentIn === undefined) {
-            throw new Error('Required parameter updateAgentIn was null or undefined when calling patchAgentsByRef.');
+            throw new Error('Required parameter updateAgentIn was null or undefined when calling patchAgentByRef.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1580,7 +1580,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AgentView>('patch', `${basePath}${localVarPath}`,
             {
@@ -1603,17 +1603,17 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchAgentsSessionsById(requestParameters: AgentsApiPatchAgentsSessionsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionView>;
-    public patchAgentsSessionsById(requestParameters: AgentsApiPatchAgentsSessionsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionView>>;
-    public patchAgentsSessionsById(requestParameters: AgentsApiPatchAgentsSessionsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionView>>;
-    public patchAgentsSessionsById(requestParameters: AgentsApiPatchAgentsSessionsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchAgentSessionsById(requestParameters: AgentApiPatchAgentSessionsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionView>;
+    public patchAgentSessionsById(requestParameters: AgentApiPatchAgentSessionsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionView>>;
+    public patchAgentSessionsById(requestParameters: AgentApiPatchAgentSessionsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionView>>;
+    public patchAgentSessionsById(requestParameters: AgentApiPatchAgentSessionsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patchAgentsSessionsById.');
+            throw new Error('Required parameter id was null or undefined when calling patchAgentSessionsById.');
         }
         const patchSessionIn = requestParameters?.patchSessionIn;
         if (patchSessionIn === null || patchSessionIn === undefined) {
-            throw new Error('Required parameter patchSessionIn was null or undefined when calling patchAgentsSessionsById.');
+            throw new Error('Required parameter patchSessionIn was null or undefined when calling patchAgentSessionsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1653,7 +1653,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SessionView>('patch', `${basePath}${localVarPath}`,
             {
@@ -1676,17 +1676,17 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchAgentsTargetsById(requestParameters: AgentsApiPatchAgentsTargetsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetView>;
-    public patchAgentsTargetsById(requestParameters: AgentsApiPatchAgentsTargetsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetView>>;
-    public patchAgentsTargetsById(requestParameters: AgentsApiPatchAgentsTargetsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetView>>;
-    public patchAgentsTargetsById(requestParameters: AgentsApiPatchAgentsTargetsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchAgentTargetsById(requestParameters: AgentApiPatchAgentTargetsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetView>;
+    public patchAgentTargetsById(requestParameters: AgentApiPatchAgentTargetsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetView>>;
+    public patchAgentTargetsById(requestParameters: AgentApiPatchAgentTargetsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetView>>;
+    public patchAgentTargetsById(requestParameters: AgentApiPatchAgentTargetsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patchAgentsTargetsById.');
+            throw new Error('Required parameter id was null or undefined when calling patchAgentTargetsById.');
         }
         const patchTargetIn = requestParameters?.patchTargetIn;
         if (patchTargetIn === null || patchTargetIn === undefined) {
-            throw new Error('Required parameter patchTargetIn was null or undefined when calling patchAgentsTargetsById.');
+            throw new Error('Required parameter patchTargetIn was null or undefined when calling patchAgentTargetsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1726,7 +1726,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/agent/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TargetView>('patch', `${basePath}${localVarPath}`,
             {
@@ -1749,13 +1749,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgents(requestParameters: AgentsApiPostAgentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentView>;
-    public postAgents(requestParameters: AgentsApiPostAgentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentView>>;
-    public postAgents(requestParameters: AgentsApiPostAgentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentView>>;
-    public postAgents(requestParameters: AgentsApiPostAgentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgent(requestParameters: AgentApiPostAgentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgentView>;
+    public postAgent(requestParameters: AgentApiPostAgentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgentView>>;
+    public postAgent(requestParameters: AgentApiPostAgentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgentView>>;
+    public postAgent(requestParameters: AgentApiPostAgentRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const createAgentIn = requestParameters?.createAgentIn;
         if (createAgentIn === null || createAgentIn === undefined) {
-            throw new Error('Required parameter createAgentIn was null or undefined when calling postAgents.');
+            throw new Error('Required parameter createAgentIn was null or undefined when calling postAgent.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1795,7 +1795,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents`;
+        let localVarPath = `/v1/agent`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AgentView>('post', `${basePath}${localVarPath}`,
             {
@@ -1818,13 +1818,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsByRefRun(requestParameters: AgentsApiPostAgentsByRefRunRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postAgentsByRefRun(requestParameters: AgentsApiPostAgentsByRefRunRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postAgentsByRefRun(requestParameters: AgentsApiPostAgentsByRefRunRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postAgentsByRefRun(requestParameters: AgentsApiPostAgentsByRefRunRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentByRefRun(requestParameters: AgentApiPostAgentByRefRunRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postAgentByRefRun(requestParameters: AgentApiPostAgentByRefRunRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postAgentByRefRun(requestParameters: AgentApiPostAgentByRefRunRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postAgentByRefRun(requestParameters: AgentApiPostAgentByRefRunRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const ref = requestParameters?.ref;
         if (ref === null || ref === undefined) {
-            throw new Error('Required parameter ref was null or undefined when calling postAgentsByRefRun.');
+            throw new Error('Required parameter ref was null or undefined when calling postAgentByRefRun.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1854,7 +1854,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/run`;
+        let localVarPath = `/v1/agent/${this.configuration.encodeParam({name: "ref", value: ref, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/run`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -1875,10 +1875,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsChat(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postAgentsChat(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postAgentsChat(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postAgentsChat(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentChat(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postAgentChat(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postAgentChat(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postAgentChat(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1907,7 +1907,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/chat`;
+        let localVarPath = `/v1/agent/chat`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -1928,10 +1928,10 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsChatConversations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public postAgentsChatConversations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public postAgentsChatConversations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public postAgentsChatConversations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentChatConversations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public postAgentChatConversations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public postAgentChatConversations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public postAgentChatConversations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1960,7 +1960,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/chat/conversations`;
+        let localVarPath = `/v1/agent/chat/conversations`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
@@ -1977,18 +1977,17 @@ export class AgentsApi extends BaseService {
 
     /**
      * Start one autonomous coding run against a repo in the caller\&#39;s org
-     * Runs a coding task on a repository: clones it into a sandbox, lets a model read and edit the code, run the tests, and push the work to a branch. Say the thing you want done — \&quot;fix the failing auth test in hanzoai/cloud\&quot; — and the run infers the repo, the branch and the plan. No prefix, no ceremony.  It answers 202 with the run\&#39;s handle the moment the run is ADMITTED — not when it finishes. A coding run takes minutes; holding a request open for one would tie a connection to a model loop and give the caller nothing it cannot get better from the session stream.  The handle is a session id, and that is deliberate: the session is already the run\&#39;s durable record and its live stream (/v1/agents/sessions/{id}/stream), so this op does not grow a progress endpoint, a status endpoint or a cancel endpoint of its own. One way to watch a run, whoever started it.  It is also how work CONTINUES. Pass an earlier run\&#39;s session as &#x60;after&#x60; and this one starts from where that one stopped, so \&quot;now add tests for it\&quot; builds on the branch already pushed instead of a fresh clone. The follow-up still gets its own branch and its own session — one run, one branch, always reviewable on its own.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsCoding(requestParameters: AgentsApiPostAgentsCodingRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CodingStarted>;
-    public postAgentsCoding(requestParameters: AgentsApiPostAgentsCodingRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CodingStarted>>;
-    public postAgentsCoding(requestParameters: AgentsApiPostAgentsCodingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CodingStarted>>;
-    public postAgentsCoding(requestParameters: AgentsApiPostAgentsCodingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentCoding(requestParameters: AgentApiPostAgentCodingRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CodingStarted>;
+    public postAgentCoding(requestParameters: AgentApiPostAgentCodingRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CodingStarted>>;
+    public postAgentCoding(requestParameters: AgentApiPostAgentCodingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CodingStarted>>;
+    public postAgentCoding(requestParameters: AgentApiPostAgentCodingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const codingStartIn = requestParameters?.codingStartIn;
         if (codingStartIn === null || codingStartIn === undefined) {
-            throw new Error('Required parameter codingStartIn was null or undefined when calling postAgentsCoding.');
+            throw new Error('Required parameter codingStartIn was null or undefined when calling postAgentCoding.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2028,7 +2027,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/coding`;
+        let localVarPath = `/v1/agent/coding`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CodingStarted>('post', `${basePath}${localVarPath}`,
             {
@@ -2051,13 +2050,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsSessions(requestParameters: AgentsApiPostAgentsSessionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionView>;
-    public postAgentsSessions(requestParameters: AgentsApiPostAgentsSessionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionView>>;
-    public postAgentsSessions(requestParameters: AgentsApiPostAgentsSessionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionView>>;
-    public postAgentsSessions(requestParameters: AgentsApiPostAgentsSessionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentSessions(requestParameters: AgentApiPostAgentSessionsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionView>;
+    public postAgentSessions(requestParameters: AgentApiPostAgentSessionsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionView>>;
+    public postAgentSessions(requestParameters: AgentApiPostAgentSessionsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionView>>;
+    public postAgentSessions(requestParameters: AgentApiPostAgentSessionsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const registerReq = requestParameters?.registerReq;
         if (registerReq === null || registerReq === undefined) {
-            throw new Error('Required parameter registerReq was null or undefined when calling postAgentsSessions.');
+            throw new Error('Required parameter registerReq was null or undefined when calling postAgentSessions.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2097,7 +2096,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions`;
+        let localVarPath = `/v1/agent/sessions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SessionView>('post', `${basePath}${localVarPath}`,
             {
@@ -2120,17 +2119,17 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsSessionsByIdEvents(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EventView>;
-    public postAgentsSessionsByIdEvents(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventView>>;
-    public postAgentsSessionsByIdEvents(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventView>>;
-    public postAgentsSessionsByIdEvents(requestParameters: AgentsApiPostAgentsSessionsByIdEventsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentSessionsByIdEvents(requestParameters: AgentApiPostAgentSessionsByIdEventsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EventView>;
+    public postAgentSessionsByIdEvents(requestParameters: AgentApiPostAgentSessionsByIdEventsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EventView>>;
+    public postAgentSessionsByIdEvents(requestParameters: AgentApiPostAgentSessionsByIdEventsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EventView>>;
+    public postAgentSessionsByIdEvents(requestParameters: AgentApiPostAgentSessionsByIdEventsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postAgentsSessionsByIdEvents.');
+            throw new Error('Required parameter id was null or undefined when calling postAgentSessionsByIdEvents.');
         }
         const eventIn = requestParameters?.eventIn;
         if (eventIn === null || eventIn === undefined) {
-            throw new Error('Required parameter eventIn was null or undefined when calling postAgentsSessionsByIdEvents.');
+            throw new Error('Required parameter eventIn was null or undefined when calling postAgentSessionsByIdEvents.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2170,7 +2169,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/events`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/events`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EventView>('post', `${basePath}${localVarPath}`,
             {
@@ -2193,17 +2192,17 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsSessionsByIdMessage(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlResult>;
-    public postAgentsSessionsByIdMessage(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlResult>>;
-    public postAgentsSessionsByIdMessage(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlResult>>;
-    public postAgentsSessionsByIdMessage(requestParameters: AgentsApiPostAgentsSessionsByIdMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentSessionsByIdMessage(requestParameters: AgentApiPostAgentSessionsByIdMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlResult>;
+    public postAgentSessionsByIdMessage(requestParameters: AgentApiPostAgentSessionsByIdMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlResult>>;
+    public postAgentSessionsByIdMessage(requestParameters: AgentApiPostAgentSessionsByIdMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlResult>>;
+    public postAgentSessionsByIdMessage(requestParameters: AgentApiPostAgentSessionsByIdMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postAgentsSessionsByIdMessage.');
+            throw new Error('Required parameter id was null or undefined when calling postAgentSessionsByIdMessage.');
         }
         const controlIn = requestParameters?.controlIn;
         if (controlIn === null || controlIn === undefined) {
-            throw new Error('Required parameter controlIn was null or undefined when calling postAgentsSessionsByIdMessage.');
+            throw new Error('Required parameter controlIn was null or undefined when calling postAgentSessionsByIdMessage.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2243,7 +2242,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/message`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/message`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ControlResult>('post', `${basePath}${localVarPath}`,
             {
@@ -2266,17 +2265,17 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsSessionsByIdPause(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlResult>;
-    public postAgentsSessionsByIdPause(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlResult>>;
-    public postAgentsSessionsByIdPause(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlResult>>;
-    public postAgentsSessionsByIdPause(requestParameters: AgentsApiPostAgentsSessionsByIdPauseRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentSessionsByIdPause(requestParameters: AgentApiPostAgentSessionsByIdPauseRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlResult>;
+    public postAgentSessionsByIdPause(requestParameters: AgentApiPostAgentSessionsByIdPauseRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlResult>>;
+    public postAgentSessionsByIdPause(requestParameters: AgentApiPostAgentSessionsByIdPauseRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlResult>>;
+    public postAgentSessionsByIdPause(requestParameters: AgentApiPostAgentSessionsByIdPauseRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postAgentsSessionsByIdPause.');
+            throw new Error('Required parameter id was null or undefined when calling postAgentSessionsByIdPause.');
         }
         const controlIn = requestParameters?.controlIn;
         if (controlIn === null || controlIn === undefined) {
-            throw new Error('Required parameter controlIn was null or undefined when calling postAgentsSessionsByIdPause.');
+            throw new Error('Required parameter controlIn was null or undefined when calling postAgentSessionsByIdPause.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2316,7 +2315,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pause`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/pause`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ControlResult>('post', `${basePath}${localVarPath}`,
             {
@@ -2339,17 +2338,17 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsSessionsByIdResume(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlResult>;
-    public postAgentsSessionsByIdResume(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlResult>>;
-    public postAgentsSessionsByIdResume(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlResult>>;
-    public postAgentsSessionsByIdResume(requestParameters: AgentsApiPostAgentsSessionsByIdResumeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentSessionsByIdResume(requestParameters: AgentApiPostAgentSessionsByIdResumeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlResult>;
+    public postAgentSessionsByIdResume(requestParameters: AgentApiPostAgentSessionsByIdResumeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlResult>>;
+    public postAgentSessionsByIdResume(requestParameters: AgentApiPostAgentSessionsByIdResumeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlResult>>;
+    public postAgentSessionsByIdResume(requestParameters: AgentApiPostAgentSessionsByIdResumeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postAgentsSessionsByIdResume.');
+            throw new Error('Required parameter id was null or undefined when calling postAgentSessionsByIdResume.');
         }
         const controlIn = requestParameters?.controlIn;
         if (controlIn === null || controlIn === undefined) {
-            throw new Error('Required parameter controlIn was null or undefined when calling postAgentsSessionsByIdResume.');
+            throw new Error('Required parameter controlIn was null or undefined when calling postAgentSessionsByIdResume.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2389,7 +2388,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/resume`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/resume`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ControlResult>('post', `${basePath}${localVarPath}`,
             {
@@ -2412,17 +2411,17 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsSessionsByIdStop(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlResult>;
-    public postAgentsSessionsByIdStop(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlResult>>;
-    public postAgentsSessionsByIdStop(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlResult>>;
-    public postAgentsSessionsByIdStop(requestParameters: AgentsApiPostAgentsSessionsByIdStopRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentSessionsByIdStop(requestParameters: AgentApiPostAgentSessionsByIdStopRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ControlResult>;
+    public postAgentSessionsByIdStop(requestParameters: AgentApiPostAgentSessionsByIdStopRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ControlResult>>;
+    public postAgentSessionsByIdStop(requestParameters: AgentApiPostAgentSessionsByIdStopRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ControlResult>>;
+    public postAgentSessionsByIdStop(requestParameters: AgentApiPostAgentSessionsByIdStopRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postAgentsSessionsByIdStop.');
+            throw new Error('Required parameter id was null or undefined when calling postAgentSessionsByIdStop.');
         }
         const controlIn = requestParameters?.controlIn;
         if (controlIn === null || controlIn === undefined) {
-            throw new Error('Required parameter controlIn was null or undefined when calling postAgentsSessionsByIdStop.');
+            throw new Error('Required parameter controlIn was null or undefined when calling postAgentSessionsByIdStop.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2462,7 +2461,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/stop`;
+        let localVarPath = `/v1/agent/sessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/stop`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ControlResult>('post', `${basePath}${localVarPath}`,
             {
@@ -2485,13 +2484,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsTargets(requestParameters: AgentsApiPostAgentsTargetsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetView>;
-    public postAgentsTargets(requestParameters: AgentsApiPostAgentsTargetsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetView>>;
-    public postAgentsTargets(requestParameters: AgentsApiPostAgentsTargetsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetView>>;
-    public postAgentsTargets(requestParameters: AgentsApiPostAgentsTargetsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentTargets(requestParameters: AgentApiPostAgentTargetsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TargetView>;
+    public postAgentTargets(requestParameters: AgentApiPostAgentTargetsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TargetView>>;
+    public postAgentTargets(requestParameters: AgentApiPostAgentTargetsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TargetView>>;
+    public postAgentTargets(requestParameters: AgentApiPostAgentTargetsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const targetReq = requestParameters?.targetReq;
         if (targetReq === null || targetReq === undefined) {
-            throw new Error('Required parameter targetReq was null or undefined when calling postAgentsTargets.');
+            throw new Error('Required parameter targetReq was null or undefined when calling postAgentTargets.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2531,7 +2530,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/targets`;
+        let localVarPath = `/v1/agent/targets`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TargetView>('post', `${basePath}${localVarPath}`,
             {
@@ -2554,13 +2553,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsTargetsByIdClaim(requestParameters: AgentsApiPostAgentsTargetsByIdClaimRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoutedRunOut>;
-    public postAgentsTargetsByIdClaim(requestParameters: AgentsApiPostAgentsTargetsByIdClaimRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoutedRunOut>>;
-    public postAgentsTargetsByIdClaim(requestParameters: AgentsApiPostAgentsTargetsByIdClaimRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoutedRunOut>>;
-    public postAgentsTargetsByIdClaim(requestParameters: AgentsApiPostAgentsTargetsByIdClaimRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentTargetsByIdClaim(requestParameters: AgentApiPostAgentTargetsByIdClaimRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoutedRunOut>;
+    public postAgentTargetsByIdClaim(requestParameters: AgentApiPostAgentTargetsByIdClaimRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoutedRunOut>>;
+    public postAgentTargetsByIdClaim(requestParameters: AgentApiPostAgentTargetsByIdClaimRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoutedRunOut>>;
+    public postAgentTargetsByIdClaim(requestParameters: AgentApiPostAgentTargetsByIdClaimRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postAgentsTargetsByIdClaim.');
+            throw new Error('Required parameter id was null or undefined when calling postAgentTargetsByIdClaim.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2591,7 +2590,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/claim`;
+        let localVarPath = `/v1/agent/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/claim`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<RoutedRunOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2613,13 +2612,13 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsTargetsByIdKey(requestParameters: AgentsApiPostAgentsTargetsByIdKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClaimKeyOut>;
-    public postAgentsTargetsByIdKey(requestParameters: AgentsApiPostAgentsTargetsByIdKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClaimKeyOut>>;
-    public postAgentsTargetsByIdKey(requestParameters: AgentsApiPostAgentsTargetsByIdKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClaimKeyOut>>;
-    public postAgentsTargetsByIdKey(requestParameters: AgentsApiPostAgentsTargetsByIdKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentTargetsByIdKey(requestParameters: AgentApiPostAgentTargetsByIdKeyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ClaimKeyOut>;
+    public postAgentTargetsByIdKey(requestParameters: AgentApiPostAgentTargetsByIdKeyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ClaimKeyOut>>;
+    public postAgentTargetsByIdKey(requestParameters: AgentApiPostAgentTargetsByIdKeyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ClaimKeyOut>>;
+    public postAgentTargetsByIdKey(requestParameters: AgentApiPostAgentTargetsByIdKeyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postAgentsTargetsByIdKey.');
+            throw new Error('Required parameter id was null or undefined when calling postAgentTargetsByIdKey.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2650,7 +2649,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/key`;
+        let localVarPath = `/v1/agent/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/key`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ClaimKeyOut>('post', `${basePath}${localVarPath}`,
             {
@@ -2672,21 +2671,21 @@ export class AgentsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postAgentsTargetsByIdRunsByRunidReport(requestParameters: AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReportOut>;
-    public postAgentsTargetsByIdRunsByRunidReport(requestParameters: AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReportOut>>;
-    public postAgentsTargetsByIdRunsByRunidReport(requestParameters: AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReportOut>>;
-    public postAgentsTargetsByIdRunsByRunidReport(requestParameters: AgentsApiPostAgentsTargetsByIdRunsByRunidReportRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postAgentTargetsByIdRunsByRunidReport(requestParameters: AgentApiPostAgentTargetsByIdRunsByRunidReportRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReportOut>;
+    public postAgentTargetsByIdRunsByRunidReport(requestParameters: AgentApiPostAgentTargetsByIdRunsByRunidReportRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReportOut>>;
+    public postAgentTargetsByIdRunsByRunidReport(requestParameters: AgentApiPostAgentTargetsByIdRunsByRunidReportRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReportOut>>;
+    public postAgentTargetsByIdRunsByRunidReport(requestParameters: AgentApiPostAgentTargetsByIdRunsByRunidReportRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postAgentsTargetsByIdRunsByRunidReport.');
+            throw new Error('Required parameter id was null or undefined when calling postAgentTargetsByIdRunsByRunidReport.');
         }
         const runId = requestParameters?.runId;
         if (runId === null || runId === undefined) {
-            throw new Error('Required parameter runId was null or undefined when calling postAgentsTargetsByIdRunsByRunidReport.');
+            throw new Error('Required parameter runId was null or undefined when calling postAgentTargetsByIdRunsByRunidReport.');
         }
         const reportRunIn = requestParameters?.reportRunIn;
         if (reportRunIn === null || reportRunIn === undefined) {
-            throw new Error('Required parameter reportRunIn was null or undefined when calling postAgentsTargetsByIdRunsByRunidReport.');
+            throw new Error('Required parameter reportRunIn was null or undefined when calling postAgentTargetsByIdRunsByRunidReport.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2726,7 +2725,7 @@ export class AgentsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/agents/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/runs/${this.configuration.encodeParam({name: "runId", value: runId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/report`;
+        let localVarPath = `/v1/agent/targets/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/runs/${this.configuration.encodeParam({name: "runId", value: runId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/report`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ReportOut>('post', `${basePath}${localVarPath}`,
             {

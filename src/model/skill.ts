@@ -34,5 +34,9 @@ export interface Skill {
      * Org is the org that authored the skill — the validated caller\'s, never a value the body supplied.
      */
     org?: string;
+    /**
+     * Source is the repository the skill was read from, \"<project>/<name>\" or \"<name>\"; empty for a skill written through the API. A push replaces every skill of its source at once, so a skill leaves when its file does.
+     */
+    source?: string;
 }
 

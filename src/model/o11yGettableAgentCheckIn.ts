@@ -16,12 +16,12 @@ export interface O11yGettableAgentCheckIn {
      * Older fields for backward compatibility with existing AWS agents
      */
     account_id?: string;
-    cloud_account_id?: string;
     cloudIntegrationId?: string;
-    'integration_config'?: O11yIntegrationConfig;
+    cloud_account_id?: string;
     integrationConfig?: O11yProviderIntegrationConfig;
+    'integration_config'?: O11yIntegrationConfig;
     providerAccountId?: string;
-    'removed_at'?: string;
     removedAt?: string;
+    'removed_at'?: string;
 }
 

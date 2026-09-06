@@ -15,6 +15,10 @@ export interface Sandbox {
      */
     'class'?: string;
     /**
+     * Cluster is the attached cluster this sandbox runs on — the fleet-local name the lease named — or empty for the home cluster. Immutable for the life of the lease, like the pod it locates: every later call into the sandbox reads it to reach the right apiserver.
+     */
+    cluster?: string;
+    /**
      * ConnectedAt is when somebody was last known to have this sandbox\'s project OPEN, Unix seconds. It is a fact with an EXPIRY rather than a flag: a watcher restamps it every beat of its stream, and it goes stale on its own when the stream dies, so nothing has to be turned off by a process that may not be there any more. The reaper reads it to choose WHICH idle allowance applies — see lifecycle.go.  Zero means nobody has said so, which puts the sandbox on the short clock.
      */
     connectedAt?: number;

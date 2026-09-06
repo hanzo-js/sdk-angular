@@ -7,13 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ForgeJobRepositoryOwner } from './forgeJobRepositoryOwner';
 
 
-export interface Event { 
-    distinctId?: string;
-    event?: string;
-    properties?: { [key: string]: any; };
-    time?: string;
-    type?: string;
+export interface ForgeJobRepository { 
+    name?: string;
+    owner?: ForgeJobRepositoryOwner;
 }
 

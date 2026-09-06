@@ -7,15 +7,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DriftFlag } from './driftFlag';
 
 
 export interface Verdict { 
-    builds?: number;
-    commit?: string;
-    fired?: boolean;
-    org?: string;
-    reason?: string;
-    ref?: string;
-    repo?: string;
+    /**
+     * Flags are the findings behind the severity, in detection order: floating-declared, floating-running, stale, un-rolled, then the release-artifact ones. Always present — `[]` for a row that runs what it declares, never null.
+     */
+    flags?: Array<DriftFlag>;
+    /**
+     * Severity is the roll-up over Flags — red if any flag is red, else yellow if any is yellow, else ok. It is the column a board sorts and filters on, and \"ok\" is exactly what no flags means.
+     */
+    severity?: string;
 }
 

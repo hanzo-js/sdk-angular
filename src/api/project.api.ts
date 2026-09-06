@@ -63,81 +63,81 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface ProjectsApiDeleteProjectsBySlugRequestParams {
+export interface ProjectApiDeleteProjectBySlugRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
 
-export interface ProjectsApiDeleteProjectsBySlugDomainsByHostRequestParams {
+export interface ProjectApiDeleteProjectBySlugDomainsByHostRequestParams {
     /** Slug is the project the host is attached to, from the path. */
     slug: string;
     /** Host is the custom hostname, from the path. It is cleaned to its canonical form (lowercased, trailing dot dropped) before anything is looked up. */
     host: string;
 }
 
-export interface ProjectsApiDeleteProjectsBySlugStarRequestParams {
+export interface ProjectApiDeleteProjectBySlugStarRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugRequestParams {
+export interface ProjectApiGetProjectBySlugRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugDeploymentsRequestParams {
+export interface ProjectApiGetProjectBySlugDeploymentsRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugDeploymentsByIdRequestParams {
+export interface ProjectApiGetProjectBySlugDeploymentsByIdRequestParams {
     /** Slug is the project the deployment belongs to, from the path. */
     slug: string;
     /** ID is the deployment id, from the path. A deployment of another project — or of another tenant\&#39;s project — is not found. */
     id: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugDomainsRequestParams {
+export interface ProjectApiGetProjectBySlugDomainsRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugReleasesRequestParams {
+export interface ProjectApiGetProjectBySlugReleasesRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsBySlugShotRequestParams {
+export interface ProjectApiGetProjectBySlugShotRequestParams {
     slug: string;
 }
 
-export interface ProjectsApiGetProjectsSitesBySlugRequestParams {
+export interface ProjectApiGetProjectSitesBySlugRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
 
-export interface ProjectsApiPatchProjectsBySlugRequestParams {
+export interface ProjectApiPatchProjectBySlugRequestParams {
     /** Slug is the project to update, from the path. The URL is the addressing authority — a &#x60;slug&#x60; in the body cannot move the write to another project. */
     slug: string;
     projectsUpdate: ProjectsUpdate;
 }
 
-export interface ProjectsApiPostProjectsRequestParams {
+export interface ProjectApiPostProjectRequestParams {
     projectsCreate: ProjectsCreate;
 }
 
-export interface ProjectsApiPostProjectsBySlugDeployRequestParams {
+export interface ProjectApiPostProjectBySlugDeployRequestParams {
     slug: string;
     body?: Blob;
 }
 
-export interface ProjectsApiPostProjectsBySlugDeploymentsRequestParams {
+export interface ProjectApiPostProjectBySlugDeploymentsRequestParams {
     /** Slug is the site to deploy, from the path. */
     slug: string;
     projectsDeployStart: ProjectsDeployStart;
 }
 
-export interface ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequestParams {
+export interface ProjectApiPostProjectBySlugDeploymentsByIdCompleteRequestParams {
     /** Slug is the project the deployment belongs to, from the path. */
     slug: string;
     /** ID is the queued deployment to complete, from the path. */
@@ -145,56 +145,56 @@ export interface ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequestPara
     projectsComplete: ProjectsComplete;
 }
 
-export interface ProjectsApiPostProjectsBySlugDomainsRequestParams {
+export interface ProjectApiPostProjectBySlugDomainsRequestParams {
     /** Slug is the site the hosts attach to, from the path. */
     slug: string;
     projectsDomainsBind: ProjectsDomainsBind;
 }
 
-export interface ProjectsApiPostProjectsBySlugDomainsByHostVerifyRequestParams {
+export interface ProjectApiPostProjectBySlugDomainsByHostVerifyRequestParams {
     /** Slug is the project the host is attached to, from the path. */
     slug: string;
     /** Host is the custom hostname, from the path. It is cleaned to its canonical form (lowercased, trailing dot dropped) before anything is looked up. */
     host: string;
 }
 
-export interface ProjectsApiPostProjectsBySlugPublishRequestParams {
+export interface ProjectApiPostProjectBySlugPublishRequestParams {
     /** Slug is the site to publish, from the path. */
     slug: string;
     projectsPublish: ProjectsPublish;
 }
 
-export interface ProjectsApiPostProjectsBySlugPurgeRequestParams {
+export interface ProjectApiPostProjectBySlugPurgeRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
 
-export interface ProjectsApiPostProjectsBySlugReleasesRequestParams {
+export interface ProjectApiPostProjectBySlugReleasesRequestParams {
     /** Slug is the site to publish, from the path. */
     slug: string;
     projectsPublish: ProjectsPublish;
 }
 
-export interface ProjectsApiPostProjectsBySlugReleasesByReleaseActivateRequestParams {
+export interface ProjectApiPostProjectBySlugReleasesByReleaseActivateRequestParams {
     /** Slug is the site the release belongs to, from the path. */
     slug: string;
     /** Release is the content-addressed release id (\&quot;rel_\&quot; + 32 hex chars), from the path. Anything that is not that shape is not found, rather than being interpolated into a storage prefix. */
     release: string;
 }
 
-export interface ProjectsApiPostProjectsForkRequestParams {
+export interface ProjectApiPostProjectForkRequestParams {
     projectsFork: ProjectsFork;
 }
 
-export interface ProjectsApiPostProjectsSitesRequestParams {
+export interface ProjectApiPostProjectSitesRequestParams {
     projectsBuildSite: ProjectsBuildSite;
 }
 
-export interface ProjectsApiPostProjectsSitesDeployRequestParams {
+export interface ProjectApiPostProjectSitesDeployRequestParams {
     projectsDeploySite: ProjectsDeploySite;
 }
 
-export interface ProjectsApiPutProjectsBySlugStarRequestParams {
+export interface ProjectApiPutProjectBySlugStarRequestParams {
     /** Slug is the project to act on, from the path. It is unique within the caller\&#39;s org and nowhere else, so another tenant\&#39;s slug is a 404. */
     slug: string;
 }
@@ -203,7 +203,7 @@ export interface ProjectsApiPutProjectsBySlugStarRequestParams {
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectsApi extends BaseService {
+export class ProjectApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -216,13 +216,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteProjectsBySlug(requestParameters: ProjectsApiDeleteProjectsBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteProjectsBySlug(requestParameters: ProjectsApiDeleteProjectsBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteProjectsBySlug(requestParameters: ProjectsApiDeleteProjectsBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteProjectsBySlug(requestParameters: ProjectsApiDeleteProjectsBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteProjectBySlug(requestParameters: ProjectApiDeleteProjectBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteProjectBySlug(requestParameters: ProjectApiDeleteProjectBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteProjectBySlug(requestParameters: ProjectApiDeleteProjectBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteProjectBySlug(requestParameters: ProjectApiDeleteProjectBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling deleteProjectsBySlug.');
+            throw new Error('Required parameter slug was null or undefined when calling deleteProjectBySlug.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -252,7 +252,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -274,17 +274,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteProjectsBySlugDomainsByHost(requestParameters: ProjectsApiDeleteProjectsBySlugDomainsByHostRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteProjectsBySlugDomainsByHost(requestParameters: ProjectsApiDeleteProjectsBySlugDomainsByHostRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteProjectsBySlugDomainsByHost(requestParameters: ProjectsApiDeleteProjectsBySlugDomainsByHostRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteProjectsBySlugDomainsByHost(requestParameters: ProjectsApiDeleteProjectsBySlugDomainsByHostRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteProjectBySlugDomainsByHost(requestParameters: ProjectApiDeleteProjectBySlugDomainsByHostRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteProjectBySlugDomainsByHost(requestParameters: ProjectApiDeleteProjectBySlugDomainsByHostRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteProjectBySlugDomainsByHost(requestParameters: ProjectApiDeleteProjectBySlugDomainsByHostRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteProjectBySlugDomainsByHost(requestParameters: ProjectApiDeleteProjectBySlugDomainsByHostRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling deleteProjectsBySlugDomainsByHost.');
+            throw new Error('Required parameter slug was null or undefined when calling deleteProjectBySlugDomainsByHost.');
         }
         const host = requestParameters?.host;
         if (host === null || host === undefined) {
-            throw new Error('Required parameter host was null or undefined when calling deleteProjectsBySlugDomainsByHost.');
+            throw new Error('Required parameter host was null or undefined when calling deleteProjectBySlugDomainsByHost.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -314,7 +314,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains/${this.configuration.encodeParam({name: "host", value: host, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains/${this.configuration.encodeParam({name: "host", value: host, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -336,13 +336,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsStar>;
-    public deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsStar>>;
-    public deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsStar>>;
-    public deleteProjectsBySlugStar(requestParameters: ProjectsApiDeleteProjectsBySlugStarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteProjectBySlugStar(requestParameters: ProjectApiDeleteProjectBySlugStarRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsStar>;
+    public deleteProjectBySlugStar(requestParameters: ProjectApiDeleteProjectBySlugStarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsStar>>;
+    public deleteProjectBySlugStar(requestParameters: ProjectApiDeleteProjectBySlugStarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsStar>>;
+    public deleteProjectBySlugStar(requestParameters: ProjectApiDeleteProjectBySlugStarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling deleteProjectsBySlugStar.');
+            throw new Error('Required parameter slug was null or undefined when calling deleteProjectBySlugStar.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -373,7 +373,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/star`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/star`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsStar>('delete', `${basePath}${localVarPath}`,
             {
@@ -394,10 +394,10 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjects(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectsProject>>;
-    public getProjects(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectsProject>>>;
-    public getProjects(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectsProject>>>;
-    public getProjects(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProject(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectsProject>>;
+    public getProject(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectsProject>>>;
+    public getProject(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectsProject>>>;
+    public getProject(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -427,7 +427,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects`;
+        let localVarPath = `/v1/project`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<ProjectsProject>>('get', `${basePath}${localVarPath}`,
             {
@@ -449,13 +449,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsBySlug(requestParameters: ProjectsApiGetProjectsBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
-    public getProjectsBySlug(requestParameters: ProjectsApiGetProjectsBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
-    public getProjectsBySlug(requestParameters: ProjectsApiGetProjectsBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
-    public getProjectsBySlug(requestParameters: ProjectsApiGetProjectsBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectBySlug(requestParameters: ProjectApiGetProjectBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
+    public getProjectBySlug(requestParameters: ProjectApiGetProjectBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
+    public getProjectBySlug(requestParameters: ProjectApiGetProjectBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
+    public getProjectBySlug(requestParameters: ProjectApiGetProjectBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling getProjectsBySlug.');
+            throw new Error('Required parameter slug was null or undefined when calling getProjectBySlug.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -486,7 +486,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsProject>('get', `${basePath}${localVarPath}`,
             {
@@ -508,13 +508,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsBySlugDeployments(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectsDeployment>>;
-    public getProjectsBySlugDeployments(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectsDeployment>>>;
-    public getProjectsBySlugDeployments(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectsDeployment>>>;
-    public getProjectsBySlugDeployments(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectBySlugDeployments(requestParameters: ProjectApiGetProjectBySlugDeploymentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectsDeployment>>;
+    public getProjectBySlugDeployments(requestParameters: ProjectApiGetProjectBySlugDeploymentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectsDeployment>>>;
+    public getProjectBySlugDeployments(requestParameters: ProjectApiGetProjectBySlugDeploymentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectsDeployment>>>;
+    public getProjectBySlugDeployments(requestParameters: ProjectApiGetProjectBySlugDeploymentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling getProjectsBySlugDeployments.');
+            throw new Error('Required parameter slug was null or undefined when calling getProjectBySlugDeployments.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -545,7 +545,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deployments`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deployments`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<ProjectsDeployment>>('get', `${basePath}${localVarPath}`,
             {
@@ -567,17 +567,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsBySlugDeploymentsById(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDeployment>;
-    public getProjectsBySlugDeploymentsById(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDeployment>>;
-    public getProjectsBySlugDeploymentsById(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDeployment>>;
-    public getProjectsBySlugDeploymentsById(requestParameters: ProjectsApiGetProjectsBySlugDeploymentsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectBySlugDeploymentsById(requestParameters: ProjectApiGetProjectBySlugDeploymentsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDeployment>;
+    public getProjectBySlugDeploymentsById(requestParameters: ProjectApiGetProjectBySlugDeploymentsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDeployment>>;
+    public getProjectBySlugDeploymentsById(requestParameters: ProjectApiGetProjectBySlugDeploymentsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDeployment>>;
+    public getProjectBySlugDeploymentsById(requestParameters: ProjectApiGetProjectBySlugDeploymentsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling getProjectsBySlugDeploymentsById.');
+            throw new Error('Required parameter slug was null or undefined when calling getProjectBySlugDeploymentsById.');
         }
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getProjectsBySlugDeploymentsById.');
+            throw new Error('Required parameter id was null or undefined when calling getProjectBySlugDeploymentsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -608,7 +608,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deployments/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deployments/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsDeployment>('get', `${basePath}${localVarPath}`,
             {
@@ -630,13 +630,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsBySlugDomains(requestParameters: ProjectsApiGetProjectsBySlugDomainsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDomains>;
-    public getProjectsBySlugDomains(requestParameters: ProjectsApiGetProjectsBySlugDomainsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDomains>>;
-    public getProjectsBySlugDomains(requestParameters: ProjectsApiGetProjectsBySlugDomainsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDomains>>;
-    public getProjectsBySlugDomains(requestParameters: ProjectsApiGetProjectsBySlugDomainsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectBySlugDomains(requestParameters: ProjectApiGetProjectBySlugDomainsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDomains>;
+    public getProjectBySlugDomains(requestParameters: ProjectApiGetProjectBySlugDomainsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDomains>>;
+    public getProjectBySlugDomains(requestParameters: ProjectApiGetProjectBySlugDomainsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDomains>>;
+    public getProjectBySlugDomains(requestParameters: ProjectApiGetProjectBySlugDomainsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling getProjectsBySlugDomains.');
+            throw new Error('Required parameter slug was null or undefined when calling getProjectBySlugDomains.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -667,7 +667,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsDomains>('get', `${basePath}${localVarPath}`,
             {
@@ -689,13 +689,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsBySlugReleases(requestParameters: ProjectsApiGetProjectsBySlugReleasesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectsRelease>>;
-    public getProjectsBySlugReleases(requestParameters: ProjectsApiGetProjectsBySlugReleasesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectsRelease>>>;
-    public getProjectsBySlugReleases(requestParameters: ProjectsApiGetProjectsBySlugReleasesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectsRelease>>>;
-    public getProjectsBySlugReleases(requestParameters: ProjectsApiGetProjectsBySlugReleasesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectBySlugReleases(requestParameters: ProjectApiGetProjectBySlugReleasesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectsRelease>>;
+    public getProjectBySlugReleases(requestParameters: ProjectApiGetProjectBySlugReleasesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectsRelease>>>;
+    public getProjectBySlugReleases(requestParameters: ProjectApiGetProjectBySlugReleasesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectsRelease>>>;
+    public getProjectBySlugReleases(requestParameters: ProjectApiGetProjectBySlugReleasesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling getProjectsBySlugReleases.');
+            throw new Error('Required parameter slug was null or undefined when calling getProjectBySlugReleases.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -726,7 +726,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/releases`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/releases`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<ProjectsRelease>>('get', `${basePath}${localVarPath}`,
             {
@@ -748,13 +748,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsBySlugShot(requestParameters: ProjectsApiGetProjectsBySlugShotRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public getProjectsBySlugShot(requestParameters: ProjectsApiGetProjectsBySlugShotRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public getProjectsBySlugShot(requestParameters: ProjectsApiGetProjectsBySlugShotRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public getProjectsBySlugShot(requestParameters: ProjectsApiGetProjectsBySlugShotRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectBySlugShot(requestParameters: ProjectApiGetProjectBySlugShotRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public getProjectBySlugShot(requestParameters: ProjectApiGetProjectBySlugShotRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public getProjectBySlugShot(requestParameters: ProjectApiGetProjectBySlugShotRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public getProjectBySlugShot(requestParameters: ProjectApiGetProjectBySlugShotRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling getProjectsBySlugShot.');
+            throw new Error('Required parameter slug was null or undefined when calling getProjectBySlugShot.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -784,7 +784,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/shot`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/shot`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
             {
@@ -805,10 +805,10 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsEdge(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EdgeState>;
-    public getProjectsEdge(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EdgeState>>;
-    public getProjectsEdge(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EdgeState>>;
-    public getProjectsEdge(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectEdge(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EdgeState>;
+    public getProjectEdge(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EdgeState>>;
+    public getProjectEdge(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EdgeState>>;
+    public getProjectEdge(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -838,7 +838,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/edge`;
+        let localVarPath = `/v1/project/edge`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<EdgeState>('get', `${basePath}${localVarPath}`,
             {
@@ -855,14 +855,14 @@ export class ProjectsApi extends BaseService {
 
     /**
      * Returns the org\&#39;s deployed sites at the pretty URLs they serve at.
-     * Returns the org\&#39;s deployed sites at the pretty URLs they serve at.  It reads the SAME org-scoped store as /v1/projects and keeps only the projects that are actually &#x60;live&#x60;, so a draft or a failed build is not advertised as a site.  Scope: a validated principal is required (403 without one) and the list is keyed by that principal\&#39;s org.
+     * Returns the org\&#39;s deployed sites at the pretty URLs they serve at.  It reads the SAME org-scoped store as /v1/project and keeps only the projects that are actually &#x60;live&#x60;, so a draft or a failed build is not advertised as a site.  Scope: a validated principal is required (403 without one) and the list is keyed by that principal\&#39;s org.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsSites(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectsSite>>;
-    public getProjectsSites(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectsSite>>>;
-    public getProjectsSites(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectsSite>>>;
-    public getProjectsSites(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectSites(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectsSite>>;
+    public getProjectSites(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectsSite>>>;
+    public getProjectSites(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectsSite>>>;
+    public getProjectSites(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -892,7 +892,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/sites`;
+        let localVarPath = `/v1/project/sites`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<ProjectsSite>>('get', `${basePath}${localVarPath}`,
             {
@@ -914,13 +914,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsSitesBySlug(requestParameters: ProjectsApiGetProjectsSitesBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsSite>;
-    public getProjectsSitesBySlug(requestParameters: ProjectsApiGetProjectsSitesBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsSite>>;
-    public getProjectsSitesBySlug(requestParameters: ProjectsApiGetProjectsSitesBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsSite>>;
-    public getProjectsSitesBySlug(requestParameters: ProjectsApiGetProjectsSitesBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectSitesBySlug(requestParameters: ProjectApiGetProjectSitesBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsSite>;
+    public getProjectSitesBySlug(requestParameters: ProjectApiGetProjectSitesBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsSite>>;
+    public getProjectSitesBySlug(requestParameters: ProjectApiGetProjectSitesBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsSite>>;
+    public getProjectSitesBySlug(requestParameters: ProjectApiGetProjectSitesBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling getProjectsSitesBySlug.');
+            throw new Error('Required parameter slug was null or undefined when calling getProjectSitesBySlug.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -951,7 +951,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/sites/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/project/sites/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsSite>('get', `${basePath}${localVarPath}`,
             {
@@ -972,10 +972,10 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsTags(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TagConfig>;
-    public getProjectsTags(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TagConfig>>;
-    public getProjectsTags(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TagConfig>>;
-    public getProjectsTags(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProjectTags(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TagConfig>;
+    public getProjectTags(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TagConfig>>;
+    public getProjectTags(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TagConfig>>;
+    public getProjectTags(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1005,7 +1005,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/tags`;
+        let localVarPath = `/v1/project/tags`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TagConfig>('get', `${basePath}${localVarPath}`,
             {
@@ -1027,17 +1027,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchProjectsBySlug(requestParameters: ProjectsApiPatchProjectsBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
-    public patchProjectsBySlug(requestParameters: ProjectsApiPatchProjectsBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
-    public patchProjectsBySlug(requestParameters: ProjectsApiPatchProjectsBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
-    public patchProjectsBySlug(requestParameters: ProjectsApiPatchProjectsBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchProjectBySlug(requestParameters: ProjectApiPatchProjectBySlugRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
+    public patchProjectBySlug(requestParameters: ProjectApiPatchProjectBySlugRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
+    public patchProjectBySlug(requestParameters: ProjectApiPatchProjectBySlugRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
+    public patchProjectBySlug(requestParameters: ProjectApiPatchProjectBySlugRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling patchProjectsBySlug.');
+            throw new Error('Required parameter slug was null or undefined when calling patchProjectBySlug.');
         }
         const projectsUpdate = requestParameters?.projectsUpdate;
         if (projectsUpdate === null || projectsUpdate === undefined) {
-            throw new Error('Required parameter projectsUpdate was null or undefined when calling patchProjectsBySlug.');
+            throw new Error('Required parameter projectsUpdate was null or undefined when calling patchProjectBySlug.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1077,7 +1077,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsProject>('patch', `${basePath}${localVarPath}`,
             {
@@ -1100,13 +1100,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjects(requestParameters: ProjectsApiPostProjectsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
-    public postProjects(requestParameters: ProjectsApiPostProjectsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
-    public postProjects(requestParameters: ProjectsApiPostProjectsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
-    public postProjects(requestParameters: ProjectsApiPostProjectsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProject(requestParameters: ProjectApiPostProjectRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
+    public postProject(requestParameters: ProjectApiPostProjectRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
+    public postProject(requestParameters: ProjectApiPostProjectRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
+    public postProject(requestParameters: ProjectApiPostProjectRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const projectsCreate = requestParameters?.projectsCreate;
         if (projectsCreate === null || projectsCreate === undefined) {
-            throw new Error('Required parameter projectsCreate was null or undefined when calling postProjects.');
+            throw new Error('Required parameter projectsCreate was null or undefined when calling postProject.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1146,7 +1146,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects`;
+        let localVarPath = `/v1/project`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsProject>('post', `${basePath}${localVarPath}`,
             {
@@ -1164,18 +1164,18 @@ export class ProjectsApi extends BaseService {
 
     /**
      * Upload a built site as one archive and serve it
-     * Takes a built site live at &#x60;https://&lt;slug&gt;.hanzo.app&#x60; in one call. The body is the site itself — a &#x60;zip&#x60; or &#x60;tar.gz&#x60; holding &#x60;index.html&#x60; at its root (or a single wrapper directory that does), sent raw or as a multipart file part. It is unpacked to the site\&#39;s own storage prefix and served immediately, answering the finished deployment.  It is bounded by the edge body limit (16 MiB by default), and that bound is the whole reason the other path exists: an oversized POST is refused by the server BEFORE any handler runs and surfaces as an opaque &#x60;400 Error when parsing request&#x60; that reads like a malformed payload rather than a size cap. A site too large for one archive opens a deployment with &#x60;POST /v1/projects/{slug}/deployments&#x60; instead and writes its files straight to storage against the scoped grant that answers with — no body limit, and no bytes through this API at all.  Billing is fail-closed and fails FIRST: the hosting gate runs before anything is parsed or uploaded, so an unfunded org is 402 and an unreachable commerce is 503 with nothing written. The debit lands only on success — a failed upload is never billed and never flips the live site — and a redeploy answers the SAME URL, because slug and apex are stable.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\&#39;s org, so another tenant\&#39;s slug is a 404. Object storage must be configured (503); an archive that does not walk is a 400 and one over the size cap is a 413.
+     * Takes a built site live at &#x60;https://&lt;slug&gt;.hanzo.app&#x60; in one call. The body is the site itself — a &#x60;zip&#x60; or &#x60;tar.gz&#x60; holding &#x60;index.html&#x60; at its root (or a single wrapper directory that does), sent raw or as a multipart file part. It is unpacked to the site\&#39;s own storage prefix and served immediately, answering the finished deployment.  It is bounded by the edge body limit (16 MiB by default), and that bound is the whole reason the other path exists: an oversized POST is refused by the server BEFORE any handler runs and surfaces as an opaque &#x60;400 Error when parsing request&#x60; that reads like a malformed payload rather than a size cap. A site too large for one archive opens a deployment with &#x60;POST /v1/project/{slug}/deployments&#x60; instead and writes its files straight to storage against the scoped grant that answers with — no body limit, and no bytes through this API at all.  Billing is fail-closed and fails FIRST: the hosting gate runs before anything is parsed or uploaded, so an unfunded org is 402 and an unreachable commerce is 503 with nothing written. The debit lands only on success — a failed upload is never billed and never flips the live site — and a redeploy answers the SAME URL, because slug and apex are stable.  Scope: a validated principal is required (403 without one) and the site is resolved within that principal\&#39;s org, so another tenant\&#39;s slug is a 404. Object storage must be configured (503); an archive that does not walk is a 400 and one over the size cap is a 413.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugDeploy(requestParameters: ProjectsApiPostProjectsBySlugDeployRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDeployment>;
-    public postProjectsBySlugDeploy(requestParameters: ProjectsApiPostProjectsBySlugDeployRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDeployment>>;
-    public postProjectsBySlugDeploy(requestParameters: ProjectsApiPostProjectsBySlugDeployRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDeployment>>;
-    public postProjectsBySlugDeploy(requestParameters: ProjectsApiPostProjectsBySlugDeployRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugDeploy(requestParameters: ProjectApiPostProjectBySlugDeployRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDeployment>;
+    public postProjectBySlugDeploy(requestParameters: ProjectApiPostProjectBySlugDeployRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDeployment>>;
+    public postProjectBySlugDeploy(requestParameters: ProjectApiPostProjectBySlugDeployRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDeployment>>;
+    public postProjectBySlugDeploy(requestParameters: ProjectApiPostProjectBySlugDeployRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugDeploy.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugDeploy.');
         }
         const body = requestParameters?.body;
 
@@ -1216,7 +1216,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deploy`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deploy`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsDeployment>('post', `${basePath}${localVarPath}`,
             {
@@ -1239,17 +1239,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugDeployments(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDeployment>;
-    public postProjectsBySlugDeployments(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDeployment>>;
-    public postProjectsBySlugDeployments(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDeployment>>;
-    public postProjectsBySlugDeployments(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugDeployments(requestParameters: ProjectApiPostProjectBySlugDeploymentsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDeployment>;
+    public postProjectBySlugDeployments(requestParameters: ProjectApiPostProjectBySlugDeploymentsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDeployment>>;
+    public postProjectBySlugDeployments(requestParameters: ProjectApiPostProjectBySlugDeploymentsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDeployment>>;
+    public postProjectBySlugDeployments(requestParameters: ProjectApiPostProjectBySlugDeploymentsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugDeployments.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugDeployments.');
         }
         const projectsDeployStart = requestParameters?.projectsDeployStart;
         if (projectsDeployStart === null || projectsDeployStart === undefined) {
-            throw new Error('Required parameter projectsDeployStart was null or undefined when calling postProjectsBySlugDeployments.');
+            throw new Error('Required parameter projectsDeployStart was null or undefined when calling postProjectBySlugDeployments.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1289,7 +1289,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deployments`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deployments`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsDeployment>('post', `${basePath}${localVarPath}`,
             {
@@ -1312,21 +1312,21 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugDeploymentsByIdComplete(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDeployment>;
-    public postProjectsBySlugDeploymentsByIdComplete(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDeployment>>;
-    public postProjectsBySlugDeploymentsByIdComplete(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDeployment>>;
-    public postProjectsBySlugDeploymentsByIdComplete(requestParameters: ProjectsApiPostProjectsBySlugDeploymentsByIdCompleteRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugDeploymentsByIdComplete(requestParameters: ProjectApiPostProjectBySlugDeploymentsByIdCompleteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDeployment>;
+    public postProjectBySlugDeploymentsByIdComplete(requestParameters: ProjectApiPostProjectBySlugDeploymentsByIdCompleteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDeployment>>;
+    public postProjectBySlugDeploymentsByIdComplete(requestParameters: ProjectApiPostProjectBySlugDeploymentsByIdCompleteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDeployment>>;
+    public postProjectBySlugDeploymentsByIdComplete(requestParameters: ProjectApiPostProjectBySlugDeploymentsByIdCompleteRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugDeploymentsByIdComplete.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugDeploymentsByIdComplete.');
         }
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling postProjectsBySlugDeploymentsByIdComplete.');
+            throw new Error('Required parameter id was null or undefined when calling postProjectBySlugDeploymentsByIdComplete.');
         }
         const projectsComplete = requestParameters?.projectsComplete;
         if (projectsComplete === null || projectsComplete === undefined) {
-            throw new Error('Required parameter projectsComplete was null or undefined when calling postProjectsBySlugDeploymentsByIdComplete.');
+            throw new Error('Required parameter projectsComplete was null or undefined when calling postProjectBySlugDeploymentsByIdComplete.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1366,7 +1366,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deployments/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/complete`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/deployments/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/complete`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsDeployment>('post', `${basePath}${localVarPath}`,
             {
@@ -1389,17 +1389,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugDomains(requestParameters: ProjectsApiPostProjectsBySlugDomainsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsBoundDomains>;
-    public postProjectsBySlugDomains(requestParameters: ProjectsApiPostProjectsBySlugDomainsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsBoundDomains>>;
-    public postProjectsBySlugDomains(requestParameters: ProjectsApiPostProjectsBySlugDomainsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsBoundDomains>>;
-    public postProjectsBySlugDomains(requestParameters: ProjectsApiPostProjectsBySlugDomainsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugDomains(requestParameters: ProjectApiPostProjectBySlugDomainsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsBoundDomains>;
+    public postProjectBySlugDomains(requestParameters: ProjectApiPostProjectBySlugDomainsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsBoundDomains>>;
+    public postProjectBySlugDomains(requestParameters: ProjectApiPostProjectBySlugDomainsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsBoundDomains>>;
+    public postProjectBySlugDomains(requestParameters: ProjectApiPostProjectBySlugDomainsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugDomains.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugDomains.');
         }
         const projectsDomainsBind = requestParameters?.projectsDomainsBind;
         if (projectsDomainsBind === null || projectsDomainsBind === undefined) {
-            throw new Error('Required parameter projectsDomainsBind was null or undefined when calling postProjectsBySlugDomains.');
+            throw new Error('Required parameter projectsDomainsBind was null or undefined when calling postProjectBySlugDomains.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1439,7 +1439,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsBoundDomains>('post', `${basePath}${localVarPath}`,
             {
@@ -1462,17 +1462,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugDomainsByHostVerify(requestParameters: ProjectsApiPostProjectsBySlugDomainsByHostVerifyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDomain>;
-    public postProjectsBySlugDomainsByHostVerify(requestParameters: ProjectsApiPostProjectsBySlugDomainsByHostVerifyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDomain>>;
-    public postProjectsBySlugDomainsByHostVerify(requestParameters: ProjectsApiPostProjectsBySlugDomainsByHostVerifyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDomain>>;
-    public postProjectsBySlugDomainsByHostVerify(requestParameters: ProjectsApiPostProjectsBySlugDomainsByHostVerifyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugDomainsByHostVerify(requestParameters: ProjectApiPostProjectBySlugDomainsByHostVerifyRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsDomain>;
+    public postProjectBySlugDomainsByHostVerify(requestParameters: ProjectApiPostProjectBySlugDomainsByHostVerifyRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsDomain>>;
+    public postProjectBySlugDomainsByHostVerify(requestParameters: ProjectApiPostProjectBySlugDomainsByHostVerifyRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsDomain>>;
+    public postProjectBySlugDomainsByHostVerify(requestParameters: ProjectApiPostProjectBySlugDomainsByHostVerifyRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugDomainsByHostVerify.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugDomainsByHostVerify.');
         }
         const host = requestParameters?.host;
         if (host === null || host === undefined) {
-            throw new Error('Required parameter host was null or undefined when calling postProjectsBySlugDomainsByHostVerify.');
+            throw new Error('Required parameter host was null or undefined when calling postProjectBySlugDomainsByHostVerify.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1503,7 +1503,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains/${this.configuration.encodeParam({name: "host", value: host, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/verify`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/domains/${this.configuration.encodeParam({name: "host", value: host, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/verify`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsDomain>('post', `${basePath}${localVarPath}`,
             {
@@ -1525,17 +1525,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugPublish(requestParameters: ProjectsApiPostProjectsBySlugPublishRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsRelease>;
-    public postProjectsBySlugPublish(requestParameters: ProjectsApiPostProjectsBySlugPublishRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsRelease>>;
-    public postProjectsBySlugPublish(requestParameters: ProjectsApiPostProjectsBySlugPublishRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsRelease>>;
-    public postProjectsBySlugPublish(requestParameters: ProjectsApiPostProjectsBySlugPublishRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugPublish(requestParameters: ProjectApiPostProjectBySlugPublishRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsRelease>;
+    public postProjectBySlugPublish(requestParameters: ProjectApiPostProjectBySlugPublishRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsRelease>>;
+    public postProjectBySlugPublish(requestParameters: ProjectApiPostProjectBySlugPublishRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsRelease>>;
+    public postProjectBySlugPublish(requestParameters: ProjectApiPostProjectBySlugPublishRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugPublish.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugPublish.');
         }
         const projectsPublish = requestParameters?.projectsPublish;
         if (projectsPublish === null || projectsPublish === undefined) {
-            throw new Error('Required parameter projectsPublish was null or undefined when calling postProjectsBySlugPublish.');
+            throw new Error('Required parameter projectsPublish was null or undefined when calling postProjectBySlugPublish.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1575,7 +1575,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/publish`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/publish`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsRelease>('post', `${basePath}${localVarPath}`,
             {
@@ -1598,13 +1598,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugPurge(requestParameters: ProjectsApiPostProjectsBySlugPurgeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
-    public postProjectsBySlugPurge(requestParameters: ProjectsApiPostProjectsBySlugPurgeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
-    public postProjectsBySlugPurge(requestParameters: ProjectsApiPostProjectsBySlugPurgeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
-    public postProjectsBySlugPurge(requestParameters: ProjectsApiPostProjectsBySlugPurgeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugPurge(requestParameters: ProjectApiPostProjectBySlugPurgeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
+    public postProjectBySlugPurge(requestParameters: ProjectApiPostProjectBySlugPurgeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
+    public postProjectBySlugPurge(requestParameters: ProjectApiPostProjectBySlugPurgeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
+    public postProjectBySlugPurge(requestParameters: ProjectApiPostProjectBySlugPurgeRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugPurge.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugPurge.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1635,7 +1635,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/purge`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/purge`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsProject>('post', `${basePath}${localVarPath}`,
             {
@@ -1657,17 +1657,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugReleases(requestParameters: ProjectsApiPostProjectsBySlugReleasesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsRelease>;
-    public postProjectsBySlugReleases(requestParameters: ProjectsApiPostProjectsBySlugReleasesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsRelease>>;
-    public postProjectsBySlugReleases(requestParameters: ProjectsApiPostProjectsBySlugReleasesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsRelease>>;
-    public postProjectsBySlugReleases(requestParameters: ProjectsApiPostProjectsBySlugReleasesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugReleases(requestParameters: ProjectApiPostProjectBySlugReleasesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsRelease>;
+    public postProjectBySlugReleases(requestParameters: ProjectApiPostProjectBySlugReleasesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsRelease>>;
+    public postProjectBySlugReleases(requestParameters: ProjectApiPostProjectBySlugReleasesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsRelease>>;
+    public postProjectBySlugReleases(requestParameters: ProjectApiPostProjectBySlugReleasesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugReleases.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugReleases.');
         }
         const projectsPublish = requestParameters?.projectsPublish;
         if (projectsPublish === null || projectsPublish === undefined) {
-            throw new Error('Required parameter projectsPublish was null or undefined when calling postProjectsBySlugReleases.');
+            throw new Error('Required parameter projectsPublish was null or undefined when calling postProjectBySlugReleases.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1707,7 +1707,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/releases`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/releases`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsRelease>('post', `${basePath}${localVarPath}`,
             {
@@ -1730,17 +1730,17 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsBySlugReleasesByReleaseActivate(requestParameters: ProjectsApiPostProjectsBySlugReleasesByReleaseActivateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsRelease>;
-    public postProjectsBySlugReleasesByReleaseActivate(requestParameters: ProjectsApiPostProjectsBySlugReleasesByReleaseActivateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsRelease>>;
-    public postProjectsBySlugReleasesByReleaseActivate(requestParameters: ProjectsApiPostProjectsBySlugReleasesByReleaseActivateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsRelease>>;
-    public postProjectsBySlugReleasesByReleaseActivate(requestParameters: ProjectsApiPostProjectsBySlugReleasesByReleaseActivateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectBySlugReleasesByReleaseActivate(requestParameters: ProjectApiPostProjectBySlugReleasesByReleaseActivateRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsRelease>;
+    public postProjectBySlugReleasesByReleaseActivate(requestParameters: ProjectApiPostProjectBySlugReleasesByReleaseActivateRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsRelease>>;
+    public postProjectBySlugReleasesByReleaseActivate(requestParameters: ProjectApiPostProjectBySlugReleasesByReleaseActivateRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsRelease>>;
+    public postProjectBySlugReleasesByReleaseActivate(requestParameters: ProjectApiPostProjectBySlugReleasesByReleaseActivateRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling postProjectsBySlugReleasesByReleaseActivate.');
+            throw new Error('Required parameter slug was null or undefined when calling postProjectBySlugReleasesByReleaseActivate.');
         }
         const release = requestParameters?.release;
         if (release === null || release === undefined) {
-            throw new Error('Required parameter release was null or undefined when calling postProjectsBySlugReleasesByReleaseActivate.');
+            throw new Error('Required parameter release was null or undefined when calling postProjectBySlugReleasesByReleaseActivate.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1771,7 +1771,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/releases/${this.configuration.encodeParam({name: "release", value: release, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/activate`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/releases/${this.configuration.encodeParam({name: "release", value: release, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/activate`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsRelease>('post', `${basePath}${localVarPath}`,
             {
@@ -1788,18 +1788,18 @@ export class ProjectsApi extends BaseService {
 
     /**
      * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\&#39;s app serving at &lt;slug&gt;.hanzo.app).
-     * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\&#39;s app serving at &lt;slug&gt;.hanzo.app). Answers 201 with the new project.  &#x60;slug&#x60; names the PARENT to fork and is required. Templates resolve first, and the caller org\&#39;s own private templates ahead of the public gallery, so a curated template slug keeps meaning the same thing even if someone later publishes a live project under it; &#x60;variant&#x60; picks that template\&#39;s format/page/theme. If no template matches, the slug resolves to the UNIQUE live project that owns it across all orgs — the same resolution the site edge uses to serve &lt;slug&gt;.hanzo.app, so what you can browse is what you can fork.  &#x60;name&#x60; and &#x60;target&#x60; override the derived project name and slug; everything else is inherited from the parent. A live parent contributes its REPO, so the child builds from the same source — the parent\&#39;s deployed bytes are never copied, because releases are per-tenant by design and the fork publishes its own. The parent it actually resolved is stamped on the child as &#x60;forkedFrom&#x60;, so attribution is a fact recorded at fork time rather than a claim reconstructed later.  It funnels through the SAME create path POST /v1/projects uses, so slug validation, org scoping, ID minting and the 409 on a slug the caller\&#39;s own org already uses are identical.  Scope: a validated principal is required (403 without one) and the child is created in THAT principal\&#39;s org.
+     * Creates a project seeded from a PUBLISHED EXAMPLE — either a starter-kit template from the ONE embedded gallery catalog, or any live project on the platform (an example a seeded creator published, or another org\&#39;s app serving at &lt;slug&gt;.hanzo.app). Answers 201 with the new project.  &#x60;slug&#x60; names the PARENT to fork and is required. Templates resolve first, and the caller org\&#39;s own private templates ahead of the public gallery, so a curated template slug keeps meaning the same thing even if someone later publishes a live project under it; &#x60;variant&#x60; picks that template\&#39;s format/page/theme. If no template matches, the slug resolves to the UNIQUE live project that owns it across all orgs — the same resolution the site edge uses to serve &lt;slug&gt;.hanzo.app, so what you can browse is what you can fork.  &#x60;name&#x60; and &#x60;target&#x60; override the derived project name and slug; everything else is inherited from the parent. A live parent contributes its REPO, so the child builds from the same source — the parent\&#39;s deployed bytes are never copied, because releases are per-tenant by design and the fork publishes its own. The parent it actually resolved is stamped on the child as &#x60;forkedFrom&#x60;, so attribution is a fact recorded at fork time rather than a claim reconstructed later.  It funnels through the SAME create path POST /v1/project uses, so slug validation, org scoping, ID minting and the 409 on a slug the caller\&#39;s own org already uses are identical.  Scope: a validated principal is required (403 without one) and the child is created in THAT principal\&#39;s org.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsFork(requestParameters: ProjectsApiPostProjectsForkRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
-    public postProjectsFork(requestParameters: ProjectsApiPostProjectsForkRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
-    public postProjectsFork(requestParameters: ProjectsApiPostProjectsForkRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
-    public postProjectsFork(requestParameters: ProjectsApiPostProjectsForkRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectFork(requestParameters: ProjectApiPostProjectForkRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsProject>;
+    public postProjectFork(requestParameters: ProjectApiPostProjectForkRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsProject>>;
+    public postProjectFork(requestParameters: ProjectApiPostProjectForkRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsProject>>;
+    public postProjectFork(requestParameters: ProjectApiPostProjectForkRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const projectsFork = requestParameters?.projectsFork;
         if (projectsFork === null || projectsFork === undefined) {
-            throw new Error('Required parameter projectsFork was null or undefined when calling postProjectsFork.');
+            throw new Error('Required parameter projectsFork was null or undefined when calling postProjectFork.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1839,7 +1839,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/fork`;
+        let localVarPath = `/v1/project/fork`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsProject>('post', `${basePath}${localVarPath}`,
             {
@@ -1857,18 +1857,18 @@ export class ProjectsApi extends BaseService {
 
     /**
      * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.
-     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns &#x60;brief&#x60; (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. &#x60;slug&#x60; and &#x60;name&#x60; are optional: the model\&#39;s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/projects — it ensures a project (framework &#x60;static&#x60;) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\&#39;s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\&#39;s org.
+     * Generates a self-contained, mobile-responsive static site from a natural-language brief and deploys it live in one call.  One inference call turns &#x60;brief&#x60; (capped at 8 KiB) into a file manifest, which then runs through the SAME validation, guards and viewport guarantee as a hand-supplied manifest: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one. The generated site is fully inline — no CDNs, no remote fonts or images — so it is CSP-safe. &#x60;slug&#x60; and &#x60;name&#x60; are optional: the model\&#39;s own title is preferred, and a slug is derived or minted when none is given.  It writes into the SAME org-scoped store as /v1/project — it ensures a project (framework &#x60;static&#x60;) for the resolved slug and records a deployment — so this is a second entry point to one publish pipeline, not a second copy of project state. Ordering is the billing contract: the hosting gate runs BEFORE any inference or upload, so a denied gate generates and uploads NOTHING, and the debit lands once, only after the site is actually live. The tokens are billed to the same ledger the hosting fee was reserved against.  Answers 503 when object storage or inference is unconfigured, and 400 when the model\&#39;s manifest cannot be parsed or fails the guards.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\&#39;s org.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsSites(requestParameters: ProjectsApiPostProjectsSitesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsSiteDeploy>;
-    public postProjectsSites(requestParameters: ProjectsApiPostProjectsSitesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsSiteDeploy>>;
-    public postProjectsSites(requestParameters: ProjectsApiPostProjectsSitesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsSiteDeploy>>;
-    public postProjectsSites(requestParameters: ProjectsApiPostProjectsSitesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectSites(requestParameters: ProjectApiPostProjectSitesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsSiteDeploy>;
+    public postProjectSites(requestParameters: ProjectApiPostProjectSitesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsSiteDeploy>>;
+    public postProjectSites(requestParameters: ProjectApiPostProjectSitesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsSiteDeploy>>;
+    public postProjectSites(requestParameters: ProjectApiPostProjectSitesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const projectsBuildSite = requestParameters?.projectsBuildSite;
         if (projectsBuildSite === null || projectsBuildSite === undefined) {
-            throw new Error('Required parameter projectsBuildSite was null or undefined when calling postProjectsSites.');
+            throw new Error('Required parameter projectsBuildSite was null or undefined when calling postProjectSites.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1908,7 +1908,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/sites`;
+        let localVarPath = `/v1/project/sites`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsSiteDeploy>('post', `${basePath}${localVarPath}`,
             {
@@ -1926,18 +1926,18 @@ export class ProjectsApi extends BaseService {
 
     /**
      * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.
-     * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.  &#x60;files&#x60; is a list of {path, content} pairs, the same shape the brief build emits, and it runs through the SAME guards: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one — so a hand-built site is exactly as safe and as responsive as a generated one. &#x60;slug&#x60; and &#x60;name&#x60; are optional; a slug is derived from the name or minted.  It writes into the SAME org-scoped store as /v1/projects, ensuring a project (framework &#x60;static&#x60;) for the resolved slug and recording a deployment. The hosting gate runs before the upload and the debit lands once, after the site is live — a failed upload is never billed. Answers 503 when object storage is unconfigured.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\&#39;s org.
+     * Deploys a caller-supplied file manifest — the deploy_site capability an agent calls — and answers with where it went live.  &#x60;files&#x60; is a list of {path, content} pairs, the same shape the brief build emits, and it runs through the SAME guards: index.html required at the root, absolute and traversal paths rejected, per-file and total size capped, and a mobile viewport meta tag injected into every HTML document that lacks one — so a hand-built site is exactly as safe and as responsive as a generated one. &#x60;slug&#x60; and &#x60;name&#x60; are optional; a slug is derived from the name or minted.  It writes into the SAME org-scoped store as /v1/project, ensuring a project (framework &#x60;static&#x60;) for the resolved slug and recording a deployment. The hosting gate runs before the upload and the debit lands once, after the site is live — a failed upload is never billed. Answers 503 when object storage is unconfigured.  Scope: a validated principal is required (403 without one) and the site is published into THAT principal\&#39;s org.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postProjectsSitesDeploy(requestParameters: ProjectsApiPostProjectsSitesDeployRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsSiteDeploy>;
-    public postProjectsSitesDeploy(requestParameters: ProjectsApiPostProjectsSitesDeployRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsSiteDeploy>>;
-    public postProjectsSitesDeploy(requestParameters: ProjectsApiPostProjectsSitesDeployRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsSiteDeploy>>;
-    public postProjectsSitesDeploy(requestParameters: ProjectsApiPostProjectsSitesDeployRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postProjectSitesDeploy(requestParameters: ProjectApiPostProjectSitesDeployRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsSiteDeploy>;
+    public postProjectSitesDeploy(requestParameters: ProjectApiPostProjectSitesDeployRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsSiteDeploy>>;
+    public postProjectSitesDeploy(requestParameters: ProjectApiPostProjectSitesDeployRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsSiteDeploy>>;
+    public postProjectSitesDeploy(requestParameters: ProjectApiPostProjectSitesDeployRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const projectsDeploySite = requestParameters?.projectsDeploySite;
         if (projectsDeploySite === null || projectsDeploySite === undefined) {
-            throw new Error('Required parameter projectsDeploySite was null or undefined when calling postProjectsSitesDeploy.');
+            throw new Error('Required parameter projectsDeploySite was null or undefined when calling postProjectSitesDeploy.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1977,7 +1977,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/sites/deploy`;
+        let localVarPath = `/v1/project/sites/deploy`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsSiteDeploy>('post', `${basePath}${localVarPath}`,
             {
@@ -2000,13 +2000,13 @@ export class ProjectsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsStar>;
-    public putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsStar>>;
-    public putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsStar>>;
-    public putProjectsBySlugStar(requestParameters: ProjectsApiPutProjectsBySlugStarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putProjectBySlugStar(requestParameters: ProjectApiPutProjectBySlugStarRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectsStar>;
+    public putProjectBySlugStar(requestParameters: ProjectApiPutProjectBySlugStarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectsStar>>;
+    public putProjectBySlugStar(requestParameters: ProjectApiPutProjectBySlugStarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectsStar>>;
+    public putProjectBySlugStar(requestParameters: ProjectApiPutProjectBySlugStarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const slug = requestParameters?.slug;
         if (slug === null || slug === undefined) {
-            throw new Error('Required parameter slug was null or undefined when calling putProjectsBySlugStar.');
+            throw new Error('Required parameter slug was null or undefined when calling putProjectBySlugStar.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2037,7 +2037,7 @@ export class ProjectsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/projects/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/star`;
+        let localVarPath = `/v1/project/${this.configuration.encodeParam({name: "slug", value: slug, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/star`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProjectsStar>('put', `${basePath}${localVarPath}`,
             {

@@ -67,29 +67,29 @@ import { Configuration }                                     from '../configurat
 import { BaseService } from '../api.base.service';
 
 
-export interface ToolsApiDeleteToolsMcpServersByIdRequestParams {
+export interface ToolApiDeleteToolMcpServersByIdRequestParams {
     /** ID is the server to deregister, from the path. */
     id: string;
 }
 
-export interface ToolsApiDeleteToolsPluginsAuthoredByIdRequestParams {
+export interface ToolApiDeleteToolPluginsAuthoredByIdRequestParams {
     /** ID is the plugin to remove, from the path. */
     id: string;
 }
 
-export interface ToolsApiDeleteToolsSkillsByIdRequestParams {
+export interface ToolApiDeleteToolSkillsByIdRequestParams {
     /** ID is the skill to remove, from the path. It is the skill\&#39;s name. */
     id: string;
 }
 
-export interface ToolsApiGetToolsRequestParams {
+export interface ToolApiGetToolRequestParams {
     /** Source keeps only tools from one source — connector, function, zap-service, agent, skill or mcp. Empty keeps every source. */
     source?: string;
     /** Activated keeps only the tools activated for the caller\&#39;s org and project, and only when it is exactly the string \&quot;true\&quot;. */
     activated?: string;
 }
 
-export interface ToolsApiGetToolsCatalogRequestParams {
+export interface ToolApiGetToolCatalogRequestParams {
     /** Q matches the name, title or description, case-insensitively. */
     q?: string;
     /** Featured keeps only the listings we put on the front of the shelf, and only when it is exactly the string \&quot;true\&quot;. */
@@ -102,44 +102,44 @@ export interface ToolsApiGetToolsCatalogRequestParams {
     offset?: number;
 }
 
-export interface ToolsApiGetToolsCatalogByIdRequestParams {
+export interface ToolApiGetToolCatalogByIdRequestParams {
     /** ID is the listing, from the path. It is the publisher\&#39;s reverse-DNS name with its one slash written as an underscore — \&quot;com.stripe_mcp\&quot;. */
     id: string;
 }
 
-export interface ToolsApiGetToolsPluginsRequestParams {
+export interface ToolApiGetToolPluginsRequestParams {
     /** All includes the configured-but-disabled subsystems too, but only when it is exactly the string \&quot;true\&quot;. Otherwise only the running ones are reported. */
     all?: string;
 }
 
-export interface ToolsApiGetToolsSkillsRequestParams {
+export interface ToolApiGetToolSkillsRequestParams {
     /** Activated keeps only the tools activated for the caller\&#39;s org and project, and only when it is exactly the string \&quot;true\&quot;. */
     activated?: string;
 }
 
-export interface ToolsApiPatchToolsCatalogByIdRequestParams {
+export interface ToolApiPatchToolCatalogByIdRequestParams {
     /** ID is the listing to curate, from the path. */
     id: string;
     curateReq: CurateReq;
 }
 
-export interface ToolsApiPostToolsCallRequestParams {
+export interface ToolApiPostToolCallRequestParams {
     toolCall: ToolCall;
 }
 
-export interface ToolsApiPostToolsMcpServersRequestParams {
+export interface ToolApiPostToolMcpServersRequestParams {
     createServerReq: CreateServerReq;
 }
 
-export interface ToolsApiPostToolsPluginsBuildRequestParams {
+export interface ToolApiPostToolPluginsBuildRequestParams {
     buildRequest: BuildRequest;
 }
 
-export interface ToolsApiPostToolsSkillsRequestParams {
+export interface ToolApiPostToolSkillsRequestParams {
     skillIn: SkillIn;
 }
 
-export interface ToolsApiPutToolsActivationRequestParams {
+export interface ToolApiPutToolActivationRequestParams {
     activationReq: ActivationReq;
 }
 
@@ -147,7 +147,7 @@ export interface ToolsApiPutToolsActivationRequestParams {
 @Injectable({
   providedIn: 'root'
 })
-export class ToolsApi extends BaseService {
+export class ToolApi extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
@@ -160,13 +160,13 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteToolsMcpServersById(requestParameters: ToolsApiDeleteToolsMcpServersByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public deleteToolsMcpServersById(requestParameters: ToolsApiDeleteToolsMcpServersByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public deleteToolsMcpServersById(requestParameters: ToolsApiDeleteToolsMcpServersByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public deleteToolsMcpServersById(requestParameters: ToolsApiDeleteToolsMcpServersByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteToolMcpServersById(requestParameters: ToolApiDeleteToolMcpServersByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteToolMcpServersById(requestParameters: ToolApiDeleteToolMcpServersByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteToolMcpServersById(requestParameters: ToolApiDeleteToolMcpServersByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteToolMcpServersById(requestParameters: ToolApiDeleteToolMcpServersByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteToolsMcpServersById.');
+            throw new Error('Required parameter id was null or undefined when calling deleteToolMcpServersById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -196,7 +196,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/mcp/servers/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/tool/mcp/servers/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
@@ -218,13 +218,13 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteToolsPluginsAuthoredById(requestParameters: ToolsApiDeleteToolsPluginsAuthoredByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PluginDeleted>;
-    public deleteToolsPluginsAuthoredById(requestParameters: ToolsApiDeleteToolsPluginsAuthoredByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PluginDeleted>>;
-    public deleteToolsPluginsAuthoredById(requestParameters: ToolsApiDeleteToolsPluginsAuthoredByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PluginDeleted>>;
-    public deleteToolsPluginsAuthoredById(requestParameters: ToolsApiDeleteToolsPluginsAuthoredByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteToolPluginsAuthoredById(requestParameters: ToolApiDeleteToolPluginsAuthoredByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PluginDeleted>;
+    public deleteToolPluginsAuthoredById(requestParameters: ToolApiDeleteToolPluginsAuthoredByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PluginDeleted>>;
+    public deleteToolPluginsAuthoredById(requestParameters: ToolApiDeleteToolPluginsAuthoredByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PluginDeleted>>;
+    public deleteToolPluginsAuthoredById(requestParameters: ToolApiDeleteToolPluginsAuthoredByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteToolsPluginsAuthoredById.');
+            throw new Error('Required parameter id was null or undefined when calling deleteToolPluginsAuthoredById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -255,7 +255,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/plugins/authored/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/tool/plugins/authored/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PluginDeleted>('delete', `${basePath}${localVarPath}`,
             {
@@ -277,13 +277,13 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteToolsSkillsById(requestParameters: ToolsApiDeleteToolsSkillsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SkillDeleted>;
-    public deleteToolsSkillsById(requestParameters: ToolsApiDeleteToolsSkillsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SkillDeleted>>;
-    public deleteToolsSkillsById(requestParameters: ToolsApiDeleteToolsSkillsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SkillDeleted>>;
-    public deleteToolsSkillsById(requestParameters: ToolsApiDeleteToolsSkillsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteToolSkillsById(requestParameters: ToolApiDeleteToolSkillsByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SkillDeleted>;
+    public deleteToolSkillsById(requestParameters: ToolApiDeleteToolSkillsByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SkillDeleted>>;
+    public deleteToolSkillsById(requestParameters: ToolApiDeleteToolSkillsByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SkillDeleted>>;
+    public deleteToolSkillsById(requestParameters: ToolApiDeleteToolSkillsByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteToolsSkillsById.');
+            throw new Error('Required parameter id was null or undefined when calling deleteToolSkillsById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -314,7 +314,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/skills/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/tool/skills/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SkillDeleted>('delete', `${basePath}${localVarPath}`,
             {
@@ -331,15 +331,15 @@ export class ToolsApi extends BaseService {
 
     /**
      * Lists every tool the caller\&#39;s org and project can reach, from every source, each flagged with whether it is activated.
-     * Lists every tool the caller\&#39;s org and project can reach, from every source, each flagged with whether it is activated. This is the discovery surface: one flat set of names spanning connector actions, user functions, zap-service routes, agents, skills and the org\&#39;s own external MCP servers, deduplicated by name so the highest-precedence source wins a collision. It lists; it does not call — dispatch is POST /v1/tools/call.
+     * Lists every tool the caller\&#39;s org and project can reach, from every source, each flagged with whether it is activated. This is the discovery surface: one flat set of names spanning connector actions, user functions, zap-service routes, agents, skills and the org\&#39;s own external MCP servers, deduplicated by name so the highest-precedence source wins a collision. It lists; it does not call — dispatch is POST /v1/tool/call.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTools(requestParameters?: ToolsApiGetToolsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ToolList>;
-    public getTools(requestParameters?: ToolsApiGetToolsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ToolList>>;
-    public getTools(requestParameters?: ToolsApiGetToolsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ToolList>>;
-    public getTools(requestParameters?: ToolsApiGetToolsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTool(requestParameters?: ToolApiGetToolRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ToolList>;
+    public getTool(requestParameters?: ToolApiGetToolRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ToolList>>;
+    public getTool(requestParameters?: ToolApiGetToolRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ToolList>>;
+    public getTool(requestParameters?: ToolApiGetToolRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const source = requestParameters?.source;
         const activated = requestParameters?.activated;
 
@@ -377,7 +377,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools`;
+        let localVarPath = `/v1/tool`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ToolList>('get', `${basePath}${localVarPath}`,
             {
@@ -399,10 +399,10 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getToolsActivation(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivationSet>;
-    public getToolsActivation(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivationSet>>;
-    public getToolsActivation(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivationSet>>;
-    public getToolsActivation(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getToolActivation(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivationSet>;
+    public getToolActivation(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivationSet>>;
+    public getToolActivation(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivationSet>>;
+    public getToolActivation(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -432,7 +432,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/activation`;
+        let localVarPath = `/v1/tool/activation`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ActivationSet>('get', `${basePath}${localVarPath}`,
             {
@@ -449,15 +449,15 @@ export class ToolsApi extends BaseService {
 
     /**
      * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.
-     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/tools/mcp/servers with its id — and its tools then join the org\&#39;s tool plane and the fleet\&#39;s MCP server. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \&quot;what is on the shelf\&quot; and \&quot;what is in the catalog\&quot; and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
+     * Lists the MCP servers the public registries publish, as we hold them: our canonical copy of registry.modelcontextprotocol.io, plus what we decided about each entry.  This is the SHELF an org picks from. A listing with a streamable-http endpoint can be enabled as-is — POST /v1/tool/mcp/servers with its id — and its tools then join the org\&#39;s tool plane and the fleet\&#39;s MCP server. A listing that only ships a stdio package needs a process to run it, which is why the transports are on every entry rather than implied.  Hidden entries are absent: they are the ones we took off the shelf. A platform SuperAdmin sees them, because the same query answers \&quot;what is on the shelf\&quot; and \&quot;what is in the catalog\&quot; and two queries would drift apart.  It is PAGED — 50 by default, 200 at most. The public registry publishes tens of thousands of servers, so an unbounded answer is a twenty-megabyte response and a storefront that renders in a minute. total is the whole match, not the page.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getToolsCatalog(requestParameters?: ToolsApiGetToolsCatalogRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<McpCatalog>;
-    public getToolsCatalog(requestParameters?: ToolsApiGetToolsCatalogRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<McpCatalog>>;
-    public getToolsCatalog(requestParameters?: ToolsApiGetToolsCatalogRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<McpCatalog>>;
-    public getToolsCatalog(requestParameters?: ToolsApiGetToolsCatalogRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getToolCatalog(requestParameters?: ToolApiGetToolCatalogRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<McpCatalog>;
+    public getToolCatalog(requestParameters?: ToolApiGetToolCatalogRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<McpCatalog>>;
+    public getToolCatalog(requestParameters?: ToolApiGetToolCatalogRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<McpCatalog>>;
+    public getToolCatalog(requestParameters?: ToolApiGetToolCatalogRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const q = requestParameters?.q;
         const featured = requestParameters?.featured;
         const official = requestParameters?.official;
@@ -504,7 +504,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/catalog`;
+        let localVarPath = `/v1/tool/catalog`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<McpCatalog>('get', `${basePath}${localVarPath}`,
             {
@@ -527,13 +527,13 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getToolsCatalogById(requestParameters: ToolsApiGetToolsCatalogByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MCPListing>;
-    public getToolsCatalogById(requestParameters: ToolsApiGetToolsCatalogByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MCPListing>>;
-    public getToolsCatalogById(requestParameters: ToolsApiGetToolsCatalogByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MCPListing>>;
-    public getToolsCatalogById(requestParameters: ToolsApiGetToolsCatalogByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getToolCatalogById(requestParameters: ToolApiGetToolCatalogByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MCPListing>;
+    public getToolCatalogById(requestParameters: ToolApiGetToolCatalogByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MCPListing>>;
+    public getToolCatalogById(requestParameters: ToolApiGetToolCatalogByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MCPListing>>;
+    public getToolCatalogById(requestParameters: ToolApiGetToolCatalogByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getToolsCatalogById.');
+            throw new Error('Required parameter id was null or undefined when calling getToolCatalogById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -564,7 +564,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/catalog/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/tool/catalog/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<MCPListing>('get', `${basePath}${localVarPath}`,
             {
@@ -585,10 +585,10 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getToolsMcpServers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<McpServerList>;
-    public getToolsMcpServers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<McpServerList>>;
-    public getToolsMcpServers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<McpServerList>>;
-    public getToolsMcpServers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getToolMcpServers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<McpServerList>;
+    public getToolMcpServers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<McpServerList>>;
+    public getToolMcpServers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<McpServerList>>;
+    public getToolMcpServers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -618,7 +618,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/mcp/servers`;
+        let localVarPath = `/v1/tool/mcp/servers`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<McpServerList>('get', `${basePath}${localVarPath}`,
             {
@@ -640,10 +640,10 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getToolsPlugins(requestParameters?: ToolsApiGetToolsPluginsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PluginMountList>;
-    public getToolsPlugins(requestParameters?: ToolsApiGetToolsPluginsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PluginMountList>>;
-    public getToolsPlugins(requestParameters?: ToolsApiGetToolsPluginsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PluginMountList>>;
-    public getToolsPlugins(requestParameters?: ToolsApiGetToolsPluginsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getToolPlugins(requestParameters?: ToolApiGetToolPluginsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PluginMountList>;
+    public getToolPlugins(requestParameters?: ToolApiGetToolPluginsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PluginMountList>>;
+    public getToolPlugins(requestParameters?: ToolApiGetToolPluginsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PluginMountList>>;
+    public getToolPlugins(requestParameters?: ToolApiGetToolPluginsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const all = requestParameters?.all;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -678,7 +678,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/plugins`;
+        let localVarPath = `/v1/tool/plugins`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PluginMountList>('get', `${basePath}${localVarPath}`,
             {
@@ -696,14 +696,14 @@ export class ToolsApi extends BaseService {
 
     /**
      * Lists the plugins the caller\&#39;s org BUILT, newest first, each with the TypeScript as authored.
-     * Lists the plugins the caller\&#39;s org BUILT, newest first, each with the TypeScript as authored. That is a different set with a different lifecycle from GET /v1/tools/plugins, which reports the subsystems this deployment mounted. The bundled CommonJS the runtime executes is never included, and neither is any credential — a plugin names the connectors provider it needs and reads the credential from ctx.auth at run time.
+     * Lists the plugins the caller\&#39;s org BUILT, newest first, each with the TypeScript as authored. That is a different set with a different lifecycle from GET /v1/tool/plugins, which reports the subsystems this deployment mounted. The bundled CommonJS the runtime executes is never included, and neither is any credential — a plugin names the connectors provider it needs and reads the credential from ctx.auth at run time.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getToolsPluginsAuthored(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthoredPluginList>;
-    public getToolsPluginsAuthored(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthoredPluginList>>;
-    public getToolsPluginsAuthored(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthoredPluginList>>;
-    public getToolsPluginsAuthored(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getToolPluginsAuthored(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthoredPluginList>;
+    public getToolPluginsAuthored(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthoredPluginList>>;
+    public getToolPluginsAuthored(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthoredPluginList>>;
+    public getToolPluginsAuthored(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -733,7 +733,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/plugins/authored`;
+        let localVarPath = `/v1/tool/plugins/authored`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AuthoredPluginList>('get', `${basePath}${localVarPath}`,
             {
@@ -750,15 +750,15 @@ export class ToolsApi extends BaseService {
 
     /**
      * Lists the skills the caller\&#39;s org can reach — the brand\&#39;s embedded catalogue plus the org\&#39;s own authored ones — with each one\&#39;s activation flag.
-     * Lists the skills the caller\&#39;s org can reach — the brand\&#39;s embedded catalogue plus the org\&#39;s own authored ones — with each one\&#39;s activation flag. A skill is discovery and activation metadata attached to an agent, never called directly, so every entry here is non-dispatchable. It is GET /v1/tools narrowed to one source, not a second store: a name a caller sees here is the same entry, with the same activation state, that discovery reports.
+     * Lists the skills the caller\&#39;s org can reach — the brand\&#39;s embedded catalogue plus the org\&#39;s own authored ones — with each one\&#39;s activation flag. A skill is discovery and activation metadata attached to an agent, never called directly, so every entry here is non-dispatchable. It is GET /v1/tool narrowed to one source, not a second store: a name a caller sees here is the same entry, with the same activation state, that discovery reports.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getToolsSkills(requestParameters?: ToolsApiGetToolsSkillsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SourceToolList>;
-    public getToolsSkills(requestParameters?: ToolsApiGetToolsSkillsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SourceToolList>>;
-    public getToolsSkills(requestParameters?: ToolsApiGetToolsSkillsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SourceToolList>>;
-    public getToolsSkills(requestParameters?: ToolsApiGetToolsSkillsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getToolSkills(requestParameters?: ToolApiGetToolSkillsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SourceToolList>;
+    public getToolSkills(requestParameters?: ToolApiGetToolSkillsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SourceToolList>>;
+    public getToolSkills(requestParameters?: ToolApiGetToolSkillsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SourceToolList>>;
+    public getToolSkills(requestParameters?: ToolApiGetToolSkillsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const activated = requestParameters?.activated;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -793,7 +793,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/skills`;
+        let localVarPath = `/v1/tool/skills`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SourceToolList>('get', `${basePath}${localVarPath}`,
             {
@@ -811,14 +811,14 @@ export class ToolsApi extends BaseService {
 
     /**
      * Lists the caller org\&#39;s OWN skills with their SKILL.md bodies.
-     * Lists the caller org\&#39;s OWN skills with their SKILL.md bodies. GET /v1/tools/skills is the registry view — the brand\&#39;s catalogue plus this org\&#39;s, with activation flags and no bodies; this is the EDITABLE set, so it carries the content that view omits and nothing the org did not write.
+     * Lists the caller org\&#39;s OWN skills with their SKILL.md bodies. GET /v1/tool/skills is the registry view — the brand\&#39;s catalogue plus this org\&#39;s, with activation flags and no bodies; this is the EDITABLE set, so it carries the content that view omits and nothing the org did not write.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getToolsSkillsAuthored(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthoredSkillList>;
-    public getToolsSkillsAuthored(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthoredSkillList>>;
-    public getToolsSkillsAuthored(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthoredSkillList>>;
-    public getToolsSkillsAuthored(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getToolSkillsAuthored(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthoredSkillList>;
+    public getToolSkillsAuthored(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthoredSkillList>>;
+    public getToolSkillsAuthored(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthoredSkillList>>;
+    public getToolSkillsAuthored(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -848,7 +848,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/skills/authored`;
+        let localVarPath = `/v1/tool/skills/authored`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<AuthoredSkillList>('get', `${basePath}${localVarPath}`,
             {
@@ -870,17 +870,17 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public patchToolsCatalogById(requestParameters: ToolsApiPatchToolsCatalogByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MCPListing>;
-    public patchToolsCatalogById(requestParameters: ToolsApiPatchToolsCatalogByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MCPListing>>;
-    public patchToolsCatalogById(requestParameters: ToolsApiPatchToolsCatalogByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MCPListing>>;
-    public patchToolsCatalogById(requestParameters: ToolsApiPatchToolsCatalogByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public patchToolCatalogById(requestParameters: ToolApiPatchToolCatalogByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MCPListing>;
+    public patchToolCatalogById(requestParameters: ToolApiPatchToolCatalogByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MCPListing>>;
+    public patchToolCatalogById(requestParameters: ToolApiPatchToolCatalogByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MCPListing>>;
+    public patchToolCatalogById(requestParameters: ToolApiPatchToolCatalogByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const id = requestParameters?.id;
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling patchToolsCatalogById.');
+            throw new Error('Required parameter id was null or undefined when calling patchToolCatalogById.');
         }
         const curateReq = requestParameters?.curateReq;
         if (curateReq === null || curateReq === undefined) {
-            throw new Error('Required parameter curateReq was null or undefined when calling patchToolsCatalogById.');
+            throw new Error('Required parameter curateReq was null or undefined when calling patchToolCatalogById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -920,7 +920,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/catalog/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/v1/tool/catalog/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<MCPListing>('patch', `${basePath}${localVarPath}`,
             {
@@ -938,18 +938,18 @@ export class ToolsApi extends BaseService {
 
     /**
      * Runs one of the caller\&#39;s activated tools and answers with its output.
-     * Runs one of the caller\&#39;s activated tools and answers with its output.  This is the endpoint onto the tool plane\&#39;s DYNAMIC half — the half no build-time catalogue can hold, because it is per-tenant: an org\&#39;s connected connector actions, its authored skills, its agents and functions, and the tools of every external MCP server it registered. A tool\&#39;s existence, its price and its activation are all rows, not code, so they cannot be known until the caller is.  One policy, the registry\&#39;s: resolve by precedence, refuse an unactivated tool 403, settle a priced one through the x402 client or fail closed 402, then dispatch to the winning source bound to the caller\&#39;s own (org, project). One metered unit, one audit record. A caller can only ever dispatch its own tools.  Discovery is GET /v1/tools — ?activated&#x3D;true for the callable set.
+     * Runs one of the caller\&#39;s activated tools and answers with its output.  This is the endpoint onto the tool plane\&#39;s DYNAMIC half — the half no build-time catalogue can hold, because it is per-tenant: an org\&#39;s connected connector actions, its authored skills, its agents and functions, and the tools of every external MCP server it registered. A tool\&#39;s existence, its price and its activation are all rows, not code, so they cannot be known until the caller is.  One policy, the registry\&#39;s: resolve by precedence, refuse an unactivated tool 403, settle a priced one through the x402 client or fail closed 402, then dispatch to the winning source bound to the caller\&#39;s own (org, project). One metered unit, one audit record. A caller can only ever dispatch its own tools.  Discovery is GET /v1/tool — ?activated&#x3D;true for the callable set.
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postToolsCall(requestParameters: ToolsApiPostToolsCallRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ToolResult>;
-    public postToolsCall(requestParameters: ToolsApiPostToolsCallRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ToolResult>>;
-    public postToolsCall(requestParameters: ToolsApiPostToolsCallRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ToolResult>>;
-    public postToolsCall(requestParameters: ToolsApiPostToolsCallRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postToolCall(requestParameters: ToolApiPostToolCallRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ToolResult>;
+    public postToolCall(requestParameters: ToolApiPostToolCallRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ToolResult>>;
+    public postToolCall(requestParameters: ToolApiPostToolCallRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ToolResult>>;
+    public postToolCall(requestParameters: ToolApiPostToolCallRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const toolCall = requestParameters?.toolCall;
         if (toolCall === null || toolCall === undefined) {
-            throw new Error('Required parameter toolCall was null or undefined when calling postToolsCall.');
+            throw new Error('Required parameter toolCall was null or undefined when calling postToolCall.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -989,7 +989,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/call`;
+        let localVarPath = `/v1/tool/call`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ToolResult>('post', `${basePath}${localVarPath}`,
             {
@@ -1011,10 +1011,10 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postToolsCatalogSync(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<McpCatalogSync>;
-    public postToolsCatalogSync(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<McpCatalogSync>>;
-    public postToolsCatalogSync(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<McpCatalogSync>>;
-    public postToolsCatalogSync(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postToolCatalogSync(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<McpCatalogSync>;
+    public postToolCatalogSync(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<McpCatalogSync>>;
+    public postToolCatalogSync(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<McpCatalogSync>>;
+    public postToolCatalogSync(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1044,7 +1044,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/catalog/sync`;
+        let localVarPath = `/v1/tool/catalog/sync`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<McpCatalogSync>('post', `${basePath}${localVarPath}`,
             {
@@ -1066,13 +1066,13 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postToolsMcpServers(requestParameters: ToolsApiPostToolsMcpServersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MCPServer>;
-    public postToolsMcpServers(requestParameters: ToolsApiPostToolsMcpServersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MCPServer>>;
-    public postToolsMcpServers(requestParameters: ToolsApiPostToolsMcpServersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MCPServer>>;
-    public postToolsMcpServers(requestParameters: ToolsApiPostToolsMcpServersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postToolMcpServers(requestParameters: ToolApiPostToolMcpServersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MCPServer>;
+    public postToolMcpServers(requestParameters: ToolApiPostToolMcpServersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MCPServer>>;
+    public postToolMcpServers(requestParameters: ToolApiPostToolMcpServersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MCPServer>>;
+    public postToolMcpServers(requestParameters: ToolApiPostToolMcpServersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const createServerReq = requestParameters?.createServerReq;
         if (createServerReq === null || createServerReq === undefined) {
-            throw new Error('Required parameter createServerReq was null or undefined when calling postToolsMcpServers.');
+            throw new Error('Required parameter createServerReq was null or undefined when calling postToolMcpServers.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1112,7 +1112,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/mcp/servers`;
+        let localVarPath = `/v1/tool/mcp/servers`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<MCPServer>('post', `${basePath}${localVarPath}`,
             {
@@ -1135,13 +1135,13 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postToolsPluginsBuild(requestParameters: ToolsApiPostToolsPluginsBuildRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BuildOut>;
-    public postToolsPluginsBuild(requestParameters: ToolsApiPostToolsPluginsBuildRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BuildOut>>;
-    public postToolsPluginsBuild(requestParameters: ToolsApiPostToolsPluginsBuildRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BuildOut>>;
-    public postToolsPluginsBuild(requestParameters: ToolsApiPostToolsPluginsBuildRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postToolPluginsBuild(requestParameters: ToolApiPostToolPluginsBuildRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BuildOut>;
+    public postToolPluginsBuild(requestParameters: ToolApiPostToolPluginsBuildRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BuildOut>>;
+    public postToolPluginsBuild(requestParameters: ToolApiPostToolPluginsBuildRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BuildOut>>;
+    public postToolPluginsBuild(requestParameters: ToolApiPostToolPluginsBuildRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const buildRequest = requestParameters?.buildRequest;
         if (buildRequest === null || buildRequest === undefined) {
-            throw new Error('Required parameter buildRequest was null or undefined when calling postToolsPluginsBuild.');
+            throw new Error('Required parameter buildRequest was null or undefined when calling postToolPluginsBuild.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1181,7 +1181,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/plugins/build`;
+        let localVarPath = `/v1/tool/plugins/build`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BuildOut>('post', `${basePath}${localVarPath}`,
             {
@@ -1204,13 +1204,13 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postToolsSkills(requestParameters: ToolsApiPostToolsSkillsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SkillWritten>;
-    public postToolsSkills(requestParameters: ToolsApiPostToolsSkillsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SkillWritten>>;
-    public postToolsSkills(requestParameters: ToolsApiPostToolsSkillsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SkillWritten>>;
-    public postToolsSkills(requestParameters: ToolsApiPostToolsSkillsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public postToolSkills(requestParameters: ToolApiPostToolSkillsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SkillWritten>;
+    public postToolSkills(requestParameters: ToolApiPostToolSkillsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SkillWritten>>;
+    public postToolSkills(requestParameters: ToolApiPostToolSkillsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SkillWritten>>;
+    public postToolSkills(requestParameters: ToolApiPostToolSkillsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const skillIn = requestParameters?.skillIn;
         if (skillIn === null || skillIn === undefined) {
-            throw new Error('Required parameter skillIn was null or undefined when calling postToolsSkills.');
+            throw new Error('Required parameter skillIn was null or undefined when calling postToolSkills.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1250,7 +1250,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/skills`;
+        let localVarPath = `/v1/tool/skills`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<SkillWritten>('post', `${basePath}${localVarPath}`,
             {
@@ -1273,13 +1273,13 @@ export class ToolsApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public putToolsActivation(requestParameters: ToolsApiPutToolsActivationRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivationSet>;
-    public putToolsActivation(requestParameters: ToolsApiPutToolsActivationRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivationSet>>;
-    public putToolsActivation(requestParameters: ToolsApiPutToolsActivationRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivationSet>>;
-    public putToolsActivation(requestParameters: ToolsApiPutToolsActivationRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public putToolActivation(requestParameters: ToolApiPutToolActivationRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivationSet>;
+    public putToolActivation(requestParameters: ToolApiPutToolActivationRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivationSet>>;
+    public putToolActivation(requestParameters: ToolApiPutToolActivationRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivationSet>>;
+    public putToolActivation(requestParameters: ToolApiPutToolActivationRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const activationReq = requestParameters?.activationReq;
         if (activationReq === null || activationReq === undefined) {
-            throw new Error('Required parameter activationReq was null or undefined when calling putToolsActivation.');
+            throw new Error('Required parameter activationReq was null or undefined when calling putToolActivation.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1319,7 +1319,7 @@ export class ToolsApi extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/tools/activation`;
+        let localVarPath = `/v1/tool/activation`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ActivationSet>('put', `${basePath}${localVarPath}`,
             {
